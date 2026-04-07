@@ -4,7 +4,7 @@ import { RootState, AppDispatch } from '@/lib/store';
 import { fetchBookings, updateBookingStatus } from '@/lib/features/bookingSlice';
 import { fetchRooms, checkOutRoom } from '@/lib/features/roomSlice';
 import { useEffect, useState } from 'react';
-import { UserCheck, UserMinus, FileText, ClipboardList, Clock, ArrowRight, User } from 'lucide-react';
+import { UserCheck, UserMinus, FileText, ClipboardList, Clock, ArrowRight, User, Hotel } from 'lucide-react';
 
 export default function ReceptionistDashboard() {
     const dispatch = useDispatch<AppDispatch>();
@@ -105,6 +105,31 @@ export default function ReceptionistDashboard() {
                             {bookings.length === 0 && (
                                 <div className="text-center py-20 text-slate-600 font-bold uppercase tracking-[0.2em] text-[10px]">No arrival logs found for the current period.</div>
                             )}
+                        </div>
+
+                        {/* Room Status Board */}
+                        <div className="rounded-3xl border border-white/10 bg-slate-900/50 p-8 backdrop-blur-md">
+                             <div className="mb-8 flex items-center justify-between border-b border-white/10 pb-6">
+                                <div className="flex items-center gap-3">
+                                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600/10 text-indigo-500">
+                                      <Hotel size={20} />
+                                   </div>
+                                   <h2 className="text-2xl font-black italic tracking-tighter uppercase">Room Status Board</h2>
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                                {rooms.map(room => (
+                                    <div key={room.id} className={`rounded-2xl border p-4 transition-all ${
+                                        room.status === 'Available' ? 'bg-green-500/5 border-green-500/20' : 'bg-red-500/5 border-red-500/20'
+                                    }`}>
+                                        <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1">Room {room.id}</div>
+                                        <div className="text-xs font-bold text-white truncate">{room.type}</div>
+                                        <div className={`mt-3 text-[8px] font-black uppercase tracking-[0.2em] ${
+                                            room.status === 'Available' ? 'text-green-500' : 'text-red-500'
+                                        }`}>{room.status}</div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
 

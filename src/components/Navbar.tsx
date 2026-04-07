@@ -1,18 +1,12 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Hotel, User, Menu, X, LayoutDashboard, ShieldCheck, LogIn } from 'lucide-react';
+import { Hotel, User, Menu, X, LayoutDashboard, ShieldCheck, LogIn, BellRing } from 'lucide-react';
 import { useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/lib/store';
 import { logout } from '@/lib/features/userSlice';
-
-const NAV_ITEMS = [
-    { name: 'Rooms', href: '/dashboard', icon: Hotel },
-    { name: 'Admin', href: '/admin', icon: ShieldCheck },
-    { name: 'Profile', href: '/profile', icon: User },
-];
 
 export default function Navbar() {
     const pathname = usePathname();
@@ -23,6 +17,28 @@ export default function Navbar() {
     const handleLogout = () => {
         dispatch(logout());
     };
+
+    // Filtered NAV_ITEMS based on user role
+    const getNavItems = () => {
+        if (!isAuthenticated) return [];
+        
+        const items = [
+            { name: 'Rooms', href: '/dashboard', icon: Hotel },
+            { name: 'Profile', href: '/profile', icon: User },
+        ];
+
+        if (user?.role === 'admin') {
+            items.push({ name: 'Admin', href: '/admin', icon: ShieldCheck });
+        }
+        
+        if (user?.role === 'receptionist' || user?.role === 'admin') {
+            items.push({ name: 'Receptionist', href: '/receptionist', icon: BellRing });
+        }
+
+        return items;
+    };
+
+    const navItems = getNavItems();
 
     return (
         <nav className="sticky top-0 z-50 w-full border-b border-white/10 bg-slate-900/80 backdrop-blur-md">
@@ -41,7 +57,7 @@ export default function Navbar() {
                 {/* Desktop Nav Links */}
                 <div className="hidden items-center gap-10 md:flex">
                     <div className="flex gap-8 font-medium">
-                        {NAV_ITEMS.map((item) => {
+                        {navItems.map((item) => {
                             const isActive = pathname === item.href;
                             const Icon = item.icon;
                             return (
@@ -98,7 +114,7 @@ export default function Navbar() {
             {isMenuOpen && (
                 <div className="absolute left-0 top-18 w-full bg-slate-900 border-b border-white/10 p-6 md:hidden">
                     <div className="flex flex-col gap-4">
-                        {NAV_ITEMS.map((item) => (
+                        {navItems.map((item) => (
                             <Link 
                                 key={item.name} 
                                 href={item.href}
@@ -130,4 +146,4 @@ export default function Navbar() {
             )}
         </nav>
     );
-}
+}

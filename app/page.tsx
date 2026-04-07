@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '@/lib/features/userSlice';
 import { AppDispatch, RootState } from '@/lib/store';
 import { useRouter } from 'next/navigation';
-import { Hotel, User, Lock, ArrowRight, ShieldCheck } from 'lucide-react';
+import { Hotel, User, Lock, ArrowRight, ShieldCheck, Briefcase, BellRing, Users } from 'lucide-react';
 import Link from 'next/link';
 
 export default function LoginPage() {
@@ -12,15 +12,33 @@ export default function LoginPage() {
     const [password, setPassword] = useState('');
     const dispatch = useDispatch<AppDispatch>();
     const router = useRouter();
-    const { error, status } = useSelector((state: RootState) => (state as any).user || { error: null, status: 'idle' });
+    const { error, user } = useSelector((state: RootState) => (state as any).user || { error: null, user: null });
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const result = await dispatch(loginUser({ username, password }));
         if (loginUser.fulfilled.match(result)) {
-            router.push('/dashboard');
-        } else {
-            router.push('/register');
+            const loggedInUser = result.payload;
+            if (loggedInUser.role === 'admin') {
+                router.push('/admin');
+            } else if (loggedInUser.role === 'receptionist') {
+                router.push('/receptionist');
+            } else {
+                router.push('/dashboard');
+            }
+        }
+    };
+
+    const quickAccess = (role: string) => {
+        if (role === 'admin') {
+            setUsername('admin');
+            setPassword('123');
+        } else if (role === 'receptionist') {
+            setUsername('reception');
+            setPassword('123');
+        } else if (role === 'guest') {
+            setUsername('guest');
+            setPassword('123');
         }
     };
 
@@ -33,6 +51,36 @@ export default function LoginPage() {
                     </div>
                     <h1 className="text-4xl font-black italic tracking-tighter uppercase mb-2">GateKeeper</h1>
                     <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-500">Secure Access • GrandStay HMS</p>
+                </div>
+
+                {/* Quick Access Selection */}
+                <div className="mb-10">
+                    <div className="mb-4 text-center">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-600">Quick Entry Bypass</span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-3">
+                        <button 
+                            onClick={() => quickAccess('admin')}
+                            className="flex flex-col items-center justify-center gap-2 rounded-2xl bg-white/5 border border-white/10 p-4 transition-all hover:bg-blue-600 hover:border-blue-400 group"
+                        >
+                            <Briefcase size={20} className="text-blue-500 group-hover:text-white" />
+                            <span className="text-[9px] font-black uppercase tracking-tighter text-slate-500 group-hover:text-white">Admin</span>
+                        </button>
+                        <button 
+                            onClick={() => quickAccess('receptionist')}
+                            className="flex flex-col items-center justify-center gap-2 rounded-2xl bg-white/5 border border-white/10 p-4 transition-all hover:bg-emerald-600 hover:border-emerald-400 group"
+                        >
+                            <BellRing size={20} className="text-emerald-500 group-hover:text-white" />
+                            <span className="text-[9px] font-black uppercase tracking-tighter text-slate-500 group-hover:text-white">Reception</span>
+                        </button>
+                        <button 
+                            onClick={() => quickAccess('guest')}
+                            className="flex flex-col items-center justify-center gap-2 rounded-2xl bg-white/5 border border-white/10 p-4 transition-all hover:bg-indigo-600 hover:border-indigo-400 group"
+                        >
+                            <Users size={20} className="text-indigo-500 group-hover:text-white" />
+                            <span className="text-[9px] font-black uppercase tracking-tighter text-slate-500 group-hover:text-white">Guest</span>
+                        </button>
+                    </div>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -72,7 +120,7 @@ export default function LoginPage() {
 
                     {error && (
                         <div className="rounded-xl bg-red-500/10 border border-red-500/20 p-4 text-[10px] font-bold text-red-500 uppercase tracking-widest text-center">
-                            Invalid credentials. Access Denied.
+                            {error}. Access Denied.
                         </div>
                     )}
 

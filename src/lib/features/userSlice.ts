@@ -1,7 +1,4 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
-
-const API_BASE = 'http://localhost:3001';
 
 interface User {
     id: string;
@@ -18,18 +15,26 @@ interface UserState {
     error: string | null;
 }
 
+// Simulation of a local database
+const MOCK_USERS: User[] = [
+    { id: '1', username: 'admin', password: '123', role: 'admin', name: 'Admin User' },
+    { id: '2', username: 'reception', password: '123', role: 'receptionist', name: 'Receptionist User' },
+    { id: '3', username: 'guest', password: '123', role: 'guest', name: 'Guest User' }
+];
+
 export const registerUser = createAsyncThunk('user/registerUser', async (userData: Omit<User, 'id'>) => {
-    const response = await axios.post(`${API_BASE}/users`, userData);
-    return response.data;
+    await new Promise(resolve => setTimeout(resolve, 500));
+    const newUser = { ...userData, id: Math.random().toString(36).substr(2, 9) };
+    return newUser;
 });
 
 export const loginUser = createAsyncThunk('user/loginUser', async (credentials: { username: string, password?: string }) => {
-    const response = await axios.get(`${API_BASE}/users?username=${credentials.username}`);
-    const user = response.data[0];
-    if (user && user.password === credentials.password) {
+    await new Promise(resolve => setTimeout(resolve, 500));
+    const user = MOCK_USERS.find(u => u.username === credentials.username && u.password === credentials.password);
+    if (user) {
         return user;
     }
-    throw new Error('Invalid credentials');
+    throw new Error('Invalid username or password');
 });
 
 const userSlice = createSlice({
