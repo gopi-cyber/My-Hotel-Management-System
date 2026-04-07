@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Hotel, User, Menu, X, LayoutDashboard, ShieldCheck, LogIn, BellRing } from 'lucide-react';
 import { useState } from 'react';
 
@@ -10,12 +10,14 @@ import { logout } from '@/lib/features/userSlice';
 
 export default function Navbar() {
     const pathname = usePathname();
+    const router = useRouter();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { isAuthenticated, user } = useSelector((state: RootState) => (state as any).user || { isAuthenticated: false, user: null });
     const dispatch = useDispatch();
 
     const handleLogout = () => {
         dispatch(logout());
+        router.push('/');
     };
 
     // Filtered NAV_ITEMS based on user role
