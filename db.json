@@ -1,0 +1,64 @@
+{
+  "rooms": [
+    {
+      "id": "1",
+      "type": "Deluxe",
+      "price": 100,
+      "status": "Available",
+      "amenities": [
+        "Free Wifi",
+        "Ocean View",
+        "Mini Bar"
+      ]
+    },
+    {
+      "id": "2",
+      "type": "Suite",
+      "price": 250,
+      "status": "Occupied",
+      "amenities": [
+        "Infinity Pool",
+        "Butler Service",
+        "Gourmet Breakfast"
+      ]
+    }
+  ],
+  "bookings": [
+    {
+      "guestName": "Test Guest",
+      "roomId": "1",
+      "checkIn": "2026-10-04",
+      "checkOut": "2026-12-04",
+      "status": "CheckedOut",
+      "id": "g3tbzNaTrX0"
+    }
+  ],
+  "users": [
+    {
+      "id": "u1",
+      "username": "admin",
+      "password": "123",
+      "name": "Admin User",
+      "role": "Admin",
+      "email": "admin@hotel.com"
+    },
+    {
+      "id": "u2",
+      "username": "staff",
+      "password": "123",
+      "name": "Receptionist",
+      "role": "Staff",
+      "email": "staff@hotel.com"
+    },
+    {
+      "username": "new_guest",
+      "email": "guest@test.com",
+      "password": "123",
+      "role": "Guest",
+      "name": "New_guest",
+      "id": "Ozzlv4GDLqs"
+    }
+  ],
+  "services": [],
+  "$schema": "./node_modules/json-server/schema.json"
+}
