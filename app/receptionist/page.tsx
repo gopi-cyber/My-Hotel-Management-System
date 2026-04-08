@@ -4,7 +4,8 @@ import { RootState, AppDispatch } from '@/lib/store';
 import { fetchBookings, updateBookingStatus } from '@/lib/features/bookingSlice';
 import { fetchRooms, checkOutRoom } from '@/lib/features/roomSlice';
 import { useEffect, useState } from 'react';
-import { UserCheck, UserMinus, FileText, ClipboardList, Clock, ArrowRight, User, Hotel } from 'lucide-react';
+import { UserCheck, UserMinus, FileText, ClipboardList, Clock, ArrowRight, User, Hotel, Bell, Home, Settings, Search, LayoutDashboard } from 'lucide-react';
+import Link from 'next/link';
 
 export default function ReceptionistDashboard() {
     const dispatch = useDispatch<AppDispatch>();
@@ -28,166 +29,166 @@ export default function ReceptionistDashboard() {
     };
 
     return (
-        <main className="min-h-screen bg-slate-950 p-8 pt-12 text-white selection:bg-blue-500/30">
-            <div className="mx-auto max-w-[1400px]">
-                {/* Header Information */}
-                <div className="mb-12 flex items-center justify-between">
+        <main className="flex min-h-screen bg-slate-50 text-slate-800 overflow-hidden font-sans">
+            {/* Mesh decor */}
+            <div className="absolute top-[-20%] right-[-10%] h-[800px] w-[800px] rounded-full bg-cyan-100/30 blur-[120px]" />
+            <div className="absolute bottom-[-20%] left-[-10%] h-[800px] w-[800px] rounded-full bg-indigo-100/30 blur-[120px]" />
+
+            {/* Glass Side Navigation */}
+            <aside className="z-20 w-72 glass-morphism border-r border-white/60 flex flex-col p-8 space-y-10">
+                <div className="flex items-center gap-4 px-2">
+                    <div className="h-10 w-10 rounded-2xl bg-cyan-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+                        <Hotel className="text-white" size={20} />
+                    </div>
                     <div>
-                        <div className="mb-2 text-[10px] font-black uppercase tracking-[0.3em] text-blue-500">Live Operations</div>
-                        <h1 className="text-5xl font-black italic tracking-tighter uppercase">Front Desk</h1>
-                        <p className="mt-2 text-slate-500 font-medium tracking-tight">Main terminal for arrivals, departures, and active room logs.</p>
+                        <span className="text-lg font-bold tracking-tight text-slate-900 block leading-none">Front Desk</span>
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1 block">Live Operations</span>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
-                    {/* Schedule / Arrivals Table */}
-                    <div className="lg:col-span-2 space-y-10">
-                        <div className="rounded-3xl border border-white/10 bg-slate-900/50 p-8 backdrop-blur-md">
-                            <div className="mb-8 flex items-center justify-between border-b border-white/10 pb-6">
-                                <div className="flex items-center gap-3">
-                                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600/10 text-blue-500">
-                                      <ClipboardList size={22} />
-                                   </div>
-                                   <h2 className="text-2xl font-black italic tracking-tighter uppercase">Arrival Schedule</h2>
-                                </div>
-                                <span className="rounded-full bg-white/5 border border-white/10 px-3 py-1 text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-none">Global Queues</span>
-                            </div>
+                <nav className="flex-1 space-y-2">
+                    <button className="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl text-sm font-semibold bg-white shadow-[10px_10px_20px_#d1d9e6] text-cyan-600 border border-white">
+                        <ClipboardList size={20} /> Today's Arrivals
+                    </button>
+                    <button className="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl text-sm font-semibold text-slate-400 hover:text-slate-600 hover:bg-white/40 transition-all">
+                        <Hotel size={20} /> Room Status Board
+                    </button>
+                    <button className="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl text-sm font-semibold text-slate-400 hover:text-slate-600 hover:bg-white/40 transition-all">
+                        <FileText size={20} /> Billing Terminal
+                    </button>
+                </nav>
 
+                <div className="pt-8 border-t border-slate-200/50">
+                    <Link href="/" className="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl text-sm font-semibold text-slate-400 hover:text-red-500 hover:bg-red-50 transition-all">
+                        <Home size={20} /> Exit Gateway
+                    </Link>
+                </div>
+            </aside>
+
+            {/* Main Terminal Area */}
+            <section className="flex-1 flex flex-col h-screen overflow-y-auto z-10 p-10 pt-8">
+                <header className="flex items-center justify-between mb-10 pb-6 border-b border-white">
+                    <div>
+                        <h1 className="text-4xl font-extrabold tracking-tight text-slate-900">Operations Alpha</h1>
+                        <p className="text-sm font-medium text-slate-400 mt-1 uppercase tracking-widest">Active Shift • Reception Terminal</p>
+                    </div>
+                    <div className="flex items-center gap-6">
+                        <div className="flex items-center gap-3 bg-white px-5 py-2.5 rounded-2xl shadow-[10px_10px_20px_#d1d9e6] border border-white">
+                            <div className="h-3 w-3 rounded-full bg-emerald-500 animate-pulse outline outline-4 outline-emerald-500/20" />
+                            <span className="text-sm font-bold text-slate-700">System Online</span>
+                        </div>
+                    </div>
+                </header>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                    <div className="lg:col-span-2 space-y-10">
+                        {/* Arrival Log */}
+                        <div className="glass-card rounded-[2.5rem] p-10 shadow-[20px_20px_60px_#d1d9e6]">
+                            <h2 className="text-2xl font-bold text-slate-900 tracking-tight mb-8">Confirmed Bookings</h2>
                             <div className="space-y-4">
                                 {bookings.map((booking) => {
                                     const room = rooms.find(r => r.id === booking.roomId);
                                     return (
-                                        <div key={booking.id} className="group relative flex items-center justify-between rounded-2xl bg-white/5 border border-transparent p-5 backdrop-blur-md transition-all hover:bg-white/10 hover:border-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/10">
+                                        <div key={booking.id} className="group flex items-center justify-between p-5 rounded-3xl bg-white/50 border border-white hover:bg-white hover:shadow-xl transition-all">
                                             <div className="flex items-center gap-5">
-                                               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/5 text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all">
-                                                  <User size={24} />
-                                               </div>
-                                               <div className="flex flex-col">
-                                                  <span className="text-lg font-black tracking-tight">{booking.guestName}</span>
-                                                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 italic flex items-center gap-2">
-                                                     <ArrowRight size={10} className="text-blue-500" />
-                                                     Room {room?.type || booking.roomId} • Status: {booking.status}
-                                                  </span>
-                                               </div>
+                                                <div className="h-12 w-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-cyan-600 group-hover:text-white group-hover:shadow-lg transition-all">
+                                                    <User size={24} />
+                                                </div>
+                                                <div>
+                                                    <p className="text-lg font-extrabold text-slate-900 tracking-tight">{booking.guestName}</p>
+                                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-0.5 italic">
+                                                        {room?.type || 'Room ' + booking.roomId} • Status: {booking.status}
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <div className="flex gap-4">
-                                                {booking.status === 'Confirmed' ? (
-                                                    <button 
-                                                        onClick={() => handleCheckIn(booking.id)}
-                                                        className="flex items-center gap-2 rounded-xl bg-green-600/10 px-4 py-2.5 text-[10px] font-black uppercase tracking-widest text-green-500 transition-all hover:bg-green-600 hover:text-white"
-                                                    >
-                                                        <UserCheck size={14} /> Check In
-                                                    </button>
-                                                ) : booking.status === 'CheckedIn' ? (
-                                                    <button 
-                                                        onClick={() => handleCheckOut(booking)}
-                                                        className="flex items-center gap-2 rounded-xl bg-orange-600/10 px-4 py-2.5 text-[10px] font-black uppercase tracking-widest text-orange-500 transition-all hover:bg-orange-600 hover:text-white"
-                                                    >
-                                                        <UserMinus size={14} /> Check Out
-                                                    </button>
-                                                ) : (
-                                                    <span className="flex items-center gap-2 rounded-xl bg-white/5 px-4 py-2.5 text-[10px] font-black uppercase tracking-widest text-slate-500">
-                                                        Completed
-                                                    </span>
+                                            
+                                            <div className="flex gap-3">
+                                                {booking.status === 'Confirmed' && (
+                                                    <button onClick={() => handleCheckIn(booking.id)} className="h-11 px-6 rounded-2xl bg-emerald-500 text-[11px] font-bold text-white shadow-lg shadow-emerald-500/20 hover:bg-emerald-600 transition-all uppercase tracking-widest">Check In</button>
                                                 )}
-                                                <button 
-                                                    onClick={() => setSelectedBooking(booking)}
-                                                    className="flex items-center justify-center rounded-xl bg-white/5 p-2.5 text-slate-400 hover:bg-white/10 hover:text-white transition-all"
-                                                >
-                                                    <FileText size={18} />
+                                                {booking.status === 'CheckedIn' && (
+                                                    <button onClick={() => handleCheckOut(booking)} className="h-11 px-6 rounded-2xl bg-orange-500 text-[11px] font-bold text-white shadow-lg shadow-orange-500/20 hover:bg-orange-600 transition-all uppercase tracking-widest">Check Out</button>
+                                                )}
+                                                <button onClick={() => setSelectedBooking(booking)} className="h-11 w-11 rounded-2xl bg-white border border-slate-100 shadow-[4px_4px_10px_#d1d9e6] flex items-center justify-center hover:bg-slate-50 transition-all text-slate-400 hover:text-indigo-600">
+                                                    <FileText size={20} />
                                                 </button>
                                             </div>
                                         </div>
                                     );
                                 })}
                             </div>
-
-                            {bookings.length === 0 && (
-                                <div className="text-center py-20 text-slate-600 font-bold uppercase tracking-[0.2em] text-[10px]">No arrival logs found for the current period.</div>
-                            )}
                         </div>
 
-                        {/* Room Status Board */}
-                        <div className="rounded-3xl border border-white/10 bg-slate-900/50 p-8 backdrop-blur-md">
-                             <div className="mb-8 flex items-center justify-between border-b border-white/10 pb-6">
-                                <div className="flex items-center gap-3">
-                                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600/10 text-indigo-500">
-                                      <Hotel size={20} />
-                                   </div>
-                                   <h2 className="text-2xl font-black italic tracking-tighter uppercase">Room Status Board</h2>
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        {/* Status Matrix */}
+                        <div className="glass-card rounded-[2.5rem] p-10 shadow-[20px_20px_60px_#d1d9e6]">
+                            <h2 className="text-2xl font-bold text-slate-900 tracking-tight mb-8">Room Telemetry Grid</h2>
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
                                 {rooms.map(room => (
-                                    <div key={room.id} className={`rounded-2xl border p-4 transition-all ${
-                                        room.status === 'Available' ? 'bg-green-500/5 border-green-500/20' : 'bg-red-500/5 border-red-500/20'
+                                    <div key={room.id} className={`p-5 rounded-3xl border-2 transition-all group cursor-pointer hover:scale-105 ${
+                                        room.status === 'Available' ? 'bg-emerald-50/50 border-emerald-100' : 'bg-red-50/50 border-red-100'
                                     }`}>
-                                        <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1">Room {room.id}</div>
-                                        <div className="text-xs font-bold text-white truncate">{room.type}</div>
-                                        <div className={`mt-3 text-[8px] font-black uppercase tracking-[0.2em] ${
-                                            room.status === 'Available' ? 'text-green-500' : 'text-red-500'
-                                        }`}>{room.status}</div>
+                                        <p className="text-[10px] font-bold text-slate-400 uppercase mb-2">#R_{room.id}</p>
+                                        <p className="text-sm font-extrabold text-slate-800 mb-3">{room.type}</p>
+                                        <div className={`text-[9px] font-black tracking-widest flex items-center gap-1.5 ${room.status === 'Available' ? 'text-emerald-500' : 'text-red-500'}`}>
+                                            <div className={`h-1.5 w-1.5 rounded-full ${room.status === 'Available' ? 'bg-emerald-500' : 'bg-red-500'}`} />
+                                            {room.status.toUpperCase()}
+                                        </div>
                                     </div>
                                 ))}
                             </div>
                         </div>
                     </div>
 
-                    {/* Operational Quick-Action Sidebar */}
-                    <div className="space-y-8">
-                        <div className="group relative overflow-hidden rounded-3xl bg-slate-900 border border-white/10 p-8 shadow-2xl transition-all hover:border-blue-500/50">
-                             <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity">
-                                <FileText size={120} />
-                             </div>
-                             <div className="relative z-10 mb-8 flex items-center gap-3">
-                                <FileText className="text-blue-500" />
-                                <h3 className="text-xl font-bold uppercase tracking-tighter italic">Terminal <span className="text-blue-500">Invoicing</span></h3>
-                             </div>
-                             <div className="relative z-10 rounded-2xl bg-black/40 p-6 border border-white/5">
-                                 <div className="mb-4 flex items-center justify-between border-b border-white/5 pb-4">
-                                    <div className="flex items-center gap-2">
-                                        <div className="h-6 w-6 rounded-full bg-blue-500/20 flex items-center justify-center text-[10px] font-bold text-blue-500 italic uppercase">GS</div>
-                                        <span className="text-xs font-bold text-white">GrandStay Bill v1.4</span>
+                    {/* Operational Sidebar */}
+                    <div className="space-y-10">
+                        <div className="bg-gradient-to-br from-indigo-600 to-indigo-800 rounded-[2.5rem] p-10 shadow-[0_20px_50px_rgba(79,70,229,0.3)]">
+                            <h3 className="text-2xl font-bold text-white italic tracking-tight mb-10">Invoicing Core</h3>
+                            <div className="bg-white/10 rounded-3xl p-8 border border-white/20 space-y-6 backdrop-blur-md shadow-inner">
+                                <div className="flex justify-between items-center text-[11px] font-bold text-indigo-100 uppercase tracking-widest opacity-60">
+                                    <span>Guest Profile</span>
+                                    <span>#{selectedBooking?.id?.slice(0, 4) || 'PNDG'}</span>
+                                </div>
+                                <div className="flex justify-between items-center bg-white/10 p-4 rounded-2xl border border-white/10">
+                                    <span className="text-sm font-bold text-white">{selectedBooking?.guestName || 'Select Patient'}</span>
+                                    <User size={16} className="text-white/40" />
+                                </div>
+                                <div className="pt-6 border-t border-white/10 space-y-4">
+                                    <div className="flex justify-between items-baseline">
+                                        <span className="text-sm font-medium text-white/60">Base Accommodation</span>
+                                        <span className="text-xl font-bold text-white">${selectedBooking ? (rooms.find(r => r.id === selectedBooking.roomId)?.price || 0) : 0}</span>
                                     </div>
-                                    <Clock size={14} className="text-slate-500" />
-                                 </div>
-                                 <div className="space-y-4 pt-2">
-                                     <div className="flex justify-between">
-                                         <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Guest Selected</span>
-                                         <span className="text-sm font-black text-white">{selectedBooking?.guestName || 'None'}</span>
-                                     </div>
-                                     <div className="flex justify-between">
-                                         <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Room Base Rate</span>
-                                         <span className="text-sm font-black text-white">${selectedBooking ? (rooms.find(r => r.id === selectedBooking.roomId)?.price || 0) : 0}</span>
-                                     </div>
-                                     <div className="mt-6 flex items-center justify-between border-t border-dashed border-white/20 pt-6">
-                                        <span className="text-lg font-black italic tracking-tighter">Running Total</span>
-                                        <span className="text-3xl font-black italic text-blue-500 tracking-tighter leading-none">${selectedBooking ? (rooms.find(r => r.id === selectedBooking.roomId)?.price || 0) + 32.50 : 0}</span>
-                                     </div>
-                                 </div>
-                                 <button 
+                                    <div className="flex justify-between items-baseline text-white/60">
+                                        <span className="text-xs font-medium">Service & Amenities</span>
+                                        <span className="text-sm font-bold">$32.50</span>
+                                    </div>
+                                </div>
+                                <div className="pt-10 flex flex-col items-center">
+                                    <span className="text-[10px] font-bold text-white/40 uppercase tracking-[0.3em] mb-2">Grand Total</span>
+                                    <span className="text-6xl font-black italic text-white tracking-tighter">${selectedBooking ? (rooms.find(r => r.id === selectedBooking.roomId)?.price || 0) + 32.50 : 0}</span>
+                                </div>
+                                <button 
                                     disabled={!selectedBooking || selectedBooking.status !== 'CheckedIn'}
                                     onClick={() => handleCheckOut(selectedBooking)}
-                                    className="mt-8 w-full rounded-2xl bg-blue-600 py-4.5 text-xs font-black uppercase tracking-widest text-white shadow-xl shadow-blue-500/20 hover:bg-blue-500 transition-all hover:scale-105 active:scale-95 disabled:opacity-30 disabled:hover:scale-100"
-                                 >
-                                    Final Check-out
-                                 </button>
-                             </div>
+                                    className="w-full mt-8 h-16 bg-white text-indigo-600 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] shadow-2xl hover:bg-slate-50 transition-all disabled:opacity-30 active:scale-95"
+                                >
+                                    Execute Checkout
+                                </button>
+                            </div>
                         </div>
 
-                         <div className="flex flex-col gap-4">
-                            <div className="rounded-2xl border border-white/10 bg-white/5 p-6 border-l-4 border-l-orange-500">
-                                <div className="mb-1 text-[10px] font-black uppercase tracking-widest text-slate-600">Shift Alert</div>
-                                <p className="text-sm font-bold text-white leading-relaxed">Guest in Room 204 requested late checkout (12:00 PM).</p>
-                            </div>
-                            <div className="rounded-2xl border border-white/10 bg-white/5 p-6 border-l-4 border-l-blue-500">
-                                <div className="mb-1 text-[10px] font-black uppercase tracking-widest text-slate-600">Inventory Notice</div>
-                                <p className="text-sm font-bold text-white leading-relaxed">Deluxe Room #102 is successfully sanitized and ready.</p>
-                            </div>
+                        <div className="space-y-4">
+                             <div className="p-6 rounded-3xl bg-white border border-slate-100 shadow-[10px_10px_30px_#d1d9e6] border-l-8 border-l-cyan-500">
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Shift Notice</p>
+                                <p className="text-sm font-bold text-slate-800 leading-relaxed italic">Room 204 requested late checkout extension until 14:00 PM.</p>
+                             </div>
+                             <div className="p-6 rounded-3xl bg-white border border-slate-100 shadow-[10px_10px_30px_#d1d9e6] border-l-8 border-l-orange-500">
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Maintenance Log</p>
+                                <p className="text-sm font-bold text-slate-800 leading-relaxed italic">Suite #102 sanitation complete. Inventory telemetry updated.</p>
+                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
         </main>
     );
 }

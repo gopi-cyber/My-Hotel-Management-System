@@ -1,5 +1,5 @@
 'use client';
-import { Plus, Edit, Trash, ShieldCheck } from 'lucide-react';
+import { Plus, Edit, Trash2, ShieldCheck, Mail, User, CheckCircle, Clock } from 'lucide-react';
 
 interface Staff {
     id: string;
@@ -11,49 +11,60 @@ interface Staff {
 
 export default function AdminStaffTable({ staff }: { staff: Staff[] }) {
     return (
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-slate-900/50 backdrop-blur-md">
-            <div className="flex items-center justify-between border-b border-white/10 p-6">
-                <div className="flex items-center gap-3">
-                    <ShieldCheck className="text-blue-500" size={24} />
-                    <h3 className="text-xl font-bold">Staff Management</h3>
+        <div className="flex flex-col h-full">
+            <div className="flex items-center justify-between mb-8">
+                <div>
+                    <h3 className="text-xl font-bold text-slate-900 tracking-tight">Personnel Log</h3>
+                    <p className="text-[12px] text-slate-400 mt-1 font-medium italic">Active staff credentials and shift status.</p>
                 </div>
-                <button className="flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-bold text-white transition-all hover:bg-emerald-500">
+                <button className="flex items-center gap-3 rounded-2xl bg-indigo-600 px-6 py-3 text-[11px] font-bold uppercase tracking-widest text-white shadow-[0_10px_20px_rgba(79,70,229,0.3)] transition-all hover:bg-indigo-500 active:scale-95">
                     <Plus size={18} />
-                    <span>Invite Staff</span>
+                    Invite Identity
                 </button>
             </div>
 
-            <div className="overflow-x-auto">
+            <div className="flex-1 overflow-hidden rounded-[2rem] border border-white bg-white/40 backdrop-blur-md shadow-[10px_10px_30px_#d1d9e6]">
                 <table className="w-full text-left text-sm">
-                    <thead className="bg-white/5 text-slate-400">
-                        <tr>
-                            <th className="px-6 py-4 font-semibold uppercase tracking-wider">Name</th>
-                            <th className="px-6 py-4 font-semibold uppercase tracking-wider">Role</th>
-                            <th className="px-6 py-4 font-semibold uppercase tracking-wider">Status</th>
-                            <th className="px-6 py-4 font-semibold uppercase tracking-wider">Contact</th>
-                            <th className="px-6 py-4 font-semibold uppercase tracking-wider">Actions</th>
+                    <thead>
+                        <tr className="bg-slate-50/50 border-b border-white">
+                            <th className="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Identify</th>
+                            <th className="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Sector / Role</th>
+                            <th className="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Telemetry</th>
+                            <th className="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Actions</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-white/5">
+                    <tbody className="divide-y divide-slate-100">
                         {staff.map((member) => (
-                            <tr key={member.id} className="hover:bg-white/5 transition-colors">
-                                <td className="px-6 py-4 font-medium text-white">{member.name}</td>
-                                <td className="px-6 py-4 text-slate-300">{member.role}</td>
-                                <td className="px-6 py-4">
-                                    <span className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-black uppercase tracking-widest ${
-                                        member.status === 'Active' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-orange-500/10 text-orange-400'
+                            <tr key={member.id} className="group hover:bg-white/60 transition-all">
+                                <td className="px-8 py-6">
+                                    <div className="flex items-center gap-4">
+                                        <div className="h-10 w-10 rounded-xl bg-white shadow-[4px_4px_10px_#d1d9e6] border border-slate-100 flex items-center justify-center text-indigo-600">
+                                            <User size={18} />
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <span className="font-extrabold text-slate-800 tracking-tight">{member.name}</span>
+                                            <span className="text-[10px] text-slate-400 font-medium">{member.email}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td className="px-8 py-6">
+                                    <span className="text-xs font-bold text-slate-600 uppercase tracking-tight bg-slate-100 px-3 py-1 rounded-lg border border-white">{member.role}</span>
+                                </td>
+                                <td className="px-8 py-6">
+                                    <span className={`inline-flex items-center gap-2 rounded-xl px-4 py-1.5 text-[9px] font-black uppercase tracking-widest border ${
+                                        member.status === 'Active' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-orange-50 text-orange-600 border-orange-100'
                                     }`}>
+                                        <div className={`h-1.5 w-1.5 rounded-full ${member.status === 'Active' ? 'bg-emerald-500' : 'bg-orange-500'}`} />
                                         {member.status}
                                     </span>
                                 </td>
-                                <td className="px-6 py-4 text-slate-500 italic">{member.email}</td>
-                                <td className="px-6 py-4">
-                                    <div className="flex gap-3">
-                                        <button className="text-slate-400 hover:text-blue-400 transition-colors">
-                                            <Edit size={18} />
+                                <td className="px-8 py-6">
+                                    <div className="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <button className="h-9 w-9 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-slate-400 hover:text-indigo-600 transition-all">
+                                            <Edit size={16} />
                                         </button>
-                                        <button className="text-slate-400 hover:text-red-400 transition-colors">
-                                            <Trash size={18} />
+                                        <button className="h-9 w-9 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-slate-400 hover:text-red-500 transition-all">
+                                            <Trash2 size={16} />
                                         </button>
                                     </div>
                                 </td>

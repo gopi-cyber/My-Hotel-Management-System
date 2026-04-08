@@ -8,7 +8,8 @@ import { RootState, AppDispatch } from '@/lib/store';
 import AdminRoomTable from '@/components/Admin/RoomTable';
 import AdminStaffTable from '@/components/Admin/StaffTable';
 import AdminReservationTable from '@/components/Admin/ReservationTable';
-import { LayoutDashboard, Users, CreditCard, PieChart, Activity, Bell, ChevronRight, Settings, Star, Calendar, BarChart3, TrendingUp, TrendingDown } from 'lucide-react';
+import { LayoutDashboard, Users, CreditCard, PieChart, Activity, BellRing, ChevronRight, Settings, Star, Calendar, BarChart3, TrendingUp, Home } from 'lucide-react';
+import Link from 'next/link';
 
 export default function AdminDashboard() {
     const [activeTab, setActiveTab] = useState<'inventory' | 'staff' | 'reservations' | 'reports'>('inventory');
@@ -24,10 +25,10 @@ export default function AdminDashboard() {
     }, [dispatch]);
 
     const stats = [
-        { label: 'Hotel Occupancy', value: '82%', icon: PieChart, color: 'text-blue-400', progress: 82 },
-        { label: 'Active Inventory', value: rooms.items.length.toString(), icon: LayoutDashboard, color: 'text-indigo-400', progress: 100 },
-        { label: 'Total Revenue', value: '$14,290', icon: CreditCard, color: 'text-emerald-400', progress: 91 },
-        { label: 'Staff in Shift', value: '12/15', icon: Users, color: 'text-yellow-400', progress: 80 },
+        { label: 'Occupancy', value: '82%', icon: PieChart, color: 'text-indigo-600', progress: 82 },
+        { label: 'Inventory', value: rooms.items.length.toString(), icon: LayoutDashboard, color: 'text-cyan-600', progress: 100 },
+        { label: 'Revenue', value: '$14,290', icon: CreditCard, color: 'text-emerald-600', progress: 91 },
+        { label: 'Staff Active', value: '12/15', icon: Users, color: 'text-amber-600', progress: 80 },
     ];
 
     const tabs = [
@@ -38,151 +39,123 @@ export default function AdminDashboard() {
     ];
 
     return (
-        <main className="min-h-screen bg-slate-950 p-8 pt-12 text-white selection:bg-blue-500/30">
-            <div className="mx-auto max-w-[1400px]">
-                {/* Header */}
-                <div className="mb-12 flex items-center justify-between">
+        <main className="flex min-h-screen bg-slate-50 text-slate-900 overflow-hidden font-sans relative">
+            {/* Inline 3D Styles */}
+            <style jsx>{`
+                .glass-surface {
+                    background: rgba(255, 255, 255, 0.4);
+                    backdrop-filter: blur(16px);
+                    border: 1px solid rgba(255, 255, 255, 0.8);
+                    box-shadow: 20px 20px 60px #d1d9e6, -20px -20px 60px #ffffff;
+                }
+                .glass-sidebar {
+                    background: rgba(255, 255, 255, 0.2);
+                    backdrop-filter: blur(12px);
+                    border-right: 1px solid rgba(255, 255, 255, 0.5);
+                }
+            `}</style>
+
+            {/* Mesh Background */}
+            <div className="absolute top-[-20%] left-[-10%] h-[800px] w-[800px] rounded-full bg-indigo-100/30 blur-[120px] pointer-events-none" />
+            <div className="absolute bottom-[-20%] right-[-10%] h-[800px] w-[800px] rounded-full bg-cyan-100/30 blur-[120px] pointer-events-none" />
+
+            {/* Sidebar */}
+            <aside className="z-20 w-72 glass-sidebar flex flex-col p-8 space-y-10">
+                <div className="flex items-center gap-4 px-2">
+                    <div className="h-10 w-10 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-lg">
+                        <Activity className="text-white" size={20} />
+                    </div>
                     <div>
-                        <div className="mb-4 flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">
-                            <span>Main Console</span>
-                            <ChevronRight size={10} />
-                            <span className="text-blue-500 uppercase">{activeTab}</span>
-                        </div>
-                        <h1 className="text-5xl font-black italic tracking-tighter uppercase">Command <span className="text-blue-500">Center</span></h1>
-                        <p className="mt-2 text-slate-400 font-medium">Strategic oversight and total control over hotel performance.</p>
-                    </div>
-                    <div className="flex gap-4">
-                        <button className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/5 border border-white/10 text-slate-400 hover:text-white transition-all">
-                            <Bell size={20} />
-                        </button>
-                        <button className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-xl shadow-blue-500/20 hover:bg-blue-500 transition-all">
-                            <Settings size={20} />
-                        </button>
+                        <span className="text-lg font-bold tracking-tight text-slate-900 block leading-none underline decoration-indigo-200 underline-offset-4">GrandStay</span>
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1 block">Operational Hub</span>
                     </div>
                 </div>
 
-                {/* HUD Stats */}
-                <div className="mb-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-                    {stats.map((stat) => (
-                        <div key={stat.label} className="group relative overflow-hidden rounded-3xl border border-white/10 bg-slate-900/40 p-8 backdrop-blur-md transition-all hover:border-white/20">
-                            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                                <stat.icon size={80} />
-                            </div>
-                            <div className="relative mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/5 text-blue-500 shadow-xl">
-                                <stat.icon size={28} className={stat.color} />
-                            </div>
-                            <div className="flex flex-col gap-1">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">{stat.label}</span>
-                                <span className="text-4xl font-black italic tracking-tighter">{stat.value}</span>
-                            </div>
-                            <div className="mt-6 h-1 w-full overflow-hidden rounded-full bg-white/5">
-                                <div className={`h-full bg-gradient-to-r from-blue-600 to-indigo-400`} style={{ width: `${stat.progress}%` }} />
-                            </div>
-                        </div>
-                    ))}
-                </div>
-
-                {/* Tabbed Navigation */}
-                <div className="mb-10 flex flex-wrap gap-4 border-b border-white/10 pb-4">
+                <nav className="flex-1 space-y-2">
                     {tabs.map((tab) => (
                         <button
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id as any)}
-                            className={`flex items-center gap-3 rounded-2xl px-6 py-3 text-sm font-black uppercase tracking-tighter transition-all ${
+                            className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl text-sm font-semibold transition-all group ${
                                 activeTab === tab.id 
-                                    ? 'bg-blue-600 text-white shadow-xl shadow-blue-500/20' 
-                                    : 'text-slate-500 hover:bg-white/5 hover:text-white'
+                                    ? 'bg-white shadow-[10px_10px_20px_#d1d9e6] text-indigo-600 border border-white' 
+                                    : 'text-slate-400 hover:text-indigo-500 hover:bg-white/50'
                             }`}
                         >
-                            <tab.icon size={20} />
+                            <tab.icon size={20} className={activeTab === tab.id ? 'text-indigo-600' : 'text-slate-300 group-hover:text-indigo-400'} />
                             {tab.label}
                         </button>
                     ))}
+                </nav>
+
+                <div className="pt-8 border-t border-slate-200/50">
+                    <Link href="/" className="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl text-sm font-semibold text-slate-400 hover:text-red-500 hover:bg-red-50 transition-all">
+                        <Home size={20} />
+                        Exit Console
+                    </Link>
                 </div>
+            </aside>
 
-                {/* Main Content Area */}
-                <div className="grid grid-cols-1 gap-10 lg:grid-cols-4">
-                    <div className="lg:col-span-3">
-                        {activeTab === 'inventory' && (
-                             <div className="rounded-3xl border border-white/10 shadow-2xl overflow-hidden">
-                                <AdminRoomTable rooms={rooms.items} />
-                            </div>
-                        )}
-                        {activeTab === 'staff' && (
-                             <div className="rounded-3xl border border-white/10 shadow-2xl overflow-hidden">
-                                <AdminStaffTable staff={staff.items} />
-                            </div>
-                        )}
-                        {activeTab === 'reservations' && (
-                             <div className="rounded-3xl border border-white/10 shadow-2xl overflow-hidden">
-                                <AdminReservationTable bookings={bookings.items} />
-                            </div>
-                        )}
-                        {activeTab === 'reports' && (
-                             <div className="space-y-8">
-                                <div className="rounded-3xl border border-white/10 bg-slate-900/40 p-10 backdrop-blur-md">
-                                    <h3 className="mb-8 text-2xl font-black italic tracking-tighter uppercase">Revenue <span className="text-blue-500 text-sm font-bold ml-1">Trend Analysis</span></h3>
-                                    <div className="flex h-64 items-end gap-2 px-10">
-                                        {[40, 60, 45, 90, 65, 80, 55, 95, 70, 85, 30, 75].map((h, i) => (
-                                            <div key={i} className="flex-1 rounded-t-lg bg-gradient-to-t from-blue-600 to-indigo-400 group relative" style={{ height: `${h}%` }}>
-                                                <div className="absolute -top-8 left-1/2 -translate-x-1/2 rounded bg-white px-1.5 py-0.5 text-[8px] font-bold text-black opacity-0 group-hover:opacity-100 transition-opacity">
-                                                    ${h * 120}
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <div className="mt-6 flex justify-between px-10 text-[10px] font-black uppercase tracking-widest text-slate-500">
-                                        <span>Jan</span><span>Apr</span><span>Jul</span><span>Oct</span><span>Dec</span>
-                                    </div>
-                                </div>
-                                
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                    <div className="rounded-3xl border border-white/10 bg-emerald-600 p-8 shadow-2xl">
-                                        <div className="flex items-center justify-between mb-4">
-                                            <TrendingUp size={32} className="text-white" />
-                                            <span className="text-[10px] font-black uppercase tracking-widest bg-white/20 px-3 py-1 rounded-full">Top Performer</span>
-                                        </div>
-                                        <h4 className="text-xl font-bold uppercase italic tracking-tighter">David Miller</h4>
-                                        <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-100 italic">Receptionist • 98.4% Efficiency</p>
-                                    </div>
-                                    <div className="rounded-3xl border border-white/10 bg-slate-900 p-8">
-                                        <div className="flex items-center justify-between mb-4">
-                                            <Star size={32} className="text-blue-500" />
-                                            <span className="text-[10px] font-black uppercase tracking-widest bg-white/5 px-3 py-1 rounded-full">Guest Sentiment</span>
-                                        </div>
-                                        <h4 className="text-xl font-bold uppercase italic tracking-tighter">9.2 Excellent</h4>
-                                        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 italic">Based on 1,240 detailed reviews</p>
-                                    </div>
-                                </div>
-                             </div>
-                        )}
+            {/* Content Area */}
+            <section className="flex-1 flex flex-col h-screen overflow-y-auto z-10 p-10 pt-8">
+                <header className="flex items-center justify-between mb-10">
+                    <div>
+                        <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 capitalize italic leading-none">{activeTab} Interface</h1>
+                        <p className="text-sm font-bold text-slate-300 mt-2 uppercase tracking-[0.2em]">High Impact Management Console</p>
                     </div>
-
-                    {/* Operational Sidebar */}
-                    <div className="space-y-8">
-                        <div className="rounded-3xl border border-white/10 bg-slate-900/40 p-8 backdrop-blur-md">
-                            <div className="mb-8 flex items-center justify-between">
-                                <h3 className="text-xl font-bold tracking-tight italic">Operations <span className="text-blue-500">Live</span></h3>
-                                <Activity size={18} className="animate-pulse text-blue-400" />
-                            </div>
-                            <div className="space-y-6">
-                                {[1, 2, 3].map((item) => (
-                                    <div key={item} className="group flex items-start gap-4 rounded-2xl border border-transparent bg-white/5 p-4 transition-all hover:border-white/10 hover:bg-white/10">
-                                        <div className="mt-1 h-2 w-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.6)]" />
-                                        <div className="flex flex-col">
-                                            <span className="text-sm font-bold text-white">Guest Registration</span>
-                                            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-1">Confirmed Room 10{item}</span>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                            <button className="mt-8 flex w-full items-center justify-center gap-2 rounded-2xl border border-white/10 py-5 text-xs font-black uppercase tracking-widest text-slate-400 transition-all hover:bg-white/10 hover:text-white">
-                                View Activity Log <ChevronRight size={14} />
-                            </button>
+                    <div className="flex items-center gap-6">
+                        <div className="flex items-center gap-3 bg-white px-5 py-2.5 rounded-2xl shadow-[10px_10px_20px_#d1d9e6] border border-white">
+                            <BellRing size={18} className="text-slate-400" />
+                            <span className="text-sm font-bold text-slate-700">Notifications</span>
                         </div>
                     </div>
+                </header>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+                    {stats.map((stat) => (
+                        <div key={stat.label} className="bg-white/60 backdrop-blur-md border border-white rounded-[2.5rem] p-8 shadow-[10px_10px_40px_rgba(0,0,0,0.03)] transition-all hover:scale-105 active:scale-95">
+                            <div className="flex items-center justify-between mb-6">
+                                <div className={`h-12 w-12 rounded-2xl bg-white border border-slate-100 flex items-center justify-center shadow-sm`}>
+                                    <stat.icon size={24} className={stat.color} />
+                                </div>
+                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{stat.label}</span>
+                            </div>
+                            <div className="flex flex-col">
+                                <span className="text-4xl font-black text-slate-900 tracking-tighter italic">{stat.value}</span>
+                                <div className="mt-4 h-1.5 w-full bg-slate-100 rounded-full overflow-hidden border border-white">
+                                    <div className="h-full bg-indigo-500 rounded-full transition-all duration-1000" style={{ width: `${stat.progress}%` }} />
+                                </div>
+                            </div>
+                        </div>
+                    ))}
                 </div>
-            </div>
+
+                <div className="flex-1 glass-surface rounded-[3rem] p-10 py-12 flex flex-col min-h-[600px] mb-10">
+                    <div className="mb-10 flex items-center justify-between">
+                        <h2 className="text-2xl font-black text-slate-900 tracking-tighter uppercase italic">{tabs.find(t => t.id === activeTab)?.label} Controller</h2>
+                    </div>
+
+                    <div className="flex-1 overflow-y-auto">
+                        {activeTab === 'inventory' && <AdminRoomTable rooms={rooms.items} />}
+                        {activeTab === 'staff' && <AdminStaffTable staff={staff.items} />}
+                        {activeTab === 'reservations' && <AdminReservationTable bookings={bookings.items} />}
+                        {activeTab === 'reports' && (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 py-4">
+                                <div className="p-12 rounded-[3rem] bg-slate-50 border-4 border-white flex flex-col items-center text-center space-y-6 shadow-inner">
+                                    <BarChart3 size={60} className="text-indigo-600" />
+                                    <h3 className="text-xl font-bold text-slate-900 uppercase">Financial Metrics</h3>
+                                    <p className="text-sm text-slate-400 max-w-xs font-medium italic leading-relaxed">High-fidelity visualization of capital distribution and operational expenditures.</p>
+                                </div>
+                                <div className="p-12 rounded-[3rem] bg-slate-50 border-4 border-white flex flex-col items-center text-center space-y-6 shadow-inner">
+                                    <TrendingUp size={60} className="text-cyan-600" />
+                                    <h3 className="text-xl font-bold text-slate-900 uppercase">Growth Telemetry</h3>
+                                    <p className="text-sm text-slate-400 max-w-xs font-medium italic leading-relaxed">Proactive forecasting of market trends and occupancy saturation indicators.</p>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </section>
         </main>
     );
 }

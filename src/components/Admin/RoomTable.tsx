@@ -1,5 +1,5 @@
 'use client';
-import { Plus, Edit, Trash, Settings } from 'lucide-react';
+import { Plus, Edit, Trash, Settings, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { deleteRoom, addRoom, updateRoom } from '@/lib/features/roomSlice';
@@ -50,66 +50,74 @@ export default function AdminRoomTable({ rooms }: { rooms: Room[] }) {
     };
 
     return (
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-slate-900/50 backdrop-blur-md">
-            <div className="flex items-center justify-between border-b border-white/10 p-6">
-                <h3 className="text-xl font-bold italic tracking-tighter uppercase">Room <span className="text-blue-500">Management</span></h3>
+        <div className="flex flex-col h-full">
+            <div className="flex items-center justify-between mb-8">
+                <div>
+                    <h3 className="text-xl font-bold text-slate-900 tracking-tight">Vanguard Inventory</h3>
+                    <p className="text-[12px] text-slate-400 mt-1 font-medium italic">High-precision room management system.</p>
+                </div>
                 <button 
                     onClick={handleAdd}
-                    className="flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-2.5 text-xs font-black uppercase tracking-widest text-white transition-all hover:bg-blue-500 shadow-lg shadow-blue-500/20"
+                    className="flex items-center gap-3 rounded-2xl bg-indigo-600 px-6 py-3 text-[11px] font-bold uppercase tracking-widest text-white shadow-[0_10px_20px_rgba(79,70,229,0.3)] transition-all hover:bg-indigo-500 active:scale-95"
                 >
                     <Plus size={18} />
-                    <span>Add Room</span>
+                    New Record
                 </button>
             </div>
 
-            <div className="overflow-x-auto">
-                <table className="w-full text-left text-sm">
-                    <thead className="bg-white/5 text-slate-400">
-                        <tr>
-                            <th className="px-6 py-4 font-semibold uppercase tracking-wider">Room Type</th>
-                            <th className="px-6 py-4 font-semibold uppercase tracking-wider">Status</th>
-                            <th className="px-6 py-4 font-semibold uppercase tracking-wider">Rate</th>
-                            <th className="px-6 py-4 font-semibold uppercase tracking-wider">Actions</th>
+            <div className="flex-1 overflow-hidden rounded-[2rem] border border-white bg-white/40 backdrop-blur-md shadow-[10px_10px_30px_#d1d9e6]">
+                <table className="w-full text-left text-sm border-collapse">
+                    <thead>
+                        <tr className="bg-slate-50/50 border-b border-white">
+                            <th className="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Descriptor</th>
+                            <th className="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">Operational Status</th>
+                            <th className="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Base Rate</th>
+                            <th className="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">Settings</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-white/5">
+                    <tbody className="divide-y divide-slate-100">
                         {rooms.map((room) => (
-                            <tr key={room.id} className="hover:bg-white/5 transition-colors">
-                                <td className="px-6 py-4 font-bold text-white tracking-tight">{room.type}</td>
-                                <td className="px-6 py-4">
-                                    <span className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-black uppercase tracking-widest ${
-                                        room.status === 'Available' ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'
+                            <tr key={room.id} className="group hover:bg-white/60 transition-all cursor-pointer">
+                                <td className="px-8 py-6">
+                                    <div className="flex flex-col">
+                                        <span className="font-extrabold text-slate-800 tracking-tight text-base">{room.type}</span>
+                                        <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-[0.2em]">ID: {room.id}</span>
+                                    </div>
+                                </td>
+                                <td className="px-8 py-6 text-center">
+                                    <span className={`inline-flex items-center gap-2 rounded-xl px-4 py-1.5 text-[9px] font-black uppercase tracking-widest border transition-all ${
+                                        room.status === 'Available' 
+                                            ? 'bg-emerald-50 text-emerald-600 border-emerald-100' 
+                                            : 'bg-red-50 text-red-600 border-red-100'
                                     }`}>
+                                        <div className={`h-1.5 w-1.5 rounded-full ${room.status === 'Available' ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'}`} />
                                         {room.status}
                                     </span>
                                 </td>
-                                <td className="px-6 py-4 text-slate-300 font-bold">${room.price}/night</td>
-                                <td className="px-6 py-4 text-center">
-                                    <div className="flex gap-4">
+                                <td className="px-8 py-6">
+                                    <div className="flex items-baseline gap-1">
+                                        <span className="text-lg font-bold text-slate-900">${room.price}</span>
+                                        <span className="text-[10px] font-bold text-slate-400 uppercase">/nt</span>
+                                    </div>
+                                </td>
+                                <td className="px-8 py-6">
+                                    <div className="flex items-center justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
                                         <button 
                                             onClick={() => handleEdit(room)}
-                                            className="text-slate-500 hover:text-blue-400 transition-colors"
-                                            title="Quick Edit"
+                                            className="h-10 w-10 rounded-xl bg-white border border-slate-100 shadow-[4px_4px_10px_#d1d9e6] flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:scale-110 transition-all"
                                         >
-                                            <Edit size={18} />
-                                        </button>
-                                        <button 
-                                            onClick={() => handleEdit(room)}
-                                            className="text-slate-500 hover:text-indigo-400 transition-colors"
-                                            title="Advanced Settings"
-                                        >
-                                            <Settings size={18} />
+                                            <Settings size={16} />
                                         </button>
                                         <button 
                                             onClick={() => handleDelete(room.id)}
-                                            className={`flex items-center gap-2 rounded-lg px-2 py-1 transition-all ${
+                                            className={`h-10 px-4 rounded-xl flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest transition-all ${
                                                 deleteConfirm === room.id 
-                                                    ? 'bg-red-500 text-white font-black text-[10px] uppercase shadow-lg shadow-red-500/30' 
-                                                    : 'text-slate-500 hover:text-red-400'
+                                                    ? 'bg-red-600 text-white shadow-lg' 
+                                                    : 'bg-white border border-slate-100 shadow-[4px_4px_10px_#d1d9e6] text-slate-400 hover:text-red-500'
                                             }`}
                                         >
-                                            <Trash size={18} />
-                                            {deleteConfirm === room.id && <span>Click again to CONFIRM</span>}
+                                            <Trash2 size={16} />
+                                            {deleteConfirm === room.id ? 'Confirm' : ''}
                                         </button>
                                     </div>
                                 </td>
@@ -123,7 +131,7 @@ export default function AdminRoomTable({ rooms }: { rooms: Room[] }) {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onSave={handleSave}
-                room={selectedRoom}
+                room={selectedRoom || undefined}
             />
         </div>
     );

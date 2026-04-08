@@ -59,6 +59,5 @@
       "id": "Ozzlv4GDLqs"
     }
   ],
-  "services": [],
-  "$schema": "./node_modules/json-server/schema.json"
+  "services": []
 }

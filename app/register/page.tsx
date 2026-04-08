@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { registerUser } from '@/lib/features/userSlice';
 import { AppDispatch } from '@/lib/store';
 import { useRouter } from 'next/navigation';
-import { Hotel, User, Lock, Mail, ArrowRight, ShieldPlus } from 'lucide-react';
+import { Hotel, User, Lock, Mail, ArrowRight, ShieldPlus, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
 
 export default function RegisterPage() {
@@ -16,12 +16,12 @@ export default function RegisterPage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const result = await dispatch(registerUser({ 
-            username, 
-            email, 
-            password, 
-            role: 'Guest', 
-            name: username.charAt(0).toUpperCase() + username.slice(1) 
+        const result = await dispatch(registerUser({
+            username,
+            email,
+            password,
+            role: 'Guest',
+            name: username.charAt(0).toUpperCase() + username.slice(1)
         }));
         if (registerUser.fulfilled.match(result)) {
             router.push('/dashboard');
@@ -29,85 +29,82 @@ export default function RegisterPage() {
     };
 
     return (
-        <main className="flex min-h-screen items-center justify-center bg-slate-950 p-6 text-white selection:bg-blue-500/30">
-            <div className="w-full max-w-md rounded-[2.5rem] border border-white/10 bg-slate-900/50 p-12 shadow-2xl backdrop-blur-3xl transition-all hover:border-white/20">
-                <div className="mb-12 text-center">
-                    <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-[2rem] bg-gradient-to-br from-blue-400 to-blue-600 shadow-2xl shadow-blue-500/20">
-                        <ShieldPlus size={40} className="text-white" />
+        <main className="relative flex min-h-screen w-full flex-col items-center justify-center bg-[#050505] dotted-circle-bg overflow-hidden p-6">
+            <div className="circular-glow top-[-10%] left-[-10%]" />
+            <div className="circular-glow bottom-[-10%] right-[-10%]" />
+
+            <div className="z-10 w-full max-w-sm">
+                <div className="mb-10 text-center">
+                    <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600/10 border border-blue-500/20 mb-4">
+                        <ShieldPlus className="text-blue-500" size={24} />
                     </div>
-                    <h1 className="text-4xl font-black italic tracking-tighter uppercase mb-2">GateKeeper</h1>
-                    <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-500">Security Enrollment • GrandStay HMS</p>
+                    <h1 className="text-2xl font-bold tracking-tight text-white">Join GrandStay</h1>
+                    <p className="mt-2 text-sm text-zinc-500">Create your digital identity for secure access.</p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="space-y-2">
-                        <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 ml-4">Full Identity</label>
-                        <div className="relative group">
-                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500 transition-colors">
-                                <User size={18} />
-                            </div>
-                            <input 
-                                type="text" 
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="space-y-1.5">
+                        <label className="text-[11px] font-bold uppercase tracking-wider text-zinc-500 ml-1">Full Identity</label>
+                        <div className="relative">
+                            <User className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-600" size={16} />
+                            <input
+                                type="text"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
-                                placeholder="Choose a username"
-                                className="w-full rounded-2xl border border-white/5 bg-white/5 py-4 pl-12 pr-6 text-sm font-medium outline-none transition-all focus:border-blue-500/50 focus:bg-white/10 placeholder:text-slate-700"
+                                className="w-full h-12 rounded-xl border border-zinc-800 bg-zinc-900/50 pl-11 pr-4 text-sm text-white placeholder:text-zinc-700 outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all"
+                                placeholder="Username"
                                 required
                             />
                         </div>
                     </div>
 
-                    <div className="space-y-2">
-                        <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 ml-4">Neural Address</label>
-                        <div className="relative group">
-                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500 transition-colors">
-                                <Mail size={18} />
-                            </div>
-                            <input 
-                                type="email" 
+                    <div className="space-y-1.5">
+                        <label className="text-[11px] font-bold uppercase tracking-wider text-zinc-500 ml-1">Neural Address</label>
+                        <div className="relative">
+                            <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-600" size={16} />
+                            <input
+                                type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                placeholder="Email@domain.com"
-                                className="w-full rounded-2xl border border-white/5 bg-white/5 py-4 pl-12 pr-6 text-sm font-medium outline-none transition-all focus:border-blue-500/50 focus:bg-white/10 placeholder:text-slate-700"
+                                className="w-full h-12 rounded-xl border border-zinc-800 bg-zinc-900/50 pl-11 pr-4 text-sm text-white placeholder:text-zinc-700 outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all"
+                                placeholder="Email Address"
                                 required
                             />
                         </div>
                     </div>
 
-                    <div className="space-y-2">
-                        <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 ml-4">Passkey Verification</label>
-                        <div className="relative group">
-                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500 transition-colors">
-                                <Lock size={18} />
-                            </div>
-                            <input 
-                                type="password" 
+                    <div className="space-y-1.5">
+                        <label className="text-[11px] font-bold uppercase tracking-wider text-zinc-500 ml-1">Passkey</label>
+                        <div className="relative">
+                            <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-600" size={16} />
+                            <input
+                                type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
+                                className="w-full h-12 rounded-xl border border-zinc-800 bg-zinc-900/50 pl-11 pr-4 text-sm text-white placeholder:text-zinc-700 outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all"
                                 placeholder="••••••••"
-                                className="w-full rounded-2xl border border-white/5 bg-white/5 py-4 pl-12 pr-6 text-sm font-medium outline-none transition-all focus:border-blue-500/50 focus:bg-white/10 placeholder:text-slate-700"
                                 required
                             />
                         </div>
                     </div>
 
-                    <button 
+                    <button
                         type="submit"
-                        className="group flex w-full items-center justify-center gap-3 rounded-2xl bg-blue-600 py-4.5 text-xs font-black uppercase tracking-widest text-white shadow-xl shadow-blue-500/20 transition-all hover:bg-blue-500 hover:scale-[1.02] active:scale-95"
+                        className="flex w-full items-center justify-center gap-2 h-12 rounded-xl bg-white text-black text-sm font-bold hover:bg-zinc-200 transition-all active:scale-[0.98]"
                     >
-                        Create Identity <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                        Register Identity <ArrowRight size={16} />
                     </button>
-                    
-                    <div className="text-center">
-                        <Link href="/" className="text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-white transition-colors">
-                            Already enrolled? <span className="text-blue-500 italic">Access GateKeeper</span>
+
+                    <div className="pt-4 text-center">
+                        <Link href="/" className="text-xs text-zinc-500 hover:text-white transition-colors">
+                            Already have an account? <span className="text-blue-500 ml-1">Access Gateway</span>
                         </Link>
                     </div>
                 </form>
 
-                <div className="mt-12 flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-[0.4em] text-slate-800">
-                    <Hotel size={12} />
-                    <span>Neural Network v1.0.4 - Secure Path</span>
+                <div className="mt-20 flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-700">
+                    <ShieldCheck size={12} />
+                    <span>Neural Authentication Active</span>
                 </div>
             </div>
         </main>
