@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { registerUser } from '@/lib/features/userSlice';
 import { AppDispatch } from '@/lib/store';
 import { useRouter } from 'next/navigation';
-import { Hotel, User, Lock, Mail, ArrowRight, ShieldPlus, ShieldCheck } from 'lucide-react';
+import { Hotel, User, Lock, Mail, ArrowRight, ShieldPlus, ShieldCheck, UserPlus } from 'lucide-react';
 import Link from 'next/link';
 
 export default function RegisterPage() {
@@ -29,59 +29,68 @@ export default function RegisterPage() {
     };
 
     return (
-        <main className="relative flex min-h-screen w-full flex-col items-center justify-center bg-[#050505] dotted-circle-bg overflow-hidden p-6">
-            <div className="circular-glow top-[-10%] left-[-10%]" />
-            <div className="circular-glow bottom-[-10%] right-[-10%]" />
+        <main className="relative flex min-h-screen w-full flex-col items-center justify-center bg-slate-50 overflow-hidden p-6 font-sans">
+            {/* Mesh decor */}
+            <div className="absolute top-[-15%] right-[-10%] h-[700px] w-[700px] rounded-full bg-indigo-100/40 blur-[120px] pointer-events-none z-0" />
+            <div className="absolute bottom-[-15%] left-[-10%] h-[700px] w-[700px] rounded-full bg-cyan-100/40 blur-[120px] pointer-events-none z-0" />
 
-            <div className="z-10 w-full max-w-sm">
+            <div className="glass-card z-10 w-full max-w-md rounded-[2.5rem] p-10 py-12">
+                <style jsx>{`
+                    .glass-card {
+                        background: rgba(255, 255, 255, 0.4);
+                        backdrop-filter: blur(16px);
+                        border: 1px solid rgba(255, 255, 255, 0.8);
+                        box-shadow: 20px 20px 60px #d1d9e6, -20px -20px 60px #ffffff;
+                    }
+                `}</style>
                 <div className="mb-10 text-center">
-                    <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600/10 border border-blue-500/20 mb-4">
-                        <ShieldPlus className="text-blue-500" size={24} />
+                    <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white shadow-[10px_10px_20px_#d1d9e6,-10px_-10px_20px_#ffffff] mb-6">
+                        <UserPlus className="text-indigo-600" size={28} />
                     </div>
-                    <h1 className="text-2xl font-bold tracking-tight text-white">Join GrandStay</h1>
-                    <p className="mt-2 text-sm text-zinc-500">Create your digital identity for secure access.</p>
+                    <h1 className="text-3xl font-bold tracking-tight text-slate-900 leading-tight">Create Identity</h1>
+                    <p className="mt-2 text-sm font-medium text-slate-500 italic">Initialize your GrandStay Hospitality Profile</p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="space-y-1.5">
-                        <label className="text-[11px] font-bold uppercase tracking-wider text-zinc-500 ml-1">Full Identity</label>
-                        <div className="relative">
-                            <User className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-600" size={16} />
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="space-y-2 text-left">
+                        <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 ml-1">Legal Name</label>
+                        <div className="relative group">
+                            <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors" size={18} />
                             <input
                                 type="text"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
-                                className="w-full h-12 rounded-xl border border-zinc-800 bg-zinc-900/50 pl-11 pr-4 text-sm text-white placeholder:text-zinc-700 outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all"
-                                placeholder="Username"
+                                className="w-full h-14 rounded-2xl border-2 border-white bg-white/50 pl-12 pr-4 text-sm font-semibold text-slate-800 placeholder:text-slate-300 shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff] outline-none focus:border-indigo-100 transition-all"
+                                placeholder="e.g. John Doe"
                                 required
                             />
                         </div>
                     </div>
 
-                    <div className="space-y-1.5">
-                        <label className="text-[11px] font-bold uppercase tracking-wider text-zinc-500 ml-1">Neural Address</label>
-                        <div className="relative">
-                            <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-600" size={16} />
+                    <div className="space-y-2 text-left">
+                        <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 ml-1">Secure Email</label>
+                        <div className="relative group">
+                            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors" size={18} />
                             <input
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full h-12 rounded-xl border border-zinc-800 bg-zinc-900/50 pl-11 pr-4 text-sm text-white placeholder:text-zinc-700 outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all"
-                                placeholder="Email Address"
+                                className="w-full h-14 rounded-2xl border-2 border-white bg-white/50 pl-12 pr-4 text-sm font-semibold text-slate-800 placeholder:text-slate-300 shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff] outline-none focus:border-indigo-100 transition-all"
+                                placeholder="john@example.com"
                                 required
                             />
                         </div>
                     </div>
 
-                    <div className="space-y-1.5">
-                        <label className="text-[11px] font-bold uppercase tracking-wider text-zinc-500 ml-1">Passkey</label>
-                        <div className="relative">
-                            <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-600" size={16} />
+                    <div className="space-y-2 text-left">
+                        <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 ml-1">Encrypted Password</label>
+                        <div className="relative group">
+                            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors" size={18} />
                             <input
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full h-12 rounded-xl border border-zinc-800 bg-zinc-900/50 pl-11 pr-4 text-sm text-white placeholder:text-zinc-700 outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all"
+                                className="w-full h-14 rounded-2xl border-2 border-white bg-white/50 pl-12 pr-4 text-sm font-semibold text-slate-800 placeholder:text-slate-300 shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff] outline-none focus:border-indigo-100 transition-all"
                                 placeholder="••••••••"
                                 required
                             />
@@ -90,21 +99,21 @@ export default function RegisterPage() {
 
                     <button
                         type="submit"
-                        className="flex w-full items-center justify-center gap-2 h-12 rounded-xl bg-white text-black text-sm font-bold hover:bg-zinc-200 transition-all active:scale-[0.98]"
+                        className="w-full h-14 rounded-2xl bg-indigo-600 text-sm font-bold text-white shadow-[0_10px_20px_rgba(79,70,229,0.3)] hover:bg-indigo-500 hover:translate-y-[-2px] active:translate-y-[0px] transition-all flex items-center justify-center gap-3"
                     >
-                        Register Identity <ArrowRight size={16} />
+                        Initialize Profile <ArrowRight size={18} />
                     </button>
 
-                    <div className="pt-4 text-center">
-                        <Link href="/" className="text-xs text-zinc-500 hover:text-white transition-colors">
-                            Already have an account? <span className="text-blue-500 ml-1">Access Gateway</span>
+                    <div className="pt-6 text-center">
+                        <Link href="/" className="text-xs font-semibold text-slate-400 hover:text-indigo-600 transition-colors">
+                            Already have an identity? <span className="text-indigo-500 underline underline-offset-4 ml-1">Secure Sign In</span>
                         </Link>
                     </div>
                 </form>
 
-                <div className="mt-20 flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-700">
-                    <ShieldCheck size={12} />
-                    <span>Neural Authentication Active</span>
+                <div className="mt-12 flex items-center justify-center gap-3 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-300">
+                    <ShieldCheck size={14} className="text-emerald-400" />
+                    <span>Privacy Policy Compliant</span>
                 </div>
             </div>
         </main>

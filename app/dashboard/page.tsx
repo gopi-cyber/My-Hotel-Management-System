@@ -44,8 +44,8 @@ export default function Dashboard() {
   return (
     <main className="flex min-h-screen bg-slate-50 text-slate-800 overflow-hidden font-sans">
       {/* Mesh Decor */}
-      <div className="absolute top-[-15%] right-[-10%] h-[700px] w-[700px] rounded-full bg-indigo-100/40 blur-[120px]" />
-      <div className="absolute bottom-[-15%] left-[-10%] h-[700px] w-[700px] rounded-full bg-cyan-100/40 blur-[120px]" />
+      <div className="absolute top-[-15%] right-[-10%] h-[700px] w-[700px] rounded-full bg-indigo-100/40 blur-[120px] pointer-events-none z-0" />
+      <div className="absolute bottom-[-15%] left-[-10%] h-[700px] w-[700px] rounded-full bg-cyan-100/40 blur-[120px] pointer-events-none z-0" />
 
       {/* Glass Sidebar */}
       <aside className="z-20 w-72 glass-morphism border-r border-white/60 flex flex-col p-8 space-y-10 h-screen">

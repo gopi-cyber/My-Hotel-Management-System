@@ -31,8 +31,8 @@ export default function ReceptionistDashboard() {
     return (
         <main className="flex min-h-screen bg-slate-50 text-slate-800 overflow-hidden font-sans">
             {/* Mesh decor */}
-            <div className="absolute top-[-20%] right-[-10%] h-[800px] w-[800px] rounded-full bg-cyan-100/30 blur-[120px]" />
-            <div className="absolute bottom-[-20%] left-[-10%] h-[800px] w-[800px] rounded-full bg-indigo-100/30 blur-[120px]" />
+            <div className="absolute top-[-20%] right-[-10%] h-[800px] w-[800px] rounded-full bg-cyan-100/30 blur-[120px] pointer-events-none z-0" />
+            <div className="absolute bottom-[-20%] left-[-10%] h-[800px] w-[800px] rounded-full bg-indigo-100/30 blur-[120px] pointer-events-none z-0" />
 
             {/* Glass Side Navigation */}
             <aside className="z-20 w-72 glass-morphism border-r border-white/60 flex flex-col p-8 space-y-10">

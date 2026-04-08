@@ -46,9 +46,9 @@ export default function LoginPage() {
 
     return (
         <main className="relative flex min-h-screen w-full flex-col items-center justify-center bg-slate-50 overflow-hidden p-6 font-sans">
-            {/* Mesh Gradient Background Decor */}
-            <div className="absolute top-[-10%] right-[-10%] h-[500px] w-[500px] rounded-full bg-indigo-100/50 blur-[100px]" />
-            <div className="absolute bottom-[-10%] left-[-10%] h-[500px] w-[500px] rounded-full bg-cyan-100/50 blur-[100px]" />
+            {/* Mesh Gradient Decor */}
+            <div className="absolute top-[-15%] right-[-10%] h-[700px] w-[700px] rounded-full bg-indigo-100/40 blur-[120px] pointer-events-none z-0" />
+            <div className="absolute bottom-[-15%] left-[-10%] h-[700px] w-[700px] rounded-full bg-cyan-100/40 blur-[120px] pointer-events-none z-0" />
             
             <div className="glass-card z-10 w-full max-w-md rounded-[2.5rem] p-10 py-12">
                 <div className="mb-10 text-center">
