@@ -1,4 +1,5 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
 
 interface User {
     id: string;
@@ -15,26 +16,46 @@ interface UserState {
     error: string | null;
 }
 
-// Simulation of a local database
-const MOCK_USERS: User[] = [
-    { id: '1', username: 'admin', password: '123', role: 'admin', name: 'Admin User' },
-    { id: '2', username: 'reception', password: '123', role: 'receptionist', name: 'Receptionist User' },
-    { id: '3', username: 'guest', password: '123', role: 'guest', name: 'Guest User' }
-];
+const API_URL = 'http://localhost:3001/users';
 
 export const registerUser = createAsyncThunk('user/registerUser', async (userData: Omit<User, 'id'>) => {
-    await new Promise(resolve => setTimeout(resolve, 500));
-    const newUser = { ...userData, id: Math.random().toString(36).substr(2, 9) };
-    return newUser;
+    // Check for duplicate username first
+    const checkResponse = await axios.get(`${API_URL}?username=${userData.username}`);
+    if (checkResponse.data.length > 0) {
+        throw new Error('Identity already initialized. Please choose a unique handle.');
+    }
+    
+    const response = await axios.post(API_URL, userData);
+    return response.data;
 });
 
 export const loginUser = createAsyncThunk('user/loginUser', async (credentials: { username: string, password?: string }) => {
-    await new Promise(resolve => setTimeout(resolve, 500));
-    const user = MOCK_USERS.find(u => u.username === credentials.username && u.password === credentials.password);
-    if (user) {
-        return user;
+    try {
+        // Query by username only to avoid JSON Server filtering issues with the password field
+        const response = await axios.get(API_URL, {
+            params: {
+                username: credentials.username
+            }
+        });
+        const users = response.data;
+        
+        if (Array.isArray(users) && users.length > 0) {
+            const user = users[0];
+            
+            // Manual password comparison
+            if (user.password === credentials.password) {
+                // Normalize role to lowercase for consistent routing
+                return {
+                    ...user,
+                    role: user.role.toLowerCase()
+                };
+            }
+        }
+        
+        throw new Error('Invalid username or password');
+    } catch (err: any) {
+        throw new Error(err.message || 'Authentication service unreachable');
     }
-    throw new Error('Invalid username or password');
 });
 
 const userSlice = createSlice({
@@ -53,13 +74,18 @@ const userSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(registerUser.fulfilled, (state, action) => {
-                state.user = action.payload;
-                state.isAuthenticated = true;
+                // We don't necessarily log them in immediately if the user wants redirect to login first
                 state.error = null;
+            })
+            .addCase(registerUser.rejected, (state, action) => {
+                state.error = action.error.message || 'Registration failed. Check if server is running.';
             })
             .addCase(loginUser.fulfilled, (state, action) => {
                 state.user = action.payload;
                 state.isAuthenticated = true;
+                state.error = null;
+            })
+            .addCase(loginUser.pending, (state) => {
                 state.error = null;
             })
             .addCase(loginUser.rejected, (state, action) => {

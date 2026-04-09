@@ -1,15 +1,48 @@
 'use client';
 import { Plus, Edit, Trash2, ShieldCheck, Mail, User, CheckCircle, Clock } from 'lucide-react';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/lib/store';
+import { addStaff, updateStaff, deleteStaff } from '@/lib/features/staffSlice';
+import StaffModal from './StaffModal';
 
 interface Staff {
     id: string;
     name: string;
-    role: string;
-    status: string;
+    role: 'Receptionist' | 'Housekeeping' | 'Management';
+    status: 'Active' | 'On Leave' | 'Inactive';
     email: string;
 }
 
 export default function AdminStaffTable({ staff }: { staff: Staff[] }) {
+    const dispatch = useDispatch<AppDispatch>();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedStaff, setSelectedStaff] = useState<Staff | null>(null);
+
+    const handleInvite = () => {
+        setSelectedStaff(null);
+        setIsModalOpen(true);
+    };
+
+    const handleEdit = (member: Staff) => {
+        setSelectedStaff(member);
+        setIsModalOpen(true);
+    };
+
+    const handleDelete = (id: string) => {
+        if (confirm('Are you sure you want to remove this identity from the core?')) {
+            dispatch(deleteStaff(id));
+        }
+    };
+
+    const handleConfirm = (data: any) => {
+        if (selectedStaff) {
+            dispatch(updateStaff(data));
+        } else {
+            dispatch(addStaff(data));
+        }
+    };
+
     return (
         <div className="flex flex-col h-full">
             <div className="flex items-center justify-between mb-8">
@@ -17,7 +50,10 @@ export default function AdminStaffTable({ staff }: { staff: Staff[] }) {
                     <h3 className="text-xl font-bold text-slate-900 tracking-tight">Personnel Log</h3>
                     <p className="text-[12px] text-slate-400 mt-1 font-medium italic">Active staff credentials and shift status.</p>
                 </div>
-                <button className="flex items-center gap-3 rounded-2xl bg-indigo-600 px-6 py-3 text-[11px] font-bold uppercase tracking-widest text-white shadow-[0_10px_20px_rgba(79,70,229,0.3)] transition-all hover:bg-indigo-500 active:scale-95">
+                <button 
+                    onClick={handleInvite}
+                    className="flex items-center gap-3 rounded-2xl bg-indigo-600 px-6 py-3 text-[11px] font-bold uppercase tracking-widest text-white shadow-[0_10px_20px_rgba(79,70,229,0.3)] transition-all hover:bg-indigo-500 active:scale-95"
+                >
                     <Plus size={18} />
                     Invite Identity
                 </button>
@@ -60,10 +96,16 @@ export default function AdminStaffTable({ staff }: { staff: Staff[] }) {
                                 </td>
                                 <td className="px-8 py-6">
                                     <div className="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <button className="h-9 w-9 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-slate-400 hover:text-indigo-600 transition-all">
+                                        <button 
+                                            onClick={() => handleEdit(member)}
+                                            className="h-9 w-9 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-slate-400 hover:text-indigo-600 transition-all"
+                                        >
                                             <Edit size={16} />
                                         </button>
-                                        <button className="h-9 w-9 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-slate-400 hover:text-red-500 transition-all">
+                                        <button 
+                                            onClick={() => handleDelete(member.id)}
+                                            className="h-9 w-9 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-slate-400 hover:text-red-500 transition-all"
+                                        >
                                             <Trash2 size={16} />
                                         </button>
                                     </div>
@@ -73,6 +115,13 @@ export default function AdminStaffTable({ staff }: { staff: Staff[] }) {
                     </tbody>
                 </table>
             </div>
+
+            <StaffModal 
+                isOpen={isModalOpen} 
+                onClose={() => setIsModalOpen(false)} 
+                onConfirm={handleConfirm}
+                staffMember={selectedStaff}
+            />
         </div>
     );
 }

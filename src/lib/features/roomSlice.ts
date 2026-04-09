@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 
-interface Room {
+export interface Room {
     id: string;
     type: string;
     price: number;
@@ -17,55 +17,73 @@ interface RoomState {
     error: string | null;
 }
 
-// Mock Data
-const MOCK_ROOMS: Room[] = [
+// Mutable in-memory store — shared across admin and guest
+let MOCK_ROOMS: Room[] = [
     { id: '101', type: 'Deluxe Ocean View', price: 299, status: 'Available', amenities: ['WiFi', 'Mini Bar', 'Ocean View'], image: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&q=80&w=800', floor: 1, description: 'Breathtaking ocean views with premium amenities.' },
     { id: '102', type: 'Presidential Suite', price: 899, status: 'Occupied', amenities: ['WiFi', 'Kitchen', 'Private Pool', 'Butler Service'], image: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&q=80&w=800', floor: 10, description: 'The pinnacle of luxury with private pool and butler service.' },
     { id: '201', type: 'Executive Suite', price: 499, status: 'Available', amenities: ['WiFi', 'Office Desk', 'City View'], image: 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&q=80&w=800', floor: 2, description: 'Perfect for business travelers with a dedicated office desk.' },
     { id: '202', type: 'Family Room', price: 349, status: 'Available', amenities: ['WiFi', '2 Queen Beds', 'Play Area'], image: 'https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&q=80&w=800', floor: 2, description: 'Spacious room with a play area for children.' },
 ];
 
-// 1. Fetch Rooms Simulation
+// Async fetch — returns current mutable list
 export const fetchRooms = createAsyncThunk('rooms/fetchRooms', async () => {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 500));
-    return MOCK_ROOMS;
+    await new Promise(resolve => setTimeout(resolve, 200));
+    return [...MOCK_ROOMS];
 });
 
-// 2. Room CRUD Simulations
-export const addRoom = createAsyncThunk('rooms/addRoom', async (room: Omit<Room, 'id'>) => {
-    await new Promise(resolve => setTimeout(resolve, 500));
-    return { ...room, id: 'r' + Math.random().toString(36).substr(2, 5) };
-});
-
-export const updateRoom = createAsyncThunk('rooms/updateRoom', async (room: Room) => {
-    await new Promise(resolve => setTimeout(resolve, 500));
-    return room;
-});
-
-export const deleteRoom = createAsyncThunk('rooms/deleteRoom', async (roomId: string) => {
-    await new Promise(resolve => setTimeout(resolve, 500));
-    return roomId;
-});
-
+// Keep bookRoom and checkOutRoom as async thunks (used by guest booking flow)
 export const bookRoom = createAsyncThunk('rooms/bookRoom', async (roomId: string) => {
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 200));
+    const room = MOCK_ROOMS.find(r => r.id === roomId);
+    if (room) room.status = 'Occupied';
     return { id: roomId, status: 'Occupied' };
 });
 
 export const checkOutRoom = createAsyncThunk('rooms/checkOutRoom', async (roomId: string) => {
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 200));
+    const room = MOCK_ROOMS.find(r => r.id === roomId);
+    if (room) room.status = 'Available';
     return { id: roomId, status: 'Available' };
 });
 
 const roomSlice = createSlice({
     name: 'rooms',
     initialState: {
-        items: MOCK_ROOMS as Room[], // Initialize with mock data
+        items: [...MOCK_ROOMS] as Room[],
         status: 'succeeded',
         error: null,
     } as RoomState,
-    reducers: {},
+    reducers: {
+        // Synchronous add — instant UI update + persists in MOCK_ROOMS
+        addRoomSync: (state, action: PayloadAction<Omit<Room, 'id'>>) => {
+            const newRoom: Room = {
+                ...action.payload,
+                id: 'r' + Math.random().toString(36).substr(2, 6),
+            };
+            MOCK_ROOMS.push(newRoom);
+            state.items.push(newRoom);
+        },
+        // Synchronous update — instantly reflects status/price/type changes
+        updateRoomSync: (state, action: PayloadAction<Room>) => {
+            const updatedRoom = action.payload;
+            // Update Redux state
+            const stateIdx = state.items.findIndex(r => r.id === updatedRoom.id);
+            if (stateIdx !== -1) {
+                state.items[stateIdx] = updatedRoom;
+            }
+            // Update the mutable store so guest sees the change too
+            const mockIdx = MOCK_ROOMS.findIndex(r => r.id === updatedRoom.id);
+            if (mockIdx !== -1) {
+                MOCK_ROOMS[mockIdx] = updatedRoom;
+            }
+        },
+        // Synchronous delete — removes from both Redux state and MOCK_ROOMS
+        deleteRoomSync: (state, action: PayloadAction<string>) => {
+            const roomId = action.payload;
+            state.items = state.items.filter(r => r.id !== roomId);
+            MOCK_ROOMS = MOCK_ROOMS.filter(r => r.id !== roomId);
+        },
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchRooms.pending, (state) => {
@@ -78,21 +96,6 @@ const roomSlice = createSlice({
             .addCase(fetchRooms.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message || 'Error loading rooms';
-            })
-            .addCase(addRoom.fulfilled, (state, action) => {
-                console.log('Room Added:', action.payload);
-                state.items.push(action.payload as any);
-            })
-            .addCase(updateRoom.fulfilled, (state, action) => {
-                console.log('Room Updated:', action.payload);
-                const index = state.items.findIndex(room => room.id === (action.payload as any).id);
-                if (index !== -1) {
-                    state.items[index] = action.payload as any;
-                }
-            })
-            .addCase(deleteRoom.fulfilled, (state, action) => {
-                console.log('Room Deleted:', action.payload);
-                state.items = state.items.filter(room => String(room.id) !== String(action.payload));
             })
             .addCase(bookRoom.fulfilled, (state, action) => {
                 const index = state.items.findIndex(room => room.id === action.payload.id);
@@ -109,4 +112,5 @@ const roomSlice = createSlice({
     },
 });
 
-export default roomSlice.reducer;
+export const { addRoomSync, updateRoomSync, deleteRoomSync } = roomSlice.actions;
+export default roomSlice.reducer;

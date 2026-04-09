@@ -57,6 +57,54 @@
       "role": "Guest",
       "name": "New_guest",
       "id": "Ozzlv4GDLqs"
+    },
+    {
+      "username": "StaffTest",
+      "email": "staff@test.com",
+      "password": "123",
+      "role": "receptionist",
+      "name": "StaffTest",
+      "id": "AcmB0moqvho"
+    },
+    {
+      "username": "FinalAdmin",
+      "email": "finaladmin@example.com",
+      "password": "123",
+      "role": "admin",
+      "name": "FinalAdmin",
+      "id": "vZfZT_DsZ1c"
+    },
+    {
+      "username": "FinalStaff",
+      "email": "finalstaff@example.com",
+      "password": "123",
+      "role": "receptionist",
+      "name": "FinalStaff",
+      "id": "1kxBriBzi1Q"
+    },
+    {
+      "username": "FinalGuest",
+      "email": "finalguest@example.com",
+      "password": "123",
+      "role": "guest",
+      "name": "FinalGuest",
+      "id": "emElSiYWMLk"
+    },
+    {
+      "username": "ValidationHero",
+      "email": "hero@test.com",
+      "password": "HeroPass123",
+      "role": "guest",
+      "name": "ValidationHero",
+      "id": "rsF_Z6cbd3A"
+    },
+    {
+      "username": "goi",
+      "email": "ggg@gmail.com",
+      "password": "123456",
+      "role": "admin",
+      "name": "Goi",
+      "id": "12CaKJhWLK4"
     }
   ],
   "services": []

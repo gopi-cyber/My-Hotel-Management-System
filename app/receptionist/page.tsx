@@ -50,11 +50,17 @@ export default function ReceptionistDashboard() {
                     <button className="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl text-sm font-semibold bg-white shadow-[10px_10px_20px_#d1d9e6] text-cyan-600 border border-white">
                         <ClipboardList size={20} /> Today's Arrivals
                     </button>
-                    <button className="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl text-sm font-semibold text-slate-400 hover:text-slate-600 hover:bg-white/40 transition-all">
-                        <Hotel size={20} /> Room Status Board
+                    <button 
+                        onClick={() => alert('Room Status Board arriving in v2.2')}
+                        className="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl text-sm font-semibold text-slate-400 hover:text-cyan-600 hover:bg-white/40 transition-all group"
+                    >
+                        <Hotel size={20} className="text-slate-300 group-hover:text-cyan-400" /> Room Status Board
                     </button>
-                    <button className="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl text-sm font-semibold text-slate-400 hover:text-slate-600 hover:bg-white/40 transition-all">
-                        <FileText size={20} /> Billing Terminal
+                    <button 
+                        onClick={() => alert('Billing Terminal arriving in v2.2')}
+                        className="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl text-sm font-semibold text-slate-400 hover:text-cyan-600 hover:bg-white/40 transition-all group"
+                    >
+                        <FileText size={20} className="text-slate-300 group-hover:text-cyan-400" /> Billing Terminal
                     </button>
                 </nav>
 
@@ -153,18 +159,16 @@ export default function ReceptionistDashboard() {
                                     <User size={16} className="text-white/40" />
                                 </div>
                                 <div className="pt-6 border-t border-white/10 space-y-4">
-                                    <div className="flex justify-between items-baseline">
                                         <span className="text-sm font-medium text-white/60">Base Accommodation</span>
-                                        <span className="text-xl font-bold text-white">${selectedBooking ? (rooms.find(r => r.id === selectedBooking.roomId)?.price || 0) : 0}</span>
-                                    </div>
+                                        <span className="text-xl font-bold text-white">₹{selectedBooking ? (rooms.find(r => r.id === selectedBooking.roomId)?.price || 0) : 0}</span>
                                     <div className="flex justify-between items-baseline text-white/60">
                                         <span className="text-xs font-medium">Service & Amenities</span>
-                                        <span className="text-sm font-bold">$32.50</span>
+                                        <span className="text-sm font-bold">₹32.50</span>
                                     </div>
                                 </div>
                                 <div className="pt-10 flex flex-col items-center">
                                     <span className="text-[10px] font-bold text-white/40 uppercase tracking-[0.3em] mb-2">Grand Total</span>
-                                    <span className="text-6xl font-black italic text-white tracking-tighter">${selectedBooking ? (rooms.find(r => r.id === selectedBooking.roomId)?.price || 0) + 32.50 : 0}</span>
+                                    <span className="text-6xl font-black italic text-white tracking-tighter">₹{selectedBooking ? (rooms.find(r => r.id === selectedBooking.roomId)?.price || 0) + 32.50 : 0}</span>
                                 </div>
                                 <button 
                                     disabled={!selectedBooking || selectedBooking.status !== 'CheckedIn'}

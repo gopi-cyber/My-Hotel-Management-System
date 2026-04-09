@@ -130,7 +130,7 @@ export default function GuestProfile() {
                                     <span className="rounded-xl bg-white/20 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-white backdrop-blur-md">Tier 1 Elite</span>
                                  </div>
                                  <p className="text-[10px] font-black uppercase tracking-widest text-blue-100 opacity-60 mb-1">Total Stay Value</p>
-                                 <h4 className="text-5xl font-black italic tracking-tighter leading-none mb-10">$892.50</h4>
+                                 <h4 className="text-5xl font-black italic tracking-tighter leading-none mb-10">₹892.50</h4>
                                  <button className="w-full rounded-2xl bg-white py-4.5 text-xs font-black uppercase tracking-widest text-blue-600 shadow-xl hover:bg-blue-50 transition-all active:scale-95">
                                     Final Settlement
                                  </button>

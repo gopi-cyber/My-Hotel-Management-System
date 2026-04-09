@@ -1,8 +1,8 @@
 'use client';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '@/lib/features/userSlice';
-import { AppDispatch } from '@/lib/store';
+import { AppDispatch, RootState } from '@/lib/store';
 import { useRouter } from 'next/navigation';
 import { Hotel, User, Lock, Mail, ArrowRight, ShieldPlus, ShieldCheck, UserPlus } from 'lucide-react';
 import Link from 'next/link';
@@ -11,8 +11,10 @@ export default function RegisterPage() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [role, setRole] = useState<'admin' | 'receptionist' | 'guest'>('guest');
     const dispatch = useDispatch<AppDispatch>();
     const router = useRouter();
+    const { error } = useSelector((state: RootState) => (state as any).user || { error: null });
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -20,11 +22,11 @@ export default function RegisterPage() {
             username,
             email,
             password,
-            role: 'Guest',
+            role,
             name: username.charAt(0).toUpperCase() + username.slice(1)
         }));
         if (registerUser.fulfilled.match(result)) {
-            router.push('/dashboard');
+            router.push('/');
         }
     };
 
@@ -49,6 +51,28 @@ export default function RegisterPage() {
                     </div>
                     <h1 className="text-3xl font-bold tracking-tight text-slate-900 leading-tight">Create Identity</h1>
                     <p className="mt-2 text-sm font-medium text-slate-500 italic">Initialize your GrandStay Hospitality Profile</p>
+                </div>
+
+                {/* Role Selection (3D Neumorphic) */}
+                <div className="mb-8 space-y-2">
+                    <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 ml-1 text-left block">Select Access Level</label>
+                    <div className="flex bg-slate-100/50 p-1.5 rounded-2xl shadow-inner">
+                        <button 
+                            type="button"
+                            onClick={() => setRole('admin')} 
+                            className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest transition-all rounded-xl ${role === 'admin' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-indigo-600'}`}
+                        >Admin</button>
+                        <button 
+                            type="button"
+                            onClick={() => setRole('receptionist')} 
+                            className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest transition-all rounded-xl border-x border-slate-200 ${role === 'receptionist' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-indigo-600'}`}
+                        >Staff</button>
+                        <button 
+                            type="button"
+                            onClick={() => setRole('guest')} 
+                            className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest transition-all rounded-xl ${role === 'guest' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-indigo-600'}`}
+                        >Guest</button>
+                    </div>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -93,9 +117,16 @@ export default function RegisterPage() {
                                 className="w-full h-14 rounded-2xl border-2 border-white bg-white/50 pl-12 pr-4 text-sm font-semibold text-slate-800 placeholder:text-slate-300 shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff] outline-none focus:border-indigo-100 transition-all"
                                 placeholder="••••••••"
                                 required
+                                minLength={6}
                             />
                         </div>
                     </div>
+
+                    {error && (
+                        <div className="p-4 bg-red-50 text-[10px] font-bold text-red-500 rounded-2xl border border-red-100 text-center uppercase tracking-widest animate-pulse">
+                            {error}
+                        </div>
+                    )}
 
                     <button
                         type="submit"

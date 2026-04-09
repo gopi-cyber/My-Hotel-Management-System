@@ -7,6 +7,7 @@ interface RoomCardProps {
         price: number;
         status: string;
         amenities: string[];
+        image?: string;
     };
     onBook?: (id: string) => void;
 }
@@ -14,10 +15,11 @@ interface RoomCardProps {
 export default function RoomCard({ room, onBook }: RoomCardProps) {
     const isAvailable = room.status === 'Available';
     
-    // Selecting premium images based on room type
-    const roomImage = room.type.toLowerCase().includes('suite') 
-        ? 'https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-        : 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+    // Use the room's own image, fall back to a generic luxury hotel photo
+    const roomImage = (room as any).image || 
+        (room.type.toLowerCase().includes('suite') 
+            ? 'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=800&q=80'
+            : 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=800&q=80');
 
     return (
         <div className="group relative flex flex-col overflow-hidden rounded-[2.5rem] bg-white/40 border-2 border-white shadow-[20px_20px_60px_#d1d9e6,-20px_-20px_60px_#ffffff] transition-all hover:translate-y-[-10px] backdrop-blur-md">
@@ -42,7 +44,7 @@ export default function RoomCard({ room, onBook }: RoomCardProps) {
                     <span className="text-[10px] font-black uppercase tracking-widest text-slate-300">Operational Log #{room.id}</span>
                 </div>
 
-                <h3 className="mb-6 text-3xl font-extrabold text-slate-900 tracking-tight leading-none">{room.type} <span className="text-indigo-600 italic">Suite</span></h3>
+                <h3 className="mb-6 text-3xl font-extrabold text-slate-900 tracking-tight leading-none">{room.type}</h3>
                 
                 <div className="mb-8 flex flex-wrap gap-2">
                     {room.amenities?.map((amenity: string, i: number) => (
@@ -55,7 +57,7 @@ export default function RoomCard({ room, onBook }: RoomCardProps) {
                 <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-8">
                     <div className="flex flex-col">
                         <div className="flex items-center text-3xl font-black text-slate-900 tracking-tighter">
-                            <span className="text-sm font-bold text-indigo-500 mr-1 self-start mt-1">$</span>
+                            <span className="text-sm font-bold text-indigo-500 mr-1 self-start mt-1">₹</span>
                             <span>{room.price}</span>
                             <span className="text-[11px] font-bold text-slate-400 ml-2 uppercase tracking-tight">/ Day</span>
                         </div>

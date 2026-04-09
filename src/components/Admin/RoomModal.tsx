@@ -10,6 +10,7 @@ interface Room {
     amenities?: string[];
     floor?: number;
     description?: string;
+    image?: string;
 }
 
 export default function AdminRoomModal({ 
@@ -29,14 +30,15 @@ export default function AdminRoomModal({
         status: 'Available',
         amenities: [],
         floor: 1,
-        description: ''
+        description: '',
+        image: ''
     });
 
     useEffect(() => {
         if (room) {
-            setFormData({...room, amenities: room.amenities || []});
+            setFormData({...room, amenities: room.amenities || [], image: (room as any).image || ''});
         } else {
-            setFormData({ type: '', price: 0, status: 'Available', amenities: [], floor: 1, description: '' });
+            setFormData({ type: '', price: 0, status: 'Available', amenities: [], floor: 1, description: '', image: '' });
         }
     }, [room, isOpen]);
 
@@ -85,7 +87,7 @@ export default function AdminRoomModal({
                     
                     <div className="grid grid-cols-2 gap-6">
                         <div className="space-y-2">
-                            <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 ml-2">Base Rate ($)</label>
+                            <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 ml-2">Base Rate (₹)</label>
                             <input 
                                 type="number" 
                                 value={formData.price}
@@ -125,6 +127,23 @@ export default function AdminRoomModal({
                             className="w-full h-32 rounded-[2rem] border-2 border-white bg-white/40 p-6 text-sm font-bold text-slate-800 shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff] outline-none focus:bg-white transition-all resize-none"
                             placeholder="Metadata logistics..."
                         />
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 ml-2">Asset Image URL</label>
+                        {(formData as any).image && (
+                            <div className="h-24 w-full rounded-2xl overflow-hidden border-2 border-white shadow-inner mb-2">
+                                <img src={(formData as any).image} alt="Preview" className="h-full w-full object-cover" onError={(e) => (e.currentTarget.style.display = 'none')} />
+                            </div>
+                        )}
+                        <input 
+                            type="url" 
+                            value={(formData as any).image || ''}
+                            onChange={(e) => setFormData({...formData, image: e.target.value} as any)}
+                            className="w-full h-14 rounded-2xl border-2 border-white bg-white/40 px-6 text-sm font-bold text-slate-800 shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff] outline-none focus:bg-white transition-all"
+                            placeholder="https://images.unsplash.com/..."
+                        />
+                        <p className="text-[9px] font-bold text-slate-300 uppercase tracking-widest ml-2">Paste a direct image URL (Unsplash, etc.)</p>
                     </div>
                 </div>
 

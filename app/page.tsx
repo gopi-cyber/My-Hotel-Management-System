@@ -23,7 +23,7 @@ export default function LoginPage() {
             const loggedInUser = result.payload;
             if (loggedInUser.role === 'admin') {
                 router.push('/admin');
-            } else if (loggedInUser.role === 'receptionist') {
+            } else if (loggedInUser.role === 'receptionist' || loggedInUser.role === 'staff') {
                 router.push('/receptionist');
             } else {
                 router.push('/dashboard');
@@ -36,10 +36,10 @@ export default function LoginPage() {
             setUsername('admin');
             setPassword('123');
         } else if (role === 'receptionist') {
-            setUsername('reception');
+            setUsername('staff');
             setPassword('123');
         } else if (role === 'guest') {
-            setUsername('guest');
+            setUsername('new_guest');
             setPassword('123');
         }
     };

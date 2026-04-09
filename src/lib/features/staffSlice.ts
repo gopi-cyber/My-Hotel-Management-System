@@ -24,6 +24,16 @@ export const addStaff = createAsyncThunk('staff/addStaff', async (staff: Omit<St
     return { ...staff, id: 's' + Math.random().toString(36).substr(2, 5) };
 });
 
+export const updateStaff = createAsyncThunk('staff/updateStaff', async (staff: Staff) => {
+    await new Promise(resolve => setTimeout(resolve, 500));
+    return staff;
+});
+
+export const deleteStaff = createAsyncThunk('staff/deleteStaff', async (id: string) => {
+    await new Promise(resolve => setTimeout(resolve, 500));
+    return id;
+});
+
 const staffSlice = createSlice({
     name: 'staff',
     initialState: {
@@ -38,6 +48,15 @@ const staffSlice = createSlice({
             })
             .addCase(addStaff.fulfilled, (state, action) => {
                 state.items.push(action.payload);
+            })
+            .addCase(updateStaff.fulfilled, (state, action) => {
+                const index = state.items.findIndex(item => item.id === action.payload.id);
+                if (index !== -1) {
+                    state.items[index] = action.payload;
+                }
+            })
+            .addCase(deleteStaff.fulfilled, (state, action) => {
+                state.items = state.items.filter(item => item.id !== action.payload);
             });
     },
 });

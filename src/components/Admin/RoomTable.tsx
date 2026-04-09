@@ -2,7 +2,7 @@
 import { Plus, Edit, Trash, Settings, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { deleteRoom, addRoom, updateRoom } from '@/lib/features/roomSlice';
+import { deleteRoomSync, addRoomSync, updateRoomSync } from '@/lib/features/roomSlice';
 import { AppDispatch } from '@/lib/store';
 import AdminRoomModal from './RoomModal';
 
@@ -12,6 +12,7 @@ interface Room {
     price: number;
     status: string;
     amenities?: string[];
+    image?: string;
 }
 
 export default function AdminRoomTable({ rooms }: { rooms: Room[] }) {
@@ -33,7 +34,7 @@ export default function AdminRoomTable({ rooms }: { rooms: Room[] }) {
 
     const handleDelete = (roomId: string) => {
         if (deleteConfirm === roomId) {
-            dispatch(deleteRoom(roomId));
+            dispatch(deleteRoomSync(roomId));
             setDeleteConfirm(null);
         } else {
             setDeleteConfirm(roomId);
@@ -42,9 +43,10 @@ export default function AdminRoomTable({ rooms }: { rooms: Room[] }) {
 
     const handleSave = (roomData: any) => {
         if (selectedRoom) {
-            dispatch(updateRoom(roomData));
+            // Must pass the full room including id
+            dispatch(updateRoomSync({ ...roomData, id: selectedRoom.id }));
         } else {
-            dispatch(addRoom(roomData));
+            dispatch(addRoomSync(roomData));
         }
         setIsModalOpen(false);
     };
@@ -65,10 +67,11 @@ export default function AdminRoomTable({ rooms }: { rooms: Room[] }) {
                 </button>
             </div>
 
-            <div className="flex-1 overflow-hidden rounded-[2rem] border border-white bg-white/40 backdrop-blur-md shadow-[10px_10px_30px_#d1d9e6]">
+            <div className="flex-1 overflow-y-auto rounded-[2rem] border border-white bg-white/40 backdrop-blur-md shadow-[10px_10px_30px_#d1d9e6]">
                 <table className="w-full text-left text-sm border-collapse">
                     <thead>
                         <tr className="bg-slate-50/50 border-b border-white">
+                            <th className="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Asset Visualization</th>
                             <th className="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Descriptor</th>
                             <th className="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">Operational Status</th>
                             <th className="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Base Rate</th>
@@ -78,6 +81,17 @@ export default function AdminRoomTable({ rooms }: { rooms: Room[] }) {
                     <tbody className="divide-y divide-slate-100">
                         {rooms.map((room) => (
                             <tr key={room.id} className="group hover:bg-white/60 transition-all cursor-pointer">
+                                <td className="px-8 py-6">
+                                    <div className="h-16 w-16 rounded-2xl overflow-hidden border border-white shadow-sm group-hover:scale-110 transition-transform bg-slate-100">
+                                        {room.image ? (
+                                            <img src={room.image} alt={room.type} className="h-full w-full object-cover" />
+                                        ) : (
+                                            <div className="h-full w-full flex items-center justify-center text-slate-300">
+                                                <Settings size={20} />
+                                            </div>
+                                        )}
+                                    </div>
+                                </td>
                                 <td className="px-8 py-6">
                                     <div className="flex flex-col">
                                         <span className="font-extrabold text-slate-800 tracking-tight text-base">{room.type}</span>
@@ -96,7 +110,7 @@ export default function AdminRoomTable({ rooms }: { rooms: Room[] }) {
                                 </td>
                                 <td className="px-8 py-6">
                                     <div className="flex items-baseline gap-1">
-                                        <span className="text-lg font-bold text-slate-900">${room.price}</span>
+                                        <span className="text-lg font-bold text-slate-900">₹{room.price}</span>
                                         <span className="text-[10px] font-bold text-slate-400 uppercase">/nt</span>
                                     </div>
                                 </td>

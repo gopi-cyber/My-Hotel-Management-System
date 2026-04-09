@@ -1,5 +1,6 @@
-'use client';
-import { Clock, CheckCircle, XCircle, ArrowRight, User, Calendar } from 'lucide-react';
+import { useState } from 'react';
+import { Clock, CheckCircle, XCircle, ArrowRight, User, Calendar, Eye } from 'lucide-react';
+import ReservationDetailModal from './ReservationDetailModal';
 
 interface Booking {
     id: string;
@@ -11,6 +12,14 @@ interface Booking {
 }
 
 export default function AdminReservationTable({ bookings }: { bookings: Booking[] }) {
+    const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleOpenDetail = (booking: Booking) => {
+        setSelectedBooking(booking);
+        setIsModalOpen(true);
+    };
+
     return (
         <div className="flex flex-col h-full">
             <div className="flex items-center justify-between mb-8">
@@ -27,7 +36,8 @@ export default function AdminReservationTable({ bookings }: { bookings: Booking[
                             <th className="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Guest Identity</th>
                             <th className="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Timeline</th>
                             <th className="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Operational Status</th>
-                            <th className="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">Reference</th>
+                            <th className="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">Reference</th>
+                            <th className="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">Actions</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
@@ -60,14 +70,29 @@ export default function AdminReservationTable({ bookings }: { bookings: Booking[
                                         {booking.status}
                                     </span>
                                 </td>
-                                <td className="px-8 py-6 text-right">
+                                <td className="px-8 py-6 text-center">
                                     <span className="text-[10px] font-mono text-slate-400 bg-slate-100 px-3 py-1.5 rounded-lg border border-white">#{booking.id.slice(0, 8)}</span>
+                                </td>
+                                <td className="px-8 py-6 text-right">
+                                    <button 
+                                        onClick={() => handleOpenDetail(booking)}
+                                        className="h-10 w-10 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all group/btn"
+                                        title="View Details"
+                                    >
+                                        <Eye size={18} className="group-hover/btn:scale-110 transition-transform" />
+                                    </button>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
+
+            <ReservationDetailModal 
+                isOpen={isModalOpen} 
+                onClose={() => setIsModalOpen(false)} 
+                booking={selectedBooking} 
+            />
         </div>
     );
 }

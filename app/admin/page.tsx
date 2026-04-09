@@ -8,11 +8,15 @@ import { RootState, AppDispatch } from '@/lib/store';
 import AdminRoomTable from '@/components/Admin/RoomTable';
 import AdminStaffTable from '@/components/Admin/StaffTable';
 import AdminReservationTable from '@/components/Admin/ReservationTable';
-import { LayoutDashboard, Users, CreditCard, PieChart, Activity, BellRing, ChevronRight, Settings, Star, Calendar, BarChart3, TrendingUp, Home } from 'lucide-react';
+import ReportDetailModal from '@/components/Admin/ReportDetailModal';
+import { LayoutDashboard, Users, CreditCard, PieChart, Activity, BellRing, ChevronRight, Settings, Star, Calendar, BarChart3, TrendingUp, Home, CheckCircle2, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
 
 export default function AdminDashboard() {
     const [activeTab, setActiveTab] = useState<'inventory' | 'staff' | 'reservations' | 'reports'>('inventory');
+    const [showNotifications, setShowNotifications] = useState(false);
+    const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+    const [reportType, setReportType] = useState<'financial' | 'growth'>('financial');
     const dispatch = useDispatch<AppDispatch>();
     const rooms = useSelector((state: RootState) => state.rooms);
     const staff = useSelector((state: RootState) => state.staff);
@@ -25,10 +29,10 @@ export default function AdminDashboard() {
     }, [dispatch]);
 
     const stats = [
-        { label: 'Occupancy', value: '82%', icon: PieChart, color: 'text-indigo-600', progress: 82 },
-        { label: 'Inventory', value: rooms.items.length.toString(), icon: LayoutDashboard, color: 'text-cyan-600', progress: 100 },
-        { label: 'Revenue', value: '$14,290', icon: CreditCard, color: 'text-emerald-600', progress: 91 },
-        { label: 'Staff Active', value: '12/15', icon: Users, color: 'text-amber-600', progress: 80 },
+        { label: 'Occupancy', value: '82%', icon: PieChart, color: 'text-indigo-600', progress: 82, onClick: () => setActiveTab('reports') },
+        { label: 'Inventory', value: rooms.items.length.toString(), icon: LayoutDashboard, color: 'text-cyan-600', progress: 100, onClick: () => setActiveTab('inventory') },
+        { label: 'Revenue', value: '₹14,290', icon: CreditCard, color: 'text-emerald-600', progress: 91, onClick: () => setActiveTab('reports') },
+        { label: 'Staff Active', value: '12/15', icon: Users, color: 'text-amber-600', progress: 80, onClick: () => setActiveTab('staff') },
     ];
 
     const tabs = [
@@ -103,19 +107,60 @@ export default function AdminDashboard() {
                         <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 capitalize italic leading-none">{activeTab} Interface</h1>
                         <p className="text-sm font-bold text-slate-300 mt-2 uppercase tracking-[0.2em]">High Impact Management Console</p>
                     </div>
-                    <div className="flex items-center gap-6">
-                        <div className="flex items-center gap-3 bg-white px-5 py-2.5 rounded-2xl shadow-[10px_10px_20px_#d1d9e6] border border-white">
+                    <div className="flex items-center gap-6 relative">
+                        <button 
+                            onClick={() => setShowNotifications(!showNotifications)}
+                            className="flex items-center gap-3 bg-white px-5 py-2.5 rounded-2xl shadow-[10px_10px_20px_#d1d9e6] border border-white hover:scale-105 active:scale-95 transition-all text-left"
+                        >
                             <BellRing size={18} className="text-slate-400" />
                             <span className="text-sm font-bold text-slate-700">Notifications</span>
-                        </div>
+                            <div className="h-2 w-2 rounded-full bg-red-500 absolute top-4 right-5 animate-pulse" />
+                        </button>
+
+                        {showNotifications && (
+                            <div className="absolute top-16 right-0 w-80 glass-surface rounded-[2rem] p-6 z-50 animate-in fade-in slide-in-from-top-4 duration-300 shadow-2xl">
+                                <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Urgent Updates</h4>
+                                <div className="space-y-4">
+                                    {[
+                                        { title: 'New Reservation', time: '2m ago', icon: CheckCircle2, color: 'text-emerald-500', tab: 'reservations' },
+                                        { title: 'Inventory Alert', time: '15m ago', icon: AlertCircle, color: 'text-amber-500', tab: 'inventory' },
+                                        { title: 'Staff Check-in', time: '1h ago', icon: Users, color: 'text-indigo-500', tab: 'staff' }
+                                    ].map((note, i) => (
+                                        <div 
+                                            key={i} 
+                                            onClick={() => {
+                                                setActiveTab(note.tab as any);
+                                                setShowNotifications(false);
+                                            }}
+                                            className="flex gap-4 p-3 rounded-2xl hover:bg-slate-50 transition-colors cursor-pointer group"
+                                        >
+                                            <div className={`h-10 w-10 rounded-xl bg-white border border-slate-100 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform`}>
+                                                <note.icon size={18} className={note.color} />
+                                            </div>
+                                            <div>
+                                                <p className="text-sm font-bold text-slate-800">{note.title}</p>
+                                                <p className="text-[10px] text-slate-400 font-bold uppercase">{note.time}</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                                <button className="w-full mt-6 py-3 rounded-xl bg-slate-100 text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all">
+                                    Clear All
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </header>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
                     {stats.map((stat) => (
-                        <div key={stat.label} className="bg-white/60 backdrop-blur-md border border-white rounded-[2.5rem] p-8 shadow-[10px_10px_40px_rgba(0,0,0,0.03)] transition-all hover:scale-105 active:scale-95">
+                        <button 
+                            key={stat.label} 
+                            onClick={stat.onClick}
+                            className="bg-white/60 backdrop-blur-md border border-white rounded-[2.5rem] p-8 shadow-[10px_10px_40px_rgba(0,0,0,0.03)] transition-all hover:scale-105 active:scale-95 text-left group w-full"
+                        >
                             <div className="flex items-center justify-between mb-6">
-                                <div className={`h-12 w-12 rounded-2xl bg-white border border-slate-100 flex items-center justify-center shadow-sm`}>
+                                <div className={`h-12 w-12 rounded-2xl bg-white border border-slate-100 flex items-center justify-center shadow-sm group-hover:shadow-md transition-all`}>
                                     <stat.icon size={24} className={stat.color} />
                                 </div>
                                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{stat.label}</span>
@@ -126,7 +171,7 @@ export default function AdminDashboard() {
                                     <div className="h-full bg-indigo-500 rounded-full transition-all duration-1000" style={{ width: `${stat.progress}%` }} />
                                 </div>
                             </div>
-                        </div>
+                        </button>
                     ))}
                 </div>
 
@@ -140,22 +185,86 @@ export default function AdminDashboard() {
                         {activeTab === 'staff' && <AdminStaffTable staff={staff.items} />}
                         {activeTab === 'reservations' && <AdminReservationTable bookings={bookings.items} />}
                         {activeTab === 'reports' && (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 py-4">
-                                <div className="p-12 rounded-[3rem] bg-slate-50 border-4 border-white flex flex-col items-center text-center space-y-6 shadow-inner">
-                                    <BarChart3 size={60} className="text-indigo-600" />
-                                    <h3 className="text-xl font-bold text-slate-900 uppercase">Financial Metrics</h3>
-                                    <p className="text-sm text-slate-400 max-w-xs font-medium italic leading-relaxed">High-fidelity visualization of capital distribution and operational expenditures.</p>
-                                </div>
-                                <div className="p-12 rounded-[3rem] bg-slate-50 border-4 border-white flex flex-col items-center text-center space-y-6 shadow-inner">
-                                    <TrendingUp size={60} className="text-cyan-600" />
-                                    <h3 className="text-xl font-bold text-slate-900 uppercase">Growth Telemetry</h3>
-                                    <p className="text-sm text-slate-400 max-w-xs font-medium italic leading-relaxed">Proactive forecasting of market trends and occupancy saturation indicators.</p>
-                                </div>
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 py-4">
+                                <button 
+                                    onClick={() => { setReportType('financial'); setIsReportModalOpen(true); }}
+                                    className="p-10 rounded-[3rem] bg-indigo-50/50 border-4 border-white flex flex-col space-y-8 shadow-[inset_0_4px_20px_rgba(0,0,0,0.02)] hover:bg-indigo-100/50 transition-all text-left group"
+                                >
+                                    <div className="flex items-center justify-between w-full">
+                                        <div className="flex items-center gap-4">
+                                            <div className="h-12 w-12 rounded-2xl bg-white shadow-sm flex items-center justify-center text-indigo-600 group-hover:scale-110 transition-transform">
+                                                <BarChart3 size={24} />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-xl font-bold text-slate-900 uppercase tracking-tight">Financial Metrics</h3>
+                                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest italic">Capital Alpha-Theta sync</p>
+                                            </div>
+                                        </div>
+                                        <ChevronRight size={20} className="text-slate-300 group-hover:text-indigo-400 group-hover:translate-x-1 transition-all" />
+                                    </div>
+                                    <div className="space-y-6 w-full">
+                                        {[
+                                            { label: 'Revenue Stream', value: '₹84.2k', progress: 75, color: 'bg-indigo-500' },
+                                            { label: 'Operational Cost', value: '₹12.8k', progress: 22, color: 'bg-cyan-500' },
+                                            { label: 'Net Liquidity', value: '₹71.4k', progress: 88, color: 'bg-emerald-500' }
+                                        ].map(item => (
+                                            <div key={item.label} className="space-y-2">
+                                                <div className="flex justify-between items-baseline">
+                                                    <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">{item.label}</span>
+                                                    <span className="text-lg font-black text-slate-900 italic">{item.value}</span>
+                                                </div>
+                                                <div className="h-2 w-full bg-white rounded-full overflow-hidden border border-white">
+                                                    <div className={`h-full ${item.color} rounded-full transition-all duration-1000`} style={{ width: `${item.progress}%` }} />
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </button>
+
+                                <button 
+                                    onClick={() => { setReportType('growth'); setIsReportModalOpen(true); }}
+                                    className="p-10 rounded-[3rem] bg-cyan-50/50 border-4 border-white flex flex-col space-y-8 shadow-[inset_0_4px_20px_rgba(0,0,0,0.02)] hover:bg-cyan-100/50 transition-all text-left group"
+                                >
+                                    <div className="flex items-center justify-between w-full">
+                                        <div className="flex items-center gap-4">
+                                            <div className="h-12 w-12 rounded-2xl bg-white shadow-sm flex items-center justify-center text-cyan-600 group-hover:scale-110 transition-transform">
+                                                <TrendingUp size={24} />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-xl font-bold text-slate-900 uppercase tracking-tight">Growth Telemetry</h3>
+                                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest italic">Predictive occupancy flow</p>
+                                            </div>
+                                        </div>
+                                        <ChevronRight size={20} className="text-slate-300 group-hover:text-cyan-400 group-hover:translate-x-1 transition-all" />
+                                    </div>
+                                    <div className="flex-1 grid grid-cols-2 gap-6 w-full">
+                                        {[
+                                            { label: 'Saturation', value: '92%', detail: '+14% YoY', color: 'text-indigo-600' },
+                                            { label: 'Velocity', value: '4.8', detail: 'Market Avg 3.2', color: 'text-cyan-600' },
+                                            { label: 'Retention', value: '78%', detail: 'High Stability', color: 'text-emerald-600' },
+                                            { label: 'Projection', value: '₹140k', detail: 'Next Quarter', color: 'text-amber-600' }
+                                        ].map(item => (
+                                            <div key={item.label} className="bg-white/40 p-5 rounded-[2rem] border border-white flex flex-col justify-between">
+                                                <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">{item.label}</span>
+                                                <div>
+                                                    <p className={`text-2xl font-black ${item.color} tracking-tighter italic`}>{item.value}</p>
+                                                    <p className="text-[8px] font-bold text-slate-400 uppercase mt-1">{item.detail}</p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </button>
                             </div>
                         )}
                     </div>
                 </div>
             </section>
+
+            <ReportDetailModal 
+                isOpen={isReportModalOpen} 
+                onClose={() => setIsReportModalOpen(false)} 
+                type={reportType} 
+            />
         </main>
     );
 }

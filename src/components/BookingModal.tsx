@@ -51,7 +51,7 @@ export default function BookingModal({ isOpen, onClose, onConfirm, room }: Booki
                                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1 italic">Verified Premium Accomodation</p>
                             </div>
                             <div className="text-right">
-                                <span className="text-3xl font-black text-indigo-600 tracking-tighter">${room.price}</span>
+                                <span className="text-3xl font-black text-indigo-600 tracking-tighter">₹{room.price}</span>
                                 <p className="text-[10px] text-slate-400 uppercase font-black tracking-widest mt-1">Base/nt</p>
                             </div>
                         </div>
