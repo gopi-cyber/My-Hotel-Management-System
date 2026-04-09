@@ -16,7 +16,7 @@ interface UserState {
     error: string | null;
 }
 
-const API_URL = 'http://localhost:3001/users';
+const API_URL = 'https://hotel-db-server-kiiv.onrender.com/users';
 
 export const registerUser = createAsyncThunk('user/registerUser', async (userData: Omit<User, 'id'>) => {
     // Check for duplicate username first
