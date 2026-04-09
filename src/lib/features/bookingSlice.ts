@@ -12,9 +12,9 @@ interface Booking {
 // Memory-based mock storage for bookings
 let MOCK_BOOKINGS: Booking[] = [
     { id: 'b1', roomId: '102', guestName: 'John Doe', checkIn: '2026-04-01', checkOut: '2026-04-05', status: 'CheckedIn' },
-    { id: 'b2', roomId: '101', guestName: 'Priya Sharma', checkIn: '2026-04-08', checkOut: '2026-04-12', status: 'Confirmed' },
+    { id: 'b2', roomId: '101', guestName: 'Priya Sharma', checkIn: '2026-04-09', checkOut: '2026-04-12', status: 'Confirmed' },
     { id: 'b3', roomId: '201', guestName: 'Arjun Mehta', checkIn: '2026-03-25', checkOut: '2026-03-30', status: 'CheckedOut' },
-    { id: 'b4', roomId: '202', guestName: 'Ananya Pillai', checkIn: '2026-04-10', checkOut: '2026-04-15', status: 'Confirmed' },
+    { id: 'b4', roomId: '202', guestName: 'Ananya Pillai', checkIn: '2026-04-09', checkOut: '2026-04-15', status: 'Confirmed' },
 ];
 
 export const fetchBookings = createAsyncThunk('bookings/fetchBookings', async () => {
