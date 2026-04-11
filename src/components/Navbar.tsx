@@ -1,19 +1,19 @@
 'use client';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Hotel, User, Menu, X, LayoutDashboard, ShieldCheck, LogIn, BellRing } from 'lucide-react';
+import { Hotel, User, Menu, X, ShieldCheck, LogIn, BellRing } from 'lucide-react';
 import { useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/lib/store';
+import { RootState, AppDispatch } from '@/lib/store';
 import { logout } from '@/lib/features/userSlice';
 
 export default function Navbar() {
     const pathname = usePathname();
     const router = useRouter();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const { isAuthenticated, user } = useSelector((state: RootState) => (state as any).user || { isAuthenticated: false, user: null });
-    const dispatch = useDispatch();
+    const { isAuthenticated, user } = useSelector((state: RootState) => state.user);
+    const dispatch = useDispatch<AppDispatch>();
 
     const handleLogout = () => {
         dispatch(logout());

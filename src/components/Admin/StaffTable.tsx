@@ -1,18 +1,10 @@
-'use client';
-import { Plus, Edit, Trash2, ShieldCheck, Mail, User, CheckCircle, Clock } from 'lucide-react';
+import { Plus, Edit, Trash2, User } from 'lucide-react';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/lib/store';
-import { addStaff, updateStaff, deleteStaff } from '@/lib/features/staffSlice';
+import { addStaff, updateStaff, deleteStaff, Staff } from '@/lib/features/staffSlice';
 import StaffModal from './StaffModal';
 
-interface Staff {
-    id: string;
-    name: string;
-    role: 'Receptionist' | 'Housekeeping' | 'Management';
-    status: 'Active' | 'On Leave' | 'Inactive';
-    email: string;
-}
 
 export default function AdminStaffTable({ staff }: { staff: Staff[] }) {
     const dispatch = useDispatch<AppDispatch>();
@@ -35,11 +27,11 @@ export default function AdminStaffTable({ staff }: { staff: Staff[] }) {
         }
     };
 
-    const handleConfirm = (data: any) => {
+    const handleConfirm = (data: Omit<Staff, 'id'> | Staff) => {
         if (selectedStaff) {
-            dispatch(updateStaff(data));
+            dispatch(updateStaff(data as Staff));
         } else {
-            dispatch(addStaff(data));
+            dispatch(addStaff(data as Omit<Staff, 'id'>));
         }
     };
 
@@ -117,6 +109,7 @@ export default function AdminStaffTable({ staff }: { staff: Staff[] }) {
             </div>
 
             <StaffModal 
+                key={selectedStaff?.id || 'new'}
                 isOpen={isModalOpen} 
                 onClose={() => setIsModalOpen(false)} 
                 onConfirm={handleConfirm}

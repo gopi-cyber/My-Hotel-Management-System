@@ -3,6 +3,7 @@ import roomReducer from './features/roomSlice';
 import bookingReducer from './features/bookingSlice';
 import userReducer from './features/userSlice';
 import staffReducer from './features/staffSlice';
+import serviceReducer from './features/serviceSlice';
 
 export const makeStore = () => {
     return configureStore({
@@ -11,6 +12,7 @@ export const makeStore = () => {
             bookings: bookingReducer,
             user: userReducer,
             staff: staffReducer,
+            services: serviceReducer,
         },
     });
 };

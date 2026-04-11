@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { X, TrendingUp, BarChart3, Target, Zap, Activity, PieChart, ShieldCheck, Info, ArrowUp, ArrowDown } from 'lucide-react';
+import { X, TrendingUp, BarChart3, Target, Zap, Activity, ShieldCheck, Info, ArrowUp, ArrowDown } from 'lucide-react';
 
 interface ReportDetailModalProps {
     isOpen: boolean;
@@ -16,10 +16,12 @@ export default function ReportDetailModal({ isOpen, onClose, type }: ReportDetai
 
     useEffect(() => {
         if (isOpen) {
-            setAnimateBars(false);
-            setSelectedBar(null);
-            const timer = setTimeout(() => setAnimateBars(true), 100);
-            return () => clearTimeout(timer);
+            requestAnimationFrame(() => {
+                setAnimateBars(false);
+                setSelectedBar(null);
+                const timer = setTimeout(() => setAnimateBars(true), 100);
+                return () => clearTimeout(timer);
+            });
         }
     }, [isOpen, activeStat, viewMode]);
 

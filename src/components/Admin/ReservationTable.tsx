@@ -1,19 +1,19 @@
 import { useState } from 'react';
-import { Clock, CheckCircle, XCircle, ArrowRight, User, Calendar, Eye } from 'lucide-react';
+import { ArrowRight, User, Calendar, Eye } from 'lucide-react';
 import ReservationDetailModal from './ReservationDetailModal';
 
 interface Booking {
     id: string;
     guestName: string;
     roomId: string;
-    checkIn: string;
-    checkOut: string;
+    checkInDate: string;
+    checkOutDate: string;
     status: string;
 }
 
 export default function AdminReservationTable({ bookings }: { bookings: Booking[] }) {
     const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isMoalOpen, setIsModalOpen] = useState(false);
 
     const handleOpenDetail = (booking: Booking) => {
         setSelectedBooking(booking);
@@ -57,7 +57,7 @@ export default function AdminReservationTable({ bookings }: { bookings: Booking[
                                 <td className="px-8 py-6">
                                     <div className="flex items-center gap-3 text-slate-600 font-bold text-xs uppercase tracking-tighter bg-white/50 px-3 py-2 rounded-xl border border-white shadow-sm">
                                         <Calendar size={14} className="text-slate-400" />
-                                        {booking.checkIn} <ArrowRight size={10} className="text-indigo-400" /> {booking.checkOut}
+                                        {booking.checkInDate} <ArrowRight size={10} className="text-indigo-400" /> {booking.checkOutDate}
                                     </div>
                                 </td>
                                 <td className="px-8 py-6">
@@ -89,7 +89,7 @@ export default function AdminReservationTable({ bookings }: { bookings: Booking[
             </div>
 
             <ReservationDetailModal 
-                isOpen={isModalOpen} 
+                isOpen={isMoalOpen} 
                 onClose={() => setIsModalOpen(false)} 
                 booking={selectedBooking} 
             />

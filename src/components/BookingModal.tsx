@@ -1,11 +1,10 @@
-'use client';
 import { useState } from 'react';
-import { X, Calendar, User, Sparkles, CreditCard, ShieldCheck, Mail, ArrowRight } from 'lucide-react';
+import { X, User, Sparkles, ShieldCheck, ArrowRight } from 'lucide-react';
 
 interface BookingModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onConfirm: (data: any) => void;
+    onConfirm: (data: { guestName: string; checkIn: string; checkOut: string; roomId: string }) => void;
     room: {
         id: string;
         type: string;

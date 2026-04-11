@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '@/lib/features/userSlice';
 import { AppDispatch, RootState } from '@/lib/store';
 import { useRouter } from 'next/navigation';
-import { Hotel, User, Lock, Mail, ArrowRight, ShieldPlus, ShieldCheck, UserPlus } from 'lucide-react';
+import { User, Lock, Mail, ArrowRight, ShieldCheck, UserPlus } from 'lucide-react';
 import Link from 'next/link';
 
 export default function RegisterPage() {
@@ -14,7 +14,7 @@ export default function RegisterPage() {
     const [role, setRole] = useState<'admin' | 'receptionist' | 'guest'>('guest');
     const dispatch = useDispatch<AppDispatch>();
     const router = useRouter();
-    const { error } = useSelector((state: RootState) => (state as any).user || { error: null });
+    const { error } = useSelector((state: RootState) => state.user || { error: null });
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -49,8 +49,8 @@ export default function RegisterPage() {
                     <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white shadow-[10px_10px_20px_#d1d9e6,-10px_-10px_20px_#ffffff] mb-6">
                         <UserPlus className="text-indigo-600" size={28} />
                     </div>
-                    <h1 className="text-3xl font-bold tracking-tight text-slate-900 leading-tight">Create Identity</h1>
-                    <p className="mt-2 text-sm font-medium text-slate-500 italic">Initialize your GrandStay Hospitality Profile</p>
+                    <h1 className="text-3xl font-bold tracking-tight text-slate-900 leading-tight">Sign Up</h1>
+                    <p className="mt-2 text-sm font-medium text-slate-500 italic">Initialize your GrandStay Hospit  ality Profile</p>
                 </div>
 
                 {/* Role Selection (3D Neumorphic) */}
@@ -137,7 +137,7 @@ export default function RegisterPage() {
 
                     <div className="pt-6 text-center">
                         <Link href="/" className="text-xs font-semibold text-slate-400 hover:text-indigo-600 transition-colors">
-                            Already have an identity? <span className="text-indigo-500 underline underline-offset-4 ml-1">Secure Sign In</span>
+                            Already have an identity? <span className="text-indigo-500 underline underline-offset-4 ml-1">Sign In</span>
                         </Link>
                     </div>
                 </form>

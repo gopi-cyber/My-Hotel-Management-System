@@ -6,8 +6,8 @@ interface Booking {
     id: string;
     guestName: string;
     roomId: string;
-    checkIn: string;
-    checkOut: string;
+    checkInDate: string;
+    checkOutDate: string;
     status: string;
 }
 
@@ -20,7 +20,7 @@ interface ReservationDetailModalProps {
 export default function ReservationDetailModal({ isOpen, onClose, booking }: ReservationDetailModalProps) {
     if (!isOpen || !booking) return null;
 
-    const duration = Math.ceil((new Date(booking.checkOut).getTime() - new Date(booking.checkIn).getTime()) / (1000 * 3600 * 24));
+    const duration = Math.ceil((new Date(booking.checkOutDate).getTime() - new Date(booking.checkInDate).getTime()) / (1000 * 3600 * 24));
 
     return (
         <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
@@ -80,7 +80,7 @@ export default function ReservationDetailModal({ isOpen, onClose, booking }: Res
                                 </div>
                                 <div>
                                     <p className="text-[9px] font-black text-slate-300 uppercase tracking-widest leading-none mb-1">Stay Period</p>
-                                    <p className="text-sm font-bold text-slate-700">{booking.checkIn} — {booking.checkOut}</p>
+                                    <p className="text-sm font-bold text-slate-700">{booking.checkInDate} — {booking.checkOutDate}</p>
                                 </div>
                             </div>
                             <div className="flex items-center gap-4 group">
@@ -148,7 +148,7 @@ export default function ReservationDetailModal({ isOpen, onClose, booking }: Res
                                 <Star size={12} className="text-amber-500 fill-amber-500" />
                                 <Star size={12} className="text-amber-400 fill-amber-400 opacity-50" />
                              </div>
-                             <p className="text-[10px] font-bold text-slate-500 italic leading-relaxed">"Exceptional stay. The telemetry sync was seamless and the ocean view from the deluxe suite is unparalleled. Highly recommend the butler service."</p>
+                             <p className="text-[10px] font-bold text-slate-500 italic leading-relaxed">&quot;Exceptional stay. The telemetry sync was seamless and the ocean view from the deluxe suite is unparalleled. Highly recommend the butler service.&quot;</p>
                              <MessageSquareQuote size={40} className="absolute -bottom-4 -right-2 text-slate-50 opacity-5" />
                         </div>
                     </div>

@@ -2,37 +2,39 @@
   "rooms": [
     {
       "id": "1",
+      "number": "101",
       "type": "Deluxe",
-      "price": 100,
-      "status": "Available",
-      "amenities": [
-        "Free Wifi",
-        "Ocean View",
-        "Mini Bar"
-      ]
+      "price": 150,
+      "status": "available",
+      "amenities": ["Free Wifi", "Ocean View", "Mini Bar", "Air Conditioning"],
+      "capacity": 2,
+      "image": "/room-deluxe.svg",
+      "createdAt": "2026-01-01T00:00:00.000Z"
     },
     {
       "id": "2",
+      "number": "102",
       "type": "Suite",
       "price": 250,
-      "status": "Occupied",
-      "amenities": [
-        "Infinity Pool",
-        "Butler Service",
-        "Gourmet Breakfast"
-      ]
-    }
-  ],
-  "bookings": [
+      "status": "available",
+      "amenities": ["Infinity Pool", "Butler Service", "Gourmet Breakfast", "Jacuzzi"],
+      "capacity": 4,
+      "image": "/room-suite.svg",
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
     {
-      "guestName": "Test Guest",
-      "roomId": "1",
-      "checkIn": "2026-10-04",
-      "checkOut": "2026-12-04",
-      "status": "CheckedOut",
-      "id": "g3tbzNaTrX0"
+      "id": "3",
+      "number": "103",
+      "type": "Standard",
+      "price": 100,
+      "status": "available",
+      "amenities": ["Free Wifi", "Air Conditioning", "Television"],
+      "capacity": 2,
+      "image": "/room-standard.svg",
+      "createdAt": "2026-01-01T00:00:00.000Z"
     }
   ],
+  "bookings": [],
   "users": [
     {
       "id": "u1",
@@ -107,5 +109,26 @@
       "id": "12CaKJhWLK4"
     }
   ],
-  "services": []
+  "staff": [
+    {
+      "id": "s1",
+      "name": "John Smith",
+      "email": "john@hotel.com",
+      "role": "Manager",
+      "shift": "Morning",
+      "status": "active",
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "s2",
+      "name": "Sarah Johnson",
+      "email": "sarah@hotel.com",
+      "role": "Housekeeping",
+      "shift": "Afternoon",
+      "status": "active",
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    }
+  ],
+  "services": [],
+  "checkIns": []
 }

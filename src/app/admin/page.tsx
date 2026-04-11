@@ -9,11 +9,12 @@ import AdminRoomTable from '@/components/Admin/RoomTable';
 import AdminStaffTable from '@/components/Admin/StaffTable';
 import AdminReservationTable from '@/components/Admin/ReservationTable';
 import ReportDetailModal from '@/components/Admin/ReportDetailModal';
-import { LayoutDashboard, Users, CreditCard, PieChart, Activity, BellRing, ChevronRight, Settings, Star, Calendar, BarChart3, TrendingUp, Home, CheckCircle2, AlertCircle } from 'lucide-react';
+import { LayoutDashboard, Users, Activity, BellRing, Calendar, BarChart3, Home, CheckCircle2, AlertCircle, ChevronRight, CreditCard, PieChart, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 
 export default function AdminDashboard() {
-    const [activeTab, setActiveTab] = useState<'inventory' | 'staff' | 'reservations' | 'reports'>('inventory');
+    type TabType = 'inventory' | 'staff' | 'reservations' | 'reports';
+    const [activeTab, setActiveTab] = useState<TabType>('inventory');
     const [showNotifications, setShowNotifications] = useState(false);
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     const [reportType, setReportType] = useState<'financial' | 'growth'>('financial');
@@ -43,17 +44,17 @@ export default function AdminDashboard() {
     ];
 
     return (
-        <main className="flex min-h-screen bg-slate-50 text-slate-900 overflow-hidden font-sans relative">
+        <main className="flex min-h-screen bg-blue-200 text-slate-900 overflow-hidden font-sans relative">
             {/* Inline 3D Styles */}
             <style jsx>{`
                 .glass-surface {
-                    background: rgba(255, 255, 255, 0.4);
+                    background: rgba(255, 255, 255, 0.62);
                     backdrop-filter: blur(16px);
                     border: 1px solid rgba(255, 255, 255, 0.8);
                     box-shadow: 20px 20px 60px #d1d9e6, -20px -20px 60px #ffffff;
                 }
                 .glass-sidebar {
-                    background: rgba(255, 255, 255, 0.2);
+                    background: rgba(255, 255, 255, 0.42);
                     backdrop-filter: blur(12px);
                     border-right: 1px solid rgba(255, 255, 255, 0.5);
                 }
@@ -71,7 +72,7 @@ export default function AdminDashboard() {
                     </div>
                     <div>
                         <span className="text-lg font-bold tracking-tight text-slate-900 block leading-none underline decoration-indigo-200 underline-offset-4">GrandStay</span>
-                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1 block">Operational Hub</span>
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1 block">Premium Hotel</span>
                     </div>
                 </div>
 
@@ -79,7 +80,7 @@ export default function AdminDashboard() {
                     {tabs.map((tab) => (
                         <button
                             key={tab.id}
-                            onClick={() => setActiveTab(tab.id as any)}
+                            onClick={() => setActiveTab(tab.id as TabType)}
                             className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl text-sm font-semibold transition-all group ${
                                 activeTab === tab.id 
                                     ? 'bg-white shadow-[10px_10px_20px_#d1d9e6] text-indigo-600 border border-white' 
@@ -129,7 +130,7 @@ export default function AdminDashboard() {
                                         <div 
                                             key={i} 
                                             onClick={() => {
-                                                setActiveTab(note.tab as any);
+                                                setActiveTab(note.tab as TabType);
                                                 setShowNotifications(false);
                                             }}
                                             className="flex gap-4 p-3 rounded-2xl hover:bg-slate-50 transition-colors cursor-pointer group"

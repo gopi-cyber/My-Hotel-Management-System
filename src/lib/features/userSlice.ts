@@ -16,7 +16,8 @@ interface UserState {
     error: string | null;
 }
 
-const API_URL = 'https://hotel-db-server-kiiv.onrender.com/users';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://hotel-db-server-kiiv.onrender.com';
+const API_URL = `${API_BASE_URL}/users`;
 
 export const registerUser = createAsyncThunk('user/registerUser', async (userData: Omit<User, 'id'>) => {
     // Check for duplicate username first
@@ -53,8 +54,11 @@ export const loginUser = createAsyncThunk('user/loginUser', async (credentials: 
         }
         
         throw new Error('Invalid username or password');
-    } catch (err: any) {
-        throw new Error(err.message || 'Authentication service unreachable');
+    } catch (err: unknown) {
+        if (axios.isAxiosError(err)) {
+            throw new Error(err.response?.data?.message || err.message || 'Authentication service unreachable');
+        }
+        throw new Error(err instanceof Error ? err.message : 'Authentication service unreachable');
     }
 });
 
@@ -73,7 +77,7 @@ const userSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(registerUser.fulfilled, (state, action) => {
+            .addCase(registerUser.fulfilled, (state) => {
                 // We don't necessarily log them in immediately if the user wants redirect to login first
                 state.error = null;
             })

@@ -1,14 +1,16 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 export interface Room {
     id: string;
+    number: string;
     type: string;
     price: number;
-    status: string;
+    status: 'available' | 'occupied' | 'maintenance';
     amenities: string[];
+    capacity: number;
     image?: string;
-    floor?: number;
     description?: string;
+    createdAt?: string;
 }
 
 interface RoomState {
@@ -17,100 +19,110 @@ interface RoomState {
     error: string | null;
 }
 
-// Mutable in-memory store — shared across admin and guest
-let MOCK_ROOMS: Room[] = [
-    { id: '101', type: 'Deluxe Ocean View', price: 299, status: 'Available', amenities: ['WiFi', 'Mini Bar', 'Ocean View'], image: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&q=80&w=800', floor: 1, description: 'Breathtaking ocean views with premium amenities.' },
-    { id: '102', type: 'Presidential Suite', price: 899, status: 'Occupied', amenities: ['WiFi', 'Kitchen', 'Private Pool', 'Butler Service'], image: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&q=80&w=800', floor: 10, description: 'The pinnacle of luxury with private pool and butler service.' },
-    { id: '201', type: 'Executive Suite', price: 499, status: 'Available', amenities: ['WiFi', 'Office Desk', 'City View'], image: 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&q=80&w=800', floor: 2, description: 'Perfect for business travelers with a dedicated office desk.' },
-    { id: '202', type: 'Family Room', price: 349, status: 'Available', amenities: ['WiFi', '2 Queen Beds', 'Play Area'], image: 'https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&q=80&w=800', floor: 2, description: 'Spacious room with a play area for children.' },
-];
+// API Thunks - Connecting to real backend
+export const fetchRooms = createAsyncThunk(
+    'rooms/fetchRooms',
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await fetch('/api/rooms');
+            if (!response.ok) throw new Error('Failed to fetch rooms');
+            return response.json();
+        } catch (error: unknown) {
+            return rejectWithValue(error instanceof Error ? error.message : 'An unknown error occurred');
+        }
+    }
+);
 
-// Async fetch — returns current mutable list
-export const fetchRooms = createAsyncThunk('rooms/fetchRooms', async () => {
-    await new Promise(resolve => setTimeout(resolve, 200));
-    return [...MOCK_ROOMS];
-});
+export const addRoom = createAsyncThunk(
+    'rooms/addRoom',
+    async (room: Omit<Room, 'id' | 'createdAt'>, { rejectWithValue }) => {
+        try {
+            const response = await fetch('/api/rooms', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(room),
+            });
+            if (!response.ok) throw new Error('Failed to add room');
+            return response.json();
+        } catch (error: unknown) {
+            return rejectWithValue(error instanceof Error ? error.message : 'An unknown error occurred');
+        }
+    }
+);
 
-// Keep bookRoom and checkOutRoom as async thunks (used by guest booking flow)
-export const bookRoom = createAsyncThunk('rooms/bookRoom', async (roomId: string) => {
-    await new Promise(resolve => setTimeout(resolve, 200));
-    const room = MOCK_ROOMS.find(r => r.id === roomId);
-    if (room) room.status = 'Occupied';
-    return { id: roomId, status: 'Occupied' };
-});
+export const updateRoom = createAsyncThunk(
+    'rooms/updateRoom',
+    async (room: Room, { rejectWithValue }) => {
+        try {
+            const response = await fetch('/api/rooms', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(room),
+            });
+            if (!response.ok) throw new Error('Failed to update room');
+            return response.json();
+        } catch (error: unknown) {
+            return rejectWithValue(error instanceof Error ? error.message : 'An unknown error occurred');
+        }
+    }
+);
 
-export const checkOutRoom = createAsyncThunk('rooms/checkOutRoom', async (roomId: string) => {
-    await new Promise(resolve => setTimeout(resolve, 200));
-    const room = MOCK_ROOMS.find(r => r.id === roomId);
-    if (room) room.status = 'Available';
-    return { id: roomId, status: 'Available' };
-});
+export const deleteRoom = createAsyncThunk(
+    'rooms/deleteRoom',
+    async (id: string, { rejectWithValue }) => {
+        try {
+            const response = await fetch(`/api/rooms?id=${id}`, {
+                method: 'DELETE',
+            });
+            if (!response.ok) throw new Error('Failed to delete room');
+            return id;
+        } catch (error: unknown) {
+            return rejectWithValue(error instanceof Error ? error.message : 'An unknown error occurred');
+        }
+    }
+);
 
 const roomSlice = createSlice({
     name: 'rooms',
     initialState: {
-        items: [...MOCK_ROOMS] as Room[],
-        status: 'succeeded',
+        items: [],
+        status: 'idle',
         error: null,
     } as RoomState,
     reducers: {
-        // Synchronous add — instant UI update + persists in MOCK_ROOMS
-        addRoomSync: (state, action: PayloadAction<Omit<Room, 'id'>>) => {
-            const newRoom: Room = {
-                ...action.payload,
-                id: 'r' + Math.random().toString(36).substr(2, 6),
-            };
-            MOCK_ROOMS.push(newRoom);
-            state.items.push(newRoom);
-        },
-        // Synchronous update — instantly reflects status/price/type changes
-        updateRoomSync: (state, action: PayloadAction<Room>) => {
-            const updatedRoom = action.payload;
-            // Update Redux state
-            const stateIdx = state.items.findIndex(r => r.id === updatedRoom.id);
-            if (stateIdx !== -1) {
-                state.items[stateIdx] = updatedRoom;
-            }
-            // Update the mutable store so guest sees the change too
-            const mockIdx = MOCK_ROOMS.findIndex(r => r.id === updatedRoom.id);
-            if (mockIdx !== -1) {
-                MOCK_ROOMS[mockIdx] = updatedRoom;
-            }
-        },
-        // Synchronous delete — removes from both Redux state and MOCK_ROOMS
-        deleteRoomSync: (state, action: PayloadAction<string>) => {
-            const roomId = action.payload;
-            state.items = state.items.filter(r => r.id !== roomId);
-            MOCK_ROOMS = MOCK_ROOMS.filter(r => r.id !== roomId);
+        clearError: (state) => {
+            state.error = null;
         },
     },
     extraReducers: (builder) => {
         builder
             .addCase(fetchRooms.pending, (state) => {
                 state.status = 'loading';
+                state.error = null;
             })
             .addCase(fetchRooms.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.items = action.payload;
+                state.error = null;
             })
             .addCase(fetchRooms.rejected, (state, action) => {
                 state.status = 'failed';
-                state.error = action.error.message || 'Error loading rooms';
+                state.error = action.payload as string;
             })
-            .addCase(bookRoom.fulfilled, (state, action) => {
-                const index = state.items.findIndex(room => room.id === action.payload.id);
+            .addCase(addRoom.fulfilled, (state, action) => {
+                state.items.push(action.payload);
+            })
+            .addCase(updateRoom.fulfilled, (state, action) => {
+                const index = state.items.findIndex((r) => r.id === action.payload.id);
                 if (index !== -1) {
-                    state.items[index].status = action.payload.status;
+                    state.items[index] = action.payload;
                 }
             })
-            .addCase(checkOutRoom.fulfilled, (state, action) => {
-                const index = state.items.findIndex(room => room.id === action.payload.id);
-                if (index !== -1) {
-                    state.items[index].status = action.payload.status;
-                }
+            .addCase(deleteRoom.fulfilled, (state, action) => {
+                state.items = state.items.filter((r) => r.id !== action.payload);
             });
     },
 });
 
-export const { addRoomSync, updateRoomSync, deleteRoomSync } = roomSlice.actions;
+export const { clearError } = roomSlice.actions;
 export default roomSlice.reducer;

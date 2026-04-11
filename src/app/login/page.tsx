@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '@/lib/features/userSlice';
 import { AppDispatch, RootState } from '@/lib/store';
 import { useRouter } from 'next/navigation';
-import { Hotel, User, Lock, ArrowRight, ShieldCheck, Briefcase, BellRing, Users } from 'lucide-react';
+import { Hotel, User, Lock, ArrowRight, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
 
 
@@ -14,7 +14,7 @@ export default function LoginPage() {
     const [password, setPassword] = useState('');
     const dispatch = useDispatch<AppDispatch>();
     const router = useRouter();
-    const { error, user } = useSelector((state: RootState) => (state as any).user || { error: null, user: null });
+    const { error } = useSelector((state: RootState) => state.user || { error: null });
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -55,8 +55,8 @@ export default function LoginPage() {
                     <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white shadow-[10px_10px_20px_#d1d9e6,-10px_-10px_20px_#ffffff] mb-6">
                         <Hotel className="text-indigo-600" size={28} />
                     </div>
-                    <h1 className="text-3xl font-bold tracking-tight text-slate-900 leading-tight">Welcome to <span className="text-indigo-600">GrandStay</span></h1>
-                    <p className="mt-2 text-sm font-medium text-slate-500">Premium 3D Operational Interface</p>
+                    <h1 className="text-3xl font-bold tracking-tight text-slate-900 leading-tight">Welcome to <span className="text-red-500">GrandStay</span></h1>
+                    <p className="mt-2 text-sm font-medium text-slate-500">Your Premium Stay</p>
                 </div>
 
                 {/* Role Toggle (3D Neumorphic) */}
@@ -107,19 +107,19 @@ export default function LoginPage() {
                         type="submit"
                         className="w-full h-14 rounded-2xl bg-indigo-600 text-sm font-bold text-white shadow-[0_10px_20px_rgba(79,70,229,0.3)] hover:bg-indigo-500 hover:translate-y-[-2px] active:translate-y-[0px] transition-all flex items-center justify-center gap-3"
                     >
-                        Access Secure Hub <ArrowRight size={18} />
+                        Log In <ArrowRight size={18} />
                     </button>
 
                     <div className="pt-6 text-center">
                         <Link href="/register" className="text-xs font-semibold text-slate-400 hover:text-indigo-600 transition-colors">
-                            First time here? <span className="text-indigo-500 underline underline-offset-4 ml-1">Initialize Identity</span>
+                            First time here? <span className="text-indigo-500 underline underline-offset-4 ml-1">Sign up</span>
                         </Link>
                     </div>
                 </form>
 
                 <div className="mt-12 flex items-center justify-center gap-3 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-300">
                     <ShieldCheck size={14} />
-                    <span>Hardware Encrypted Tunnel</span>
+                    
                 </div>
             </div>
         </main>

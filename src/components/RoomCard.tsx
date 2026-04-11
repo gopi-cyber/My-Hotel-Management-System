@@ -1,4 +1,4 @@
-import { Bed, DollarSign, Star, Sparkles, MapPin, ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 
 interface RoomCardProps {
     room: {
@@ -13,10 +13,10 @@ interface RoomCardProps {
 }
 
 export default function RoomCard({ room, onBook }: RoomCardProps) {
-    const isAvailable = room.status === 'Available';
+    const isAvailable = room.status === 'Available' || room.status === 'available';
     
     // Use the room's own image, fall back to a generic luxury hotel photo
-    const roomImage = (room as any).image || 
+    const roomImage = room.image || 
         (room.type.toLowerCase().includes('suite') 
             ? 'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=800&q=80'
             : 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=800&q=80');
@@ -31,9 +31,10 @@ export default function RoomCard({ room, onBook }: RoomCardProps) {
                     {room.status.toUpperCase()}
                 </div>
                 
-                <img 
+                <Image 
                     src={roomImage} 
                     alt={room.type}
+                    fill
                     className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110"
                 />
             </div>

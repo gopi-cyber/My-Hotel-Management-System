@@ -1,17 +1,9 @@
 'use client';
-import { useState, useEffect } from 'react';
-import { X, Save, Plus, Trash2, ArrowRight } from 'lucide-react';
+import { useState } from 'react';
+import { X, ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 
-interface Room {
-    id?: string;
-    type: string;
-    price: number;
-    status: string;
-    amenities?: string[];
-    floor?: number;
-    description?: string;
-    image?: string;
-}
+import { Room } from '@/lib/features/roomSlice';
 
 export default function AdminRoomModal({ 
     isOpen, 
@@ -21,26 +13,20 @@ export default function AdminRoomModal({
 }: { 
     isOpen: boolean; 
     onClose: () => void; 
-    onSave: (room: any) => void; 
+    onSave: (room: Room) => void; 
     room?: Room | null 
 }) {
     const [formData, setFormData] = useState<Room>({
-        type: '',
-        price: 0,
-        status: 'Available',
-        amenities: [],
-        floor: 1,
-        description: '',
-        image: ''
+        id: room?.id || '',
+        number: room?.number || '',
+        type: room?.type || '',
+        price: room?.price || 0,
+        status: (room?.status || 'available') as 'available' | 'occupied' | 'maintenance',
+        amenities: room?.amenities || [],
+        capacity: room?.capacity || 1,
+        description: room?.description || '',
+        image: room?.image || ''
     });
-
-    useEffect(() => {
-        if (room) {
-            setFormData({...room, amenities: room.amenities || [], image: (room as any).image || ''});
-        } else {
-            setFormData({ type: '', price: 0, status: 'Available', amenities: [], floor: 1, description: '', image: '' });
-        }
-    }, [room, isOpen]);
 
     if (!isOpen) return null;
 
@@ -74,16 +60,29 @@ export default function AdminRoomModal({
 
                 {/* Content Area */}
                 <div className="overflow-y-auto pr-2 space-y-8 custom-scrollbar">
-                    <div className="space-y-2">
-                        <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 ml-2">Identify / Descriptor</label>
-                        <input 
-                            type="text" 
-                            value={formData.type}
-                            onChange={(e) => setFormData({...formData, type: e.target.value})}
-                            className="w-full h-14 rounded-2xl border-2 border-white bg-white/40 px-6 text-sm font-bold text-slate-800 shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff] outline-none focus:bg-white transition-all capitalize"
-                            placeholder="e.g. Royal Suite"
-                        />
+                    <div className="grid grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                            <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 ml-2">Identify / Descriptor</label>
+                            <input 
+                                type="text" 
+                                value={formData.type}
+                                onChange={(e) => setFormData({...formData, type: e.target.value})}
+                                className="w-full h-14 rounded-2xl border-2 border-white bg-white/40 px-6 text-sm font-bold text-slate-800 shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff] outline-none focus:bg-white transition-all capitalize"
+                                placeholder="Royal Suite"
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 ml-2">Room Number</label>
+                            <input 
+                                type="text" 
+                                value={formData.number}
+                                onChange={(e) => setFormData({...formData, number: e.target.value})}
+                                className="w-full h-14 rounded-2xl border-2 border-white bg-white/40 px-6 text-sm font-bold text-slate-800 shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff] outline-none focus:bg-white transition-all"
+                                placeholder="101"
+                            />
+                        </div>
                     </div>
+
                     
                     <div className="grid grid-cols-2 gap-6">
                         <div className="space-y-2">
@@ -96,11 +95,11 @@ export default function AdminRoomModal({
                             />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 ml-2">Sector / Floor</label>
+                            <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 ml-2">Capacity</label>
                             <input 
                                 type="number" 
-                                value={formData.floor}
-                                onChange={(e) => setFormData({...formData, floor: Number(e.target.value)})}
+                                value={formData.capacity}
+                                onChange={(e) => setFormData({...formData, capacity: Number(e.target.value)})}
                                 className="w-full h-14 rounded-2xl border-2 border-white bg-white/40 px-6 text-sm font-bold text-slate-800 shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff] outline-none focus:bg-white transition-all"
                             />
                         </div>
@@ -110,12 +109,12 @@ export default function AdminRoomModal({
                             <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 ml-2">Status Vector</label>
                             <select 
                                 value={formData.status}
-                                onChange={(e) => setFormData({...formData, status: e.target.value})}
+                                onChange={(e) => setFormData({...formData, status: e.target.value as any})}
                                 className="w-full h-14 rounded-2xl border-2 border-white bg-white/40 px-6 text-sm font-bold text-slate-800 shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff] outline-none focus:bg-white transition-all appearance-none cursor-pointer"
                             >
-                                <option value="Available">ACTIVE / AVAILABLE</option>
-                                <option value="Occupied">LOCKED / OCCUPIED</option>
-                                <option value="Maintenance">SYSTEM MAINTENANCE</option>
+                                <option value="available">ACTIVE / AVAILABLE</option>
+                                <option value="occupied">LOCKED / OCCUPIED</option>
+                                <option value="maintenance">SYSTEM MAINTENANCE</option>
                             </select>
                     </div>
 
@@ -131,15 +130,20 @@ export default function AdminRoomModal({
 
                     <div className="space-y-2">
                         <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 ml-2">Asset Image URL</label>
-                        {(formData as any).image && (
-                            <div className="h-24 w-full rounded-2xl overflow-hidden border-2 border-white shadow-inner mb-2">
-                                <img src={(formData as any).image} alt="Preview" className="h-full w-full object-cover" onError={(e) => (e.currentTarget.style.display = 'none')} />
+                        {formData.image && (
+                            <div className="h-24 w-full rounded-2xl overflow-hidden border-2 border-white shadow-inner mb-2 relative">
+                                <Image 
+                                    src={formData.image} 
+                                    alt="Preview" 
+                                    fill
+                                    className="h-full w-full object-cover" 
+                                />
                             </div>
                         )}
                         <input 
                             type="url" 
-                            value={(formData as any).image || ''}
-                            onChange={(e) => setFormData({...formData, image: e.target.value} as any)}
+                            value={formData.image || ''}
+                            onChange={(e) => setFormData({...formData, image: e.target.value})}
                             className="w-full h-14 rounded-2xl border-2 border-white bg-white/40 px-6 text-sm font-bold text-slate-800 shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff] outline-none focus:bg-white transition-all"
                             placeholder="https://images.unsplash.com/..."
                         />

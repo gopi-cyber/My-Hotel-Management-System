@@ -1,19 +1,10 @@
-'use client';
-import { Plus, Edit, Trash, Settings, Trash2 } from 'lucide-react';
+import { Plus, Settings, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { deleteRoomSync, addRoomSync, updateRoomSync } from '@/lib/features/roomSlice';
+import { addRoom, updateRoom, deleteRoom, Room } from '@/lib/features/roomSlice';
 import { AppDispatch } from '@/lib/store';
 import AdminRoomModal from './RoomModal';
-
-interface Room {
-    id: string;
-    type: string;
-    price: number;
-    status: string;
-    amenities?: string[];
-    image?: string;
-}
+import Image from 'next/image';
 
 export default function AdminRoomTable({ rooms }: { rooms: Room[] }) {
     const dispatch = useDispatch<AppDispatch>();
@@ -34,19 +25,18 @@ export default function AdminRoomTable({ rooms }: { rooms: Room[] }) {
 
     const handleDelete = (roomId: string) => {
         if (deleteConfirm === roomId) {
-            dispatch(deleteRoomSync(roomId));
+            dispatch(deleteRoom(roomId));
             setDeleteConfirm(null);
         } else {
             setDeleteConfirm(roomId);
         }
     };
 
-    const handleSave = (roomData: any) => {
+    const handleSave = (roomData: Room) => {
         if (selectedRoom) {
-            // Must pass the full room including id
-            dispatch(updateRoomSync({ ...roomData, id: selectedRoom.id }));
+            dispatch(updateRoom({ ...roomData, id: selectedRoom.id }));
         } else {
-            dispatch(addRoomSync(roomData));
+            dispatch(addRoom(roomData));
         }
         setIsModalOpen(false);
     };
@@ -84,7 +74,12 @@ export default function AdminRoomTable({ rooms }: { rooms: Room[] }) {
                                 <td className="px-8 py-6">
                                     <div className="h-16 w-16 rounded-2xl overflow-hidden border border-white shadow-sm group-hover:scale-110 transition-transform bg-slate-100">
                                         {room.image ? (
-                                            <img src={room.image} alt={room.type} className="h-full w-full object-cover" />
+                                            <Image 
+                                                src={room.image} 
+                                                alt={room.type} 
+                                                fill
+                                                className="h-full w-full object-cover" 
+                                            />
                                         ) : (
                                             <div className="h-full w-full flex items-center justify-center text-slate-300">
                                                 <Settings size={20} />
@@ -100,11 +95,12 @@ export default function AdminRoomTable({ rooms }: { rooms: Room[] }) {
                                 </td>
                                 <td className="px-8 py-6 text-center">
                                     <span className={`inline-flex items-center gap-2 rounded-xl px-4 py-1.5 text-[9px] font-black uppercase tracking-widest border transition-all ${
-                                        room.status === 'Available' 
+                                        room.status === 'available' 
                                             ? 'bg-emerald-50 text-emerald-600 border-emerald-100' 
                                             : 'bg-red-50 text-red-600 border-red-100'
                                     }`}>
-                                        <div className={`h-1.5 w-1.5 rounded-full ${room.status === 'Available' ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'}`} />
+                                        <div className={`h-1.5 w-1.5 rounded-full ${room.status === 'available' ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'}`} />
+
                                         {room.status}
                                     </span>
                                 </td>
@@ -142,6 +138,7 @@ export default function AdminRoomTable({ rooms }: { rooms: Room[] }) {
             </div>
 
             <AdminRoomModal 
+                key={selectedRoom?.id || 'new'}
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onSave={handleSave}

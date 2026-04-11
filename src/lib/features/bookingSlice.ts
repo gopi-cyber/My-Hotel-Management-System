@@ -1,61 +1,121 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-interface Booking {
+export interface Booking {
     id: string;
     roomId: string;
+    guestId: string;
     guestName: string;
-    checkIn: string;
-    checkOut: string;
-    status: 'Confirmed' | 'CheckedIn' | 'CheckedOut';
+    checkInDate: string;
+    checkOutDate: string;
+    totalPrice: number;
+    status: 'pending' | 'confirmed' | 'checked_in' | 'checked_out' | 'cancelled';
+    nights: number;
+    createdAt?: string;
+    checkedInTime?: string;
+    checkedOutTime?: string;
 }
 
-// Memory-based mock storage for bookings
-let MOCK_BOOKINGS: Booking[] = [
-    { id: 'b1', roomId: '102', guestName: 'John Doe', checkIn: '2026-04-01', checkOut: '2026-04-05', status: 'CheckedIn' },
-    { id: 'b2', roomId: '101', guestName: 'Priya Sharma', checkIn: '2026-04-09', checkOut: '2026-04-12', status: 'Confirmed' },
-    { id: 'b3', roomId: '201', guestName: 'Arjun Mehta', checkIn: '2026-03-25', checkOut: '2026-03-30', status: 'CheckedOut' },
-    { id: 'b4', roomId: '202', guestName: 'Ananya Pillai', checkIn: '2026-04-09', checkOut: '2026-04-15', status: 'Confirmed' },
-];
+interface BookingState {
+    items: Booking[];
+    status: 'idle' | 'loading' | 'succeeded' | 'failed';
+    error: string | null;
+}
 
-export const fetchBookings = createAsyncThunk('bookings/fetchBookings', async () => {
-    await new Promise(resolve => setTimeout(resolve, 500));
-    return [...MOCK_BOOKINGS];
-});
-
-export const addBooking = createAsyncThunk('bookings/addBooking', async (booking: Omit<Booking, 'id'>) => {
-    await new Promise(resolve => setTimeout(resolve, 500));
-    const newBooking = { ...booking, id: 'b' + Math.random().toString(36).substr(2, 5) };
-    MOCK_BOOKINGS.push(newBooking);
-    return newBooking;
-});
-
-export const updateBookingStatus = createAsyncThunk('bookings/updateBookingStatus', async ({ id, status }: { id: string, status: string }) => {
-    await new Promise(resolve => setTimeout(resolve, 500));
-    const index = MOCK_BOOKINGS.findIndex(b => b.id === id);
-    if (index !== -1) {
-        MOCK_BOOKINGS[index] = { ...MOCK_BOOKINGS[index], status: status as any };
-        return MOCK_BOOKINGS[index];
+// API Thunks
+export const fetchBookings = createAsyncThunk(
+    'bookings/fetchBookings',
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await fetch('/api/bookings');
+            if (!response.ok) throw new Error('Failed to fetch bookings');
+            return response.json();
+        } catch (error: unknown) {
+            return rejectWithValue(error instanceof Error ? error.message : 'An unknown error occurred');
+        }
     }
-    throw new Error('Booking not found');
-});
+);
+
+export const fetchUserBookings = createAsyncThunk(
+    'bookings/fetchUserBookings',
+    async (userId: string, { rejectWithValue }) => {
+        try {
+            const response = await fetch(`/api/bookings?userId=${userId}`);
+            if (!response.ok) throw new Error('Failed to fetch user bookings');
+            return response.json();
+        } catch (error: unknown) {
+            return rejectWithValue(error instanceof Error ? error.message : 'An unknown error occurred');
+        }
+    }
+);
+
+export const addBooking = createAsyncThunk(
+    'bookings/addBooking',
+    async (booking: Omit<Booking, 'id' | 'createdAt'>, { rejectWithValue }) => {
+        try {
+            const response = await fetch('/api/bookings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(booking),
+            });
+            if (!response.ok) throw new Error('Failed to create booking');
+            return response.json();
+        } catch (error: unknown) {
+            return rejectWithValue(error instanceof Error ? error.message : 'An unknown error occurred');
+        }
+    }
+);
+
+export const updateBooking = createAsyncThunk(
+    'bookings/updateBooking',
+    async (booking: Booking, { rejectWithValue }) => {
+        try {
+            const response = await fetch('/api/bookings', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(booking),
+            });
+            if (!response.ok) throw new Error('Failed to update booking');
+            return response.json();
+        } catch (error: unknown) {
+            return rejectWithValue(error instanceof Error ? error.message : 'An unknown error occurred');
+        }
+    }
+);
 
 const bookingSlice = createSlice({
     name: 'bookings',
     initialState: {
-        items: MOCK_BOOKINGS as Booking[],
-        status: 'succeeded',
+        items: [],
+        status: 'idle',
+        error: null,
+    } as BookingState,
+    reducers: {
+        clearError: (state) => {
+            state.error = null;
+        },
     },
-    reducers: {},
     extraReducers: (builder) => {
         builder
+            .addCase(fetchBookings.pending, (state) => {
+                state.status = 'loading';
+            })
             .addCase(fetchBookings.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.items = action.payload;
+            })
+            .addCase(fetchBookings.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload as string;
+            })
+            .addCase(fetchUserBookings.fulfilled, (state, action) => {
+                state.status = 'succeeded';
                 state.items = action.payload;
             })
             .addCase(addBooking.fulfilled, (state, action) => {
                 state.items.push(action.payload);
             })
-            .addCase(updateBookingStatus.fulfilled, (state, action) => {
-                const index = state.items.findIndex(b => b.id === action.payload.id);
+            .addCase(updateBooking.fulfilled, (state, action) => {
+                const index = state.items.findIndex((b) => b.id === action.payload.id);
                 if (index !== -1) {
                     state.items[index] = action.payload;
                 }
@@ -63,4 +123,5 @@ const bookingSlice = createSlice({
     },
 });
 
+export const { clearError } = bookingSlice.actions;
 export default bookingSlice.reducer;
