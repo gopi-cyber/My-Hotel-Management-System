@@ -31,60 +31,60 @@ export default function RegisterPage() {
     };
 
     return (
-        <main className="relative flex min-h-screen w-full flex-col items-center justify-center bg-slate-50 overflow-hidden p-6 font-sans">
+        <main className="relative flex min-h-screen w-full flex-col items-center justify-center bg-emerald-50/10 overflow-hidden p-6 font-sans">
             {/* Mesh decor */}
-            <div className="absolute top-[-15%] right-[-10%] h-[700px] w-[700px] rounded-full bg-indigo-100/40 blur-[120px] pointer-events-none z-0" />
-            <div className="absolute bottom-[-15%] left-[-10%] h-[700px] w-[700px] rounded-full bg-cyan-100/40 blur-[120px] pointer-events-none z-0" />
+            <div className="absolute top-[-15%] right-[-10%] h-[700px] w-[700px] rounded-full bg-emerald-100/40 blur-[120px] pointer-events-none z-0" />
+            <div className="absolute bottom-[-15%] left-[-10%] h-[700px] w-[700px] rounded-full bg-amber-100/40 blur-[120px] pointer-events-none z-0" />
 
-            <div className="glass-card z-10 w-full max-w-md rounded-[2.5rem] p-10 py-12">
+            <div className="glass-card z-10 w-full max-w-md rounded-[3rem] p-10 py-12">
                 <style jsx>{`
                     .glass-card {
                         background: rgba(255, 255, 255, 0.4);
                         backdrop-filter: blur(16px);
-                        border: 1px solid rgba(255, 255, 255, 0.8);
-                        box-shadow: 20px 20px 60px #d1d9e6, -20px -20px 60px #ffffff;
+                        border: 2px solid rgba(255, 255, 255, 0.8);
+                        box-shadow: 20px 20px 60px #d1d9d4, -20px -20px 60px #ffffff;
                     }
                 `}</style>
                 <div className="mb-10 text-center">
-                    <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white shadow-[10px_10px_20px_#d1d9e6,-10px_-10px_20px_#ffffff] mb-6">
-                        <UserPlus className="text-indigo-600" size={28} />
+                    <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white shadow-[10px_10px_20px_#d1d9d4,-10px_-10px_20px_#ffffff] mb-6">
+                        <UserPlus className="text-emerald-700" size={28} />
                     </div>
-                    <h1 className="text-3xl font-bold tracking-tight text-slate-900 leading-tight">Sign Up</h1>
-                    <p className="mt-2 text-sm font-medium text-slate-500 italic">Initialize your GrandStay Hospit  ality Profile</p>
+                    <h1 className="text-3xl font-black tracking-tighter text-emerald-950 leading-tight">Create Profile</h1>
+                    <p className="mt-2 text-[10px] font-black uppercase tracking-[0.3em] text-emerald-800/40 italic">Initialize your GrandStay Hospitality Identity</p>
                 </div>
 
                 {/* Role Selection (3D Neumorphic) */}
                 <div className="mb-8 space-y-2">
-                    <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 ml-1 text-left block">Select Access Level</label>
-                    <div className="flex bg-slate-100/50 p-1.5 rounded-2xl shadow-inner">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-emerald-800/30 ml-4 text-left block">Select Access Level</label>
+                    <div className="flex bg-emerald-50/50 p-1.5 rounded-2xl shadow-inner border border-white">
                         <button 
                             type="button"
                             onClick={() => setRole('admin')} 
-                            className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest transition-all rounded-xl ${role === 'admin' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-indigo-600'}`}
+                            className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest transition-all rounded-[1rem] ${role === 'admin' ? 'bg-emerald-700 text-white shadow-lg' : 'text-emerald-800/40 hover:text-emerald-700'}`}
                         >Admin</button>
                         <button 
                             type="button"
                             onClick={() => setRole('receptionist')} 
-                            className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest transition-all rounded-xl border-x border-slate-200 ${role === 'receptionist' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-indigo-600'}`}
+                            className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest transition-all rounded-[1rem] border-x border-emerald-100 ${role === 'receptionist' ? 'bg-emerald-700 text-white shadow-lg' : 'text-emerald-800/40 hover:text-emerald-700'}`}
                         >Staff</button>
                         <button 
                             type="button"
                             onClick={() => setRole('guest')} 
-                            className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest transition-all rounded-xl ${role === 'guest' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-indigo-600'}`}
+                            className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest transition-all rounded-[1rem] ${role === 'guest' ? 'bg-emerald-700 text-white shadow-lg' : 'text-emerald-800/40 hover:text-emerald-700'}`}
                         >Guest</button>
                     </div>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="space-y-2 text-left">
-                        <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 ml-1">Legal Name</label>
+                        <label className="text-[10px] font-black uppercase tracking-widest text-emerald-800/30 ml-4">Legal Name</label>
                         <div className="relative group">
-                            <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors" size={18} />
+                            <User className="absolute left-6 top-1/2 -translate-y-1/2 text-emerald-300 group-focus-within:text-emerald-700 transition-colors" size={18} />
                             <input
                                 type="text"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
-                                className="w-full h-14 rounded-2xl border-2 border-white bg-white/50 pl-12 pr-4 text-sm font-semibold text-slate-800 placeholder:text-slate-300 shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff] outline-none focus:border-indigo-100 transition-all"
+                                className="w-full h-16 rounded-[1.8rem] border-2 border-white bg-white/50 pl-14 pr-4 text-sm font-bold text-emerald-950 placeholder:text-emerald-300 shadow-[inset_4px_4px_8px_#d1d9d4,inset_-4px_-4px_8px_#ffffff] outline-none focus:bg-white transition-all"
                                 placeholder="e.g. John Doe"
                                 required
                             />
@@ -92,14 +92,14 @@ export default function RegisterPage() {
                     </div>
 
                     <div className="space-y-2 text-left">
-                        <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 ml-1">Secure Email</label>
+                        <label className="text-[10px] font-black uppercase tracking-widest text-emerald-800/30 ml-4">Secure Email</label>
                         <div className="relative group">
-                            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors" size={18} />
+                            <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-emerald-300 group-focus-within:text-emerald-700 transition-colors" size={18} />
                             <input
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full h-14 rounded-2xl border-2 border-white bg-white/50 pl-12 pr-4 text-sm font-semibold text-slate-800 placeholder:text-slate-300 shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff] outline-none focus:border-indigo-100 transition-all"
+                                className="w-full h-16 rounded-[1.8rem] border-2 border-white bg-white/50 pl-14 pr-4 text-sm font-bold text-emerald-950 placeholder:text-emerald-300 shadow-[inset_4px_4px_8px_#d1d9d4,inset_-4px_-4px_8px_#ffffff] outline-none focus:bg-white transition-all"
                                 placeholder="john@example.com"
                                 required
                             />
@@ -107,14 +107,14 @@ export default function RegisterPage() {
                     </div>
 
                     <div className="space-y-2 text-left">
-                        <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 ml-1">Encrypted Password</label>
+                        <label className="text-[10px] font-black uppercase tracking-widest text-emerald-800/30 ml-4">Encrypted Password</label>
                         <div className="relative group">
-                            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors" size={18} />
+                            <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-emerald-300 group-focus-within:text-emerald-700 transition-colors" size={18} />
                             <input
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full h-14 rounded-2xl border-2 border-white bg-white/50 pl-12 pr-4 text-sm font-semibold text-slate-800 placeholder:text-slate-300 shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff] outline-none focus:border-indigo-100 transition-all"
+                                className="w-full h-16 rounded-[1.8rem] border-2 border-white bg-white/50 pl-14 pr-4 text-sm font-bold text-emerald-950 placeholder:text-emerald-300 shadow-[inset_4px_4px_8px_#d1d9d4,inset_-4px_-4px_8px_#ffffff] outline-none focus:bg-white transition-all"
                                 placeholder="••••••••"
                                 required
                                 minLength={6}
@@ -130,19 +130,19 @@ export default function RegisterPage() {
 
                     <button
                         type="submit"
-                        className="w-full h-14 rounded-2xl bg-indigo-600 text-sm font-bold text-white shadow-[0_10px_20px_rgba(79,70,229,0.3)] hover:bg-indigo-500 hover:translate-y-[-2px] active:translate-y-[0px] transition-all flex items-center justify-center gap-3"
+                        className="w-full h-16 rounded-[1.8rem] bg-emerald-700 text-[10px] font-black uppercase tracking-[0.3em] text-white shadow-[0_20px_40px_rgba(4,120,87,0.3)] hover:bg-emerald-800 hover:translate-y-[-2px] active:scale-95 transition-all flex items-center justify-center gap-4"
                     >
-                        Initialize Profile <ArrowRight size={18} />
+                        Initialize Identity <ArrowRight size={18} />
                     </button>
 
                     <div className="pt-6 text-center">
-                        <Link href="/" className="text-xs font-semibold text-slate-400 hover:text-indigo-600 transition-colors">
-                            Already have an identity? <span className="text-indigo-500 underline underline-offset-4 ml-1">Sign In</span>
+                        <Link href="/" className="text-[10px] font-black uppercase tracking-widest text-emerald-800/40 hover:text-emerald-700 transition-colors">
+                            Already have an identity? <span className="text-emerald-600 underline underline-offset-4 ml-1 italic">Sign In</span>
                         </Link>
                     </div>
                 </form>
 
-                <div className="mt-12 flex items-center justify-center gap-3 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-300">
+                <div className="mt-12 flex items-center justify-center gap-3 text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-100">
                     <ShieldCheck size={14} className="text-emerald-400" />
                     <span>Privacy Policy Compliant</span>
                 </div>

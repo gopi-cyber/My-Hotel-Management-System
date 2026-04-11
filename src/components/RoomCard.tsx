@@ -22,11 +22,11 @@ export default function RoomCard({ room, onBook }: RoomCardProps) {
             : 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=800&q=80');
 
     return (
-        <div className="group relative flex flex-col overflow-hidden rounded-[2.5rem] bg-white/40 border-2 border-white shadow-[20px_20px_60px_#d1d9e6,-20px_-20px_60px_#ffffff] transition-all hover:translate-y-[-10px] backdrop-blur-md">
+        <div className="group relative flex flex-col overflow-hidden rounded-[2.5rem] bg-white/40 border-2 border-white shadow-[20px_20px_60px_#d1d9d4,-20px_-20px_60px_#ffffff] transition-all hover:translate-y-[-10px] backdrop-blur-md">
             {/* Image Section */}
             <div className="relative h-64 w-full overflow-hidden">
-                <div className={`absolute top-5 right-5 z-20 rounded-2xl px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-white backdrop-blur-xl border border-white/30 shadow-lg ${
-                    isAvailable ? 'bg-emerald-500/80 shadow-emerald-500/20' : 'bg-red-500/80 shadow-red-500/20'
+                <div className={`absolute top-5 right-5 z-20 rounded-2xl px-4 py-2 text-[10px] font-black uppercase tracking-widest text-white backdrop-blur-xl border border-white/30 shadow-lg ${
+                    isAvailable ? 'bg-emerald-600/80 shadow-emerald-500/20' : 'bg-red-500/80 shadow-red-500/20'
                 }`}>
                     {room.status.toUpperCase()}
                 </div>
@@ -42,35 +42,35 @@ export default function RoomCard({ room, onBook }: RoomCardProps) {
             {/* Glass Detail Section */}
             <div className="flex flex-col p-8">
                 <div className="mb-2 flex items-center justify-between">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-300">Operational Log #{room.id}</span>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-emerald-800/20">Operational Log #{room.id.toUpperCase()}</span>
                 </div>
 
-                <h3 className="mb-6 text-3xl font-extrabold text-slate-900 tracking-tight leading-none">{room.type}</h3>
+                <h3 className="mb-6 text-3xl font-black text-emerald-950 tracking-tighter leading-none italic">{room.type}</h3>
                 
                 <div className="mb-8 flex flex-wrap gap-2">
                     {room.amenities?.map((amenity: string, i: number) => (
-                        <span key={i} className="rounded-xl bg-white px-3.5 py-1.5 text-[9px] font-bold text-slate-500 border border-slate-100 shadow-sm capitalize">
+                        <span key={i} className="rounded-xl bg-white px-3.5 py-1.5 text-[9px] font-black text-emerald-700/60 border border-emerald-50 shadow-sm capitalize tracking-tighter">
                             {amenity}
                         </span>
                     ))}
                 </div>
 
-                <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-8">
+                <div className="mt-4 flex items-center justify-between border-t border-emerald-50 pt-8">
                     <div className="flex flex-col">
-                        <div className="flex items-center text-3xl font-black text-slate-900 tracking-tighter">
-                            <span className="text-sm font-bold text-indigo-500 mr-1 self-start mt-1">₹</span>
+                        <div className="flex items-center text-3xl font-black text-emerald-950 tracking-tighter italic">
+                            <span className="text-sm font-bold text-emerald-500 mr-1 self-start mt-1">₹</span>
                             <span>{room.price}</span>
-                            <span className="text-[11px] font-bold text-slate-400 ml-2 uppercase tracking-tight">/ Day</span>
+                            <span className="text-[11px] font-bold text-emerald-800/40 ml-2 uppercase tracking-tight not-italic">/ Day</span>
                         </div>
                     </div>
                     
                     <button 
                         onClick={() => onBook?.(room.id)}
                         disabled={!isAvailable}
-                        className={`h-14 px-10 rounded-2xl text-[11px] font-bold uppercase tracking-widest transition-all ${
+                        className={`h-14 px-10 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${
                             isAvailable 
-                            ? 'bg-indigo-600 text-white shadow-[0_10px_20px_rgba(79,70,229,0.3)] hover:bg-indigo-500 active:scale-95'
-                            : 'bg-slate-100 text-slate-400 cursor-not-allowed border border-white shadow-inner'
+                            ? 'bg-emerald-700 text-white shadow-[0_10px_20px_rgba(4,120,87,0.3)] hover:bg-emerald-800 active:scale-95'
+                            : 'bg-emerald-50 text-emerald-800/20 cursor-not-allowed border border-white shadow-inner'
                         }`}
                     >
                         {isAvailable ? 'Secure Now' : 'Occupied'}
