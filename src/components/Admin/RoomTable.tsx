@@ -34,7 +34,7 @@ export default function AdminRoomTable({ rooms }: { rooms: Room[] }) {
 
     const handleSave = (roomData: Room) => {
         if (selectedRoom) {
-            dispatch(updateRoom({ ...roomData, id: selectedRoom.id }));
+            dispatch(updateRoom(roomData));
         } else {
             dispatch(addRoom(roomData));
         }
@@ -43,6 +43,21 @@ export default function AdminRoomTable({ rooms }: { rooms: Room[] }) {
 
     return (
         <div className="flex flex-col h-full">
+            {/* Grand Inventory Header */}
+            <div className="w-full h-48 rounded-[3rem] overflow-hidden mb-10 relative border-4 border-white shadow-[20px_20px_40px_rgba(0,0,0,0.05)] animate-in fade-in slide-in-from-top-4 duration-500">
+                <Image 
+                    src="/images/inventory_header_grand.png" 
+                    alt="Inventory Command Center" 
+                    fill 
+                    className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/40 to-transparent" />
+                <div className="absolute bottom-8 left-10">
+                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/80 mb-2 block">System Status: Optimal</span>
+                    <h2 className="text-3xl font-black italic tracking-tighter text-white uppercase italic">Central Command</h2>
+                </div>
+            </div>
+
             <div className="flex items-center justify-between mb-8">
                 <div>
                     <h3 className="text-xl font-bold text-slate-900 tracking-tight">Vanguard Inventory</h3>
@@ -72,7 +87,7 @@ export default function AdminRoomTable({ rooms }: { rooms: Room[] }) {
                         {rooms.map((room) => (
                             <tr key={room.id} className="group hover:bg-white/60 transition-all cursor-pointer">
                                 <td className="px-8 py-6">
-                                    <div className="h-16 w-16 rounded-2xl overflow-hidden border border-white shadow-sm group-hover:scale-110 transition-transform bg-slate-100">
+                                    <div className="h-16 w-16 rounded-2xl overflow-hidden border border-white shadow-sm group-hover:scale-110 transition-transform bg-slate-100 relative">
                                         {room.image ? (
                                             <Image 
                                                 src={room.image} 

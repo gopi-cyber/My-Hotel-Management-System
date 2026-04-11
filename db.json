@@ -5,10 +5,15 @@
       "number": "101",
       "type": "Deluxe",
       "price": 150,
-      "status": "available",
-      "amenities": ["Free Wifi", "Ocean View", "Mini Bar", "Air Conditioning"],
+      "status": "occupied",
+      "amenities": [
+        "Free Wifi",
+        "Ocean View",
+        "Mini Bar",
+        "Air Conditioning"
+      ],
       "capacity": 2,
-      "image": "/room-deluxe.svg",
+      "image": "/images/deluxe_room_grand.png",
       "createdAt": "2026-01-01T00:00:00.000Z"
     },
     {
@@ -17,9 +22,14 @@
       "type": "Suite",
       "price": 250,
       "status": "available",
-      "amenities": ["Infinity Pool", "Butler Service", "Gourmet Breakfast", "Jacuzzi"],
+      "amenities": [
+        "Infinity Pool",
+        "Butler Service",
+        "Gourmet Breakfast",
+        "Jacuzzi"
+      ],
       "capacity": 4,
-      "image": "/room-suite.svg",
+      "image": "/images/suite_room_grand.png",
       "createdAt": "2026-01-01T00:00:00.000Z"
     },
     {
@@ -28,13 +38,30 @@
       "type": "Standard",
       "price": 100,
       "status": "available",
-      "amenities": ["Free Wifi", "Air Conditioning", "Television"],
+      "amenities": [
+        "Free Wifi",
+        "Air Conditioning",
+        "Television"
+      ],
       "capacity": 2,
-      "image": "/room-standard.svg",
+      "image": "/images/standard_room_grand.png",
       "createdAt": "2026-01-01T00:00:00.000Z"
     }
   ],
-  "bookings": [],
+  "bookings": [
+    {
+      "roomId": "1",
+      "guestId": "Ozzlv4GDLqs",
+      "guestName": "New_guest",
+      "checkInDate": "2026-04-18",
+      "checkOutDate": "2026-04-10",
+      "totalPrice": -1200,
+      "nights": -8,
+      "status": "pending",
+      "id": "1775895161819",
+      "createdAt": "2026-04-11T08:12:41.819Z"
+    }
+  ],
   "users": [
     {
       "id": "u1",

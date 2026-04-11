@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { X, ArrowRight } from 'lucide-react';
+import { X, ArrowRight, ChevronDown, Plus, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 
 import { Room } from '@/lib/features/roomSlice';
@@ -28,6 +28,25 @@ export default function AdminRoomModal({
         image: room?.image || ''
     });
 
+    const [newAmenity, setNewAmenity] = useState('');
+
+    const addAmenity = () => {
+        if (newAmenity.trim() && !formData.amenities.includes(newAmenity.trim())) {
+            setFormData({
+                ...formData,
+                amenities: [...formData.amenities, newAmenity.trim()]
+            });
+            setNewAmenity('');
+        }
+    };
+
+    const removeAmenity = (index: number) => {
+        setFormData({
+            ...formData,
+            amenities: formData.amenities.filter((_, i) => i !== index)
+        });
+    };
+
     if (!isOpen) return null;
 
     return (
@@ -39,6 +58,19 @@ export default function AdminRoomModal({
                     backdrop-filter: blur(24px);
                     border: 4px solid rgba(255, 255, 255, 1);
                     box-shadow: 40px 40px 80px rgba(0,0,0,0.1), -20px -20px 60px #ffffff;
+                }
+                .custom-scrollbar::-webkit-scrollbar {
+                    width: 6px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb {
+                    background: rgba(79, 70, 229, 0.1);
+                    border-radius: 20px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                    background: rgba(79, 70, 229, 0.2);
                 }
             `}</style>
 
@@ -106,7 +138,8 @@ export default function AdminRoomModal({
                     </div>
 
                     <div className="space-y-2">
-                            <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 ml-2">Status Vector</label>
+                        <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 ml-2">Status Vector</label>
+                        <div className="relative group">
                             <select 
                                 value={formData.status}
                                 onChange={(e) => setFormData({...formData, status: e.target.value as any})}
@@ -116,6 +149,48 @@ export default function AdminRoomModal({
                                 <option value="occupied">LOCKED / OCCUPIED</option>
                                 <option value="maintenance">SYSTEM MAINTENANCE</option>
                             </select>
+                            <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none group-focus-within:text-indigo-600 transition-colors" size={18} />
+                        </div>
+                    </div>
+
+                    {/* Amenities Management */}
+                    <div className="space-y-4">
+                        <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 ml-2">Inventory Perks / Amenities</label>
+                        <div className="flex gap-2">
+                            <input 
+                                type="text" 
+                                value={newAmenity}
+                                onChange={(e) => setNewAmenity(e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && addAmenity()}
+                                className="flex-1 h-12 rounded-xl border-2 border-white bg-white/40 px-5 text-xs font-bold text-slate-800 shadow-[inset_2px_2px_4px_#d1d9e6] outline-none focus:bg-white transition-all"
+                                placeholder="Add Amenity (e.g. Mini Bar)"
+                            />
+                            <button 
+                                onClick={addAmenity}
+                                className="h-12 w-12 rounded-xl bg-white border-2 border-white shadow-sm flex items-center justify-center text-indigo-600 hover:bg-indigo-50 transition-all active:scale-95"
+                            >
+                                <Plus size={20} />
+                            </button>
+                        </div>
+                        <div className="flex flex-wrap gap-2 min-h-[40px]">
+                            {formData.amenities.map((amenity, index) => (
+                                <div 
+                                    key={index}
+                                    className="flex items-center gap-2 bg-white/80 border border-white px-4 py-1.5 rounded-xl text-[10px] font-black uppercase text-slate-600 shadow-sm transition-all hover:shadow-md animate-in fade-in zoom-in duration-200"
+                                >
+                                    {amenity}
+                                    <button 
+                                        onClick={() => removeAmenity(index)}
+                                        className="text-slate-300 hover:text-red-500 transition-colors"
+                                    >
+                                        <X size={12} strokeWidth={3} />
+                                    </button>
+                                </div>
+                            ))}
+                            {formData.amenities.length === 0 && (
+                                <p className="text-[10px] text-slate-300 italic font-bold">No amenities specified yet.</p>
+                            )}
+                        </div>
                     </div>
 
                     <div className="space-y-2">
@@ -131,13 +206,14 @@ export default function AdminRoomModal({
                     <div className="space-y-2">
                         <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 ml-2">Asset Image URL</label>
                         {formData.image && (
-                            <div className="h-24 w-full rounded-2xl overflow-hidden border-2 border-white shadow-inner mb-2 relative">
+                            <div className="h-40 w-full rounded-2xl overflow-hidden border-2 border-white shadow-inner mb-2 relative group bg-slate-50">
                                 <Image 
                                     src={formData.image} 
                                     alt="Preview" 
                                     fill
-                                    className="h-full w-full object-cover" 
+                                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" 
                                 />
+                                <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity" />
                             </div>
                         )}
                         <input 
