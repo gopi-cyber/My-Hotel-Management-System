@@ -42,6 +42,10 @@ export default function Dashboard() {
       setError('Please select check-in and check-out dates first');
       return;
     }
+    if (new Date(checkOutDate) < new Date(checkInDate)) {
+      setError('Outbound date cannot be before inbound date');
+      return;
+    }
     setSelectedRoom(room);
     setIsModalOpen(true);
   };
@@ -278,6 +282,7 @@ export default function Dashboard() {
                     type="date"
                     value={checkOutDate}
                     onChange={(e) => setCheckOutDate(e.target.value)}
+                    min={checkInDate || undefined}
                     className="w-full px-6 py-4 rounded-2xl bg-white/40 border border-emerald-50 focus:outline-none focus:bg-white transition-all text-sm font-bold text-emerald-950 shadow-inner"
                   />
                 </div>
@@ -293,7 +298,14 @@ export default function Dashboard() {
                 </div>
                 <div className="flex items-end">
                   <button
-                    onClick={() => setActiveView('discover')}
+                    onClick={() => {
+                      if (checkInDate && checkOutDate && new Date(checkOutDate) < new Date(checkInDate)) {
+                        setError('Outbound date cannot be before inbound date');
+                        return;
+                      }
+                      setError('');
+                      setActiveView('discover');
+                    }}
                     className="w-full h-14 rounded-2xl bg-emerald-700 text-white font-black text-[10px] uppercase tracking-[0.3em] hover:bg-emerald-800 transition-all shadow-xl shadow-emerald-500/20 active:scale-95 flex items-center justify-center gap-3"
                   >
                     <Search size={18} /> Initiate Search

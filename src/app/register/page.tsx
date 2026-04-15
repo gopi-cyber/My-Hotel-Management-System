@@ -26,95 +26,85 @@ export default function RegisterPage() {
             name: username.charAt(0).toUpperCase() + username.slice(1)
         }));
         if (registerUser.fulfilled.match(result)) {
-            router.push('/');
+            router.push('/login');
         }
     };
 
     return (
-        <main className="relative flex min-h-screen w-full flex-col items-center justify-center bg-emerald-50/10 overflow-hidden p-6 font-sans">
-            {/* Mesh decor */}
-            <div className="absolute top-[-15%] right-[-10%] h-[700px] w-[700px] rounded-full bg-emerald-100/40 blur-[120px] pointer-events-none z-0" />
-            <div className="absolute bottom-[-15%] left-[-10%] h-[700px] w-[700px] rounded-full bg-amber-100/40 blur-[120px] pointer-events-none z-0" />
-
-            <div className="glass-card z-10 w-full max-w-md rounded-[3rem] p-10 py-12">
-                <style jsx>{`
-                    .glass-card {
-                        background: rgba(255, 255, 255, 0.4);
-                        backdrop-filter: blur(16px);
-                        border: 2px solid rgba(255, 255, 255, 0.8);
-                        box-shadow: 20px 20px 60px #d1d9d4, -20px -20px 60px #ffffff;
-                    }
-                `}</style>
-                <div className="mb-10 text-center">
-                    <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white shadow-[10px_10px_20px_#d1d9d4,-10px_-10px_20px_#ffffff] mb-6">
-                        <UserPlus className="text-emerald-700" size={28} />
+        <main className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden p-6 font-sans">
+            <div className="glass-panel-3d z-10 w-full max-w-md p-10 py-16 border-white/10">
+                <div className="mb-12 text-center">
+                    <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-500 shadow-2xl shadow-amber-500/20 mb-8 transform hover:scale-110 transition-transform">
+                        <UserPlus className="text-slate-950" size={32} />
                     </div>
-                    <h1 className="text-3xl font-black tracking-tighter text-emerald-950 leading-tight">Create Profile</h1>
-                    <p className="mt-2 text-[10px] font-black uppercase tracking-[0.3em] text-emerald-800/40 italic">Initialize your GrandStay Hospitality Identity</p>
+                    <h1 className="text-4xl font-black tracking-tighter text-white leading-tight uppercase italic underline decoration-amber-500 decoration-4 underline-offset-8">
+                        Create <span className="text-gradient underline-none">Identity</span>
+                    </h1>
+                    <p className="mt-6 text-[10px] font-black uppercase tracking-[0.4em] text-white/40 italic">Initialize Hospitality Sequence</p>
                 </div>
 
-                {/* Role Selection (3D Neumorphic) */}
-                <div className="mb-8 space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-emerald-800/30 ml-4 text-left block">Select Access Level</label>
-                    <div className="flex bg-emerald-50/50 p-1.5 rounded-2xl shadow-inner border border-white">
+                {/* Role Selection (3D Glass) */}
+                <div className="mb-10 space-y-3">
+                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-500/60 ml-2 block">Access Level Definition</label>
+                    <div className="flex bg-white/5 p-1 rounded-2xl shadow-inner border border-white/5">
                         <button 
                             type="button"
                             onClick={() => setRole('admin')} 
-                            className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest transition-all rounded-[1rem] ${role === 'admin' ? 'bg-emerald-700 text-white shadow-lg' : 'text-emerald-800/40 hover:text-emerald-700'}`}
+                            className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest transition-all rounded-xl ${role === 'admin' ? 'bg-amber-500 text-slate-950 shadow-lg' : 'text-white/40 hover:text-white hover:bg-white/5'}`}
                         >Admin</button>
                         <button 
                             type="button"
                             onClick={() => setRole('receptionist')} 
-                            className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest transition-all rounded-[1rem] border-x border-emerald-100 ${role === 'receptionist' ? 'bg-emerald-700 text-white shadow-lg' : 'text-emerald-800/40 hover:text-emerald-700'}`}
+                            className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest transition-all rounded-xl border-x border-white/5 ${role === 'receptionist' ? 'bg-amber-500 text-slate-950 shadow-lg' : 'text-white/40 hover:text-white hover:bg-white/5'}`}
                         >Staff</button>
                         <button 
                             type="button"
                             onClick={() => setRole('guest')} 
-                            className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest transition-all rounded-[1rem] ${role === 'guest' ? 'bg-emerald-700 text-white shadow-lg' : 'text-emerald-800/40 hover:text-emerald-700'}`}
+                            className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest transition-all rounded-xl ${role === 'guest' ? 'bg-amber-500 text-slate-950 shadow-lg' : 'text-white/40 hover:text-white hover:bg-white/5'}`}
                         >Guest</button>
                     </div>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="space-y-2 text-left">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-emerald-800/30 ml-4">Legal Name</label>
+                <form onSubmit={handleSubmit} className="space-y-8">
+                    <div className="space-y-3 text-left">
+                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-500/60 ml-2">Designation</label>
                         <div className="relative group">
-                            <User className="absolute left-6 top-1/2 -translate-y-1/2 text-emerald-300 group-focus-within:text-emerald-700 transition-colors" size={18} />
+                            <User className="absolute left-6 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-amber-400 transition-colors" size={20} />
                             <input
                                 type="text"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
-                                className="w-full h-16 rounded-[1.8rem] border-2 border-white bg-white/50 pl-14 pr-4 text-sm font-bold text-emerald-950 placeholder:text-emerald-300 shadow-[inset_4px_4px_8px_#d1d9d4,inset_-4px_-4px_8px_#ffffff] outline-none focus:bg-white transition-all"
-                                placeholder="e.g. John Doe"
+                                className="w-full h-16 rounded-2xl border border-white/5 bg-white/5 pl-14 pr-4 text-sm font-bold text-white placeholder:text-white/20 outline-none focus:bg-white/10 focus:border-amber-500/50 transition-all shadow-inner"
+                                placeholder="USER_NAME"
                                 required
                             />
                         </div>
                     </div>
 
-                    <div className="space-y-2 text-left">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-emerald-800/30 ml-4">Secure Email</label>
+                    <div className="space-y-3 text-left">
+                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-500/60 ml-2">Communication Link</label>
                         <div className="relative group">
-                            <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-emerald-300 group-focus-within:text-emerald-700 transition-colors" size={18} />
+                            <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-amber-400 transition-colors" size={20} />
                             <input
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full h-16 rounded-[1.8rem] border-2 border-white bg-white/50 pl-14 pr-4 text-sm font-bold text-emerald-950 placeholder:text-emerald-300 shadow-[inset_4px_4px_8px_#d1d9d4,inset_-4px_-4px_8px_#ffffff] outline-none focus:bg-white transition-all"
-                                placeholder="john@example.com"
+                                className="w-full h-16 rounded-2xl border border-white/5 bg-white/5 pl-14 pr-4 text-sm font-bold text-white placeholder:text-white/20 outline-none focus:bg-white/10 focus:border-amber-500/50 transition-all shadow-inner"
+                                placeholder="EMAIL_ADDRESS"
                                 required
                             />
                         </div>
                     </div>
 
-                    <div className="space-y-2 text-left">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-emerald-800/30 ml-4">Encrypted Password</label>
+                    <div className="space-y-3 text-left">
+                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-500/60 ml-2">Authorization Secret</label>
                         <div className="relative group">
-                            <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-emerald-300 group-focus-within:text-emerald-700 transition-colors" size={18} />
+                            <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-amber-400 transition-colors" size={20} />
                             <input
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full h-16 rounded-[1.8rem] border-2 border-white bg-white/50 pl-14 pr-4 text-sm font-bold text-emerald-950 placeholder:text-emerald-300 shadow-[inset_4px_4px_8px_#d1d9d4,inset_-4px_-4px_8px_#ffffff] outline-none focus:bg-white transition-all"
+                                className="w-full h-16 rounded-2xl border border-white/5 bg-white/5 pl-14 pr-4 text-sm font-bold text-white placeholder:text-white/20 outline-none focus:bg-white/10 focus:border-amber-500/50 transition-all shadow-inner"
                                 placeholder="••••••••"
                                 required
                                 minLength={6}
@@ -123,28 +113,28 @@ export default function RegisterPage() {
                     </div>
 
                     {error && (
-                        <div className="p-4 bg-red-50 text-[10px] font-bold text-red-500 rounded-2xl border border-red-100 text-center uppercase tracking-widest animate-pulse">
+                        <div className="p-4 bg-red-500/10 text-[10px] font-black text-red-400 rounded-2xl border border-red-500/20 text-center uppercase tracking-widest animate-pulse">
                             {error}
                         </div>
                     )}
 
                     <button
                         type="submit"
-                        className="w-full h-16 rounded-[1.8rem] bg-emerald-700 text-[10px] font-black uppercase tracking-[0.3em] text-white shadow-[0_20px_40px_rgba(4,120,87,0.3)] hover:bg-emerald-800 hover:translate-y-[-2px] active:scale-95 transition-all flex items-center justify-center gap-4"
+                        className="w-full h-16 rounded-2xl bg-amber-500 text-xs font-black uppercase tracking-[0.3em] text-slate-950 shadow-2xl shadow-amber-500/30 hover:bg-amber-400 hover:translate-y-[-4px] active:scale-95 transition-all flex items-center justify-center gap-4"
                     >
-                        Initialize Identity <ArrowRight size={18} />
+                        Execute Creation <ArrowRight size={18} />
                     </button>
 
-                    <div className="pt-6 text-center">
-                        <Link href="/" className="text-[10px] font-black uppercase tracking-widest text-emerald-800/40 hover:text-emerald-700 transition-colors">
-                            Already have an identity? <span className="text-emerald-600 underline underline-offset-4 ml-1 italic">Sign In</span>
+                    <div className="pt-8 text-center">
+                        <Link href="/login" className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 hover:text-amber-400 transition-colors">
+                            Already encoded? <span className="text-amber-500 underline underline-offset-4 ml-1 italic">Login Access</span>
                         </Link>
                     </div>
                 </form>
 
-                <div className="mt-12 flex items-center justify-center gap-3 text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-100">
-                    <ShieldCheck size={14} className="text-emerald-400" />
-                    <span>Privacy Policy Compliant</span>
+                <div className="mt-16 flex items-center justify-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-white/10">
+                    <ShieldCheck size={16} className="text-amber-500/40" />
+                    <span>Identity Encryption Active</span>
                 </div>
             </div>
         </main>

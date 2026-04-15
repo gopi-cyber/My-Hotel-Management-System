@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { X, ArrowRight, ChevronDown, Plus, Trash2 } from 'lucide-react';
+import { X, ArrowRight, ChevronDown, Plus } from 'lucide-react';
 import Image from 'next/image';
 
 import { Room } from '@/lib/features/roomSlice';
@@ -142,7 +142,7 @@ export default function AdminRoomModal({
                         <div className="relative group">
                             <select 
                                 value={formData.status}
-                                onChange={(e) => setFormData({...formData, status: e.target.value as any})}
+                                onChange={(e) => setFormData({...formData, status: e.target.value as 'available' | 'occupied' | 'maintenance'})}
                                 className="w-full h-14 rounded-2xl border-2 border-white bg-white/40 px-6 text-sm font-bold text-slate-800 shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff] outline-none focus:bg-white transition-all appearance-none cursor-pointer"
                             >
                                 <option value="available">ACTIVE / AVAILABLE</option>

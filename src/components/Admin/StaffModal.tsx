@@ -89,7 +89,7 @@ export default function StaffModal({ isOpen, onClose, onConfirm, staffMember }: 
                                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Sector</label>
                                 <select 
                                     value={formData.role}
-                                    onChange={(e) => setFormData({...formData, role: e.target.value as any})}
+                                    onChange={(e) => setFormData({...formData, role: e.target.value as 'Receptionist' | 'Housekeeping' | 'Management'})}
                                     className="w-full h-16 rounded-2xl border-2 border-slate-50 bg-slate-50/50 px-6 text-sm font-bold text-slate-800 outline-none focus:border-indigo-500/20 focus:bg-white transition-all appearance-none cursor-pointer"
                                 >
                                     <option value="Receptionist">Receptionist</option>
@@ -101,7 +101,7 @@ export default function StaffModal({ isOpen, onClose, onConfirm, staffMember }: 
                                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Shift</label>
                                 <select 
                                     value={formData.shift}
-                                    onChange={(e) => setFormData({...formData, shift: e.target.value as any})}
+                                    onChange={(e) => setFormData({...formData, shift: e.target.value as 'Morning' | 'Afternoon' | 'Night'})}
                                     className="w-full h-16 rounded-2xl border-2 border-slate-50 bg-slate-50/50 px-6 text-sm font-bold text-slate-800 outline-none focus:border-indigo-500/20 focus:bg-white transition-all appearance-none cursor-pointer"
                                 >
                                     <option value="Morning">Morning</option>
@@ -115,7 +115,7 @@ export default function StaffModal({ isOpen, onClose, onConfirm, staffMember }: 
                             <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Telemetry Status</label>
                             <select 
                                 value={formData.status}
-                                onChange={(e) => setFormData({...formData, status: e.target.value as any})}
+                                onChange={(e) => setFormData({...formData, status: e.target.value as 'Active' | 'On Leave' | 'Inactive'})}
                                 className="w-full h-16 rounded-2xl border-2 border-slate-50 bg-slate-50/50 px-6 text-sm font-bold text-slate-800 outline-none focus:border-indigo-500/20 focus:bg-white transition-all appearance-none cursor-pointer"
                             >
                                 <option value="Active">Active</option>

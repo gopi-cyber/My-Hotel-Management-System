@@ -14,12 +14,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "LuxeStay - Premium Hotel Management System",
+  title: "GRANDSTAY - Premium Hotel Management System",
   description: "Professional hotel management system with real-time bookings, guest services, and receptionist operations. Manage your hotel efficiently with our comprehensive platform.",
   keywords: ["hotel management", "booking system", "hospitality", "reservations"],
   authors: [{ name: "Hotel Management Team" }],
   openGraph: {
-    title: "LuxeStay - Premium Hotel Management System",
+    title: "GRANDSTAY - Premium Hotel Management System",
     description: "Comprehensive hotel management platform for modern hospitality",
     type: "website",
   },

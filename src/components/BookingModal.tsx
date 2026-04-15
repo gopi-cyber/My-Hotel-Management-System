@@ -19,10 +19,26 @@ export default function BookingModal({ isOpen, onClose, onConfirm, room }: Booki
         checkIn: '',
         checkOut: '',
     });
+    const [error, setError] = useState<string | null>(null);
 
     if (!isOpen || !room) return null;
 
     const handleConfirm = () => {
+        setError(null);
+
+        if (!bookingData.guestName || !bookingData.checkIn || !bookingData.checkOut) {
+            setError("All fields are required.");
+            return;
+        }
+
+        const cin = new Date(bookingData.checkIn);
+        const cout = new Date(bookingData.checkOut);
+
+        if (cout <= cin) {
+            setError("Check-out date must be after check-in date.");
+            return;
+        }
+
         onConfirm({ ...bookingData, roomId: room.id });
         setStep(2); // Show success state
     };
@@ -89,9 +105,15 @@ export default function BookingModal({ isOpen, onClose, onConfirm, room }: Booki
                             </div>
                         </div>
 
-                        <div className="mt-12 pt-10 border-t border-emerald-50 flex flex-col gap-6">
+                        {error && (
+                            <div className="p-4 rounded-2xl bg-red-50 border-2 border-red-100 text-red-600 text-[10px] font-bold text-center animate-shake">
+                                {error}
+                            </div>
+                        )}
+
+                        <div className="mt-8 pt-10 border-t border-emerald-50 flex flex-col gap-6">
                             <button 
-                                onClick={handleCheckIn}
+                                onClick={handleConfirm}
                                 className="w-full h-16 rounded-[1.8rem] bg-emerald-700 text-[10px] font-black uppercase tracking-[0.3em] text-white shadow-[0_20px_40px_rgba(4,120,87,0.3)] hover:bg-emerald-800 hover:translate-y-[-3px] active:scale-95 transition-all flex items-center justify-center gap-4"
                             >
                                 Secure Selection <ArrowRight size={20} />

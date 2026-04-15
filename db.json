@@ -48,20 +48,7 @@
       "createdAt": "2026-01-01T00:00:00.000Z"
     }
   ],
-  "bookings": [
-    {
-      "roomId": "1",
-      "guestId": "Ozzlv4GDLqs",
-      "guestName": "New_guest",
-      "checkInDate": "2026-04-18",
-      "checkOutDate": "2026-04-10",
-      "totalPrice": -1200,
-      "nights": -8,
-      "status": "pending",
-      "id": "1775895161819",
-      "createdAt": "2026-04-11T08:12:41.819Z"
-    }
-  ],
+  "bookings": [],
   "users": [
     {
       "id": "u1",
