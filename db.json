@@ -21,7 +21,7 @@
       "number": "102",
       "type": "Suite",
       "price": 250,
-      "status": "available",
+      "status": "occupied",
       "amenities": [
         "Infinity Pool",
         "Butler Service",
@@ -48,7 +48,20 @@
       "createdAt": "2026-01-01T00:00:00.000Z"
     }
   ],
-  "bookings": [],
+  "bookings": [
+    {
+      "roomId": "2",
+      "guestId": "Ozzlv4GDLqs",
+      "guestName": "New_guest",
+      "checkInDate": "2026-04-17",
+      "checkOutDate": "2026-04-18",
+      "totalPrice": 250,
+      "nights": 1,
+      "status": "pending",
+      "id": "1776326800465",
+      "createdAt": "2026-04-16T08:06:40.465Z"
+    }
+  ],
   "users": [
     {
       "id": "u1",

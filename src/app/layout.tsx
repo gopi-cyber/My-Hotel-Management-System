@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import StoreProvider from "@/lib/StoreProvider";
+import { CustomCursor } from "@/components/CustomCursor";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,13 +15,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "GRANDSTAY - Premium Hotel Management System",
-  description: "Professional hotel management system with real-time bookings, guest services, and receptionist operations. Manage your hotel efficiently with our comprehensive platform.",
-  keywords: ["hotel management", "booking system", "hospitality", "reservations"],
-  authors: [{ name: "Hotel Management Team" }],
+  title: "VORTEX HOSPITALITY - Premium Nexus Control",
+  description: "Professional hospitality management system with real-time neural telemetry, guest registries, and nexus administrative control. Powering the next generation of seamless hotel operations.",
+  keywords: ["hotel management", "vortex", "nexus", "hospitality", "telemetry"],
+  authors: [{ name: "Vortex DevOps Team" }],
   openGraph: {
-    title: "GRANDSTAY - Premium Hotel Management System",
-    description: "Comprehensive hotel management platform for modern hospitality",
+    title: "VORTEX HOSPITALITY - Premium Nexus Control",
+    description: "The ultimate nexus for modern hospitality management and neural telemetry.",
     type: "website",
   },
 };
@@ -37,8 +38,12 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <StoreProvider>
+          <div className="cinematic-bg-container" />
+          <div className="cinematic-overlay" />
+          <CustomCursor />
           {children}
         </StoreProvider>
+
       </body>
     </html>
   );

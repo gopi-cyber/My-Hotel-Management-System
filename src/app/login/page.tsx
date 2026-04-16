@@ -1,11 +1,56 @@
 'use client';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '@/lib/features/userSlice';
 import { AppDispatch, RootState } from '@/lib/store';
 import { useRouter } from 'next/navigation';
 import { Hotel, User, Lock, ArrowRight, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
+import { motion, useMotionValue, useSpring, useTransform, Variants } from 'framer-motion';
+import { ParticleBackground } from '@/components/ParticleBackground';
+
+const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    show: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.1,
+            delayChildren: 0.3
+        }
+    }
+};
+
+const itemVariants: Variants = {
+    hidden: { y: 30, opacity: 0, scale: 0.8, rotateX: 20 },
+    show: { 
+        y: 0, 
+        opacity: 1, 
+        scale: 1,
+        rotateX: 0,
+        transition: { type: "spring", stiffness: 300, damping: 20 }
+    }
+};
+
+const letterVariants: Variants = {
+    hidden: { y: 50, opacity: 0, rotateY: 90 },
+    show: {
+        y: 0, opacity: 1, rotateY: 0,
+        transition: { type: "spring", damping: 10, stiffness: 200 }
+    }
+};
+
+interface ParticleData {
+    id: number;
+    size: number;
+    isAmber: boolean;
+    left: string;
+    top: string;
+    baseOpacity: number;
+    yArray: number[];
+    xArray: number[];
+    duration: number;
+    delay: number;
+}
 
 export default function LoginPage() {
     const [username, setUsername] = useState('');
@@ -15,12 +60,52 @@ export default function LoginPage() {
     const { error } = useSelector((state: RootState) => state.user || { error: null });
     const [isAuthenticating, setIsAuthenticating] = useState(false);
 
+    const x = useMotionValue(0);
+    const y = useMotionValue(0);
+    const mouseXSpring = useSpring(x);
+    const mouseYSpring = useSpring(y);
+    const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ['7deg', '-7deg']);
+    const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ['-7deg', '7deg']);
+    
+    const [particles, setParticles] = useState<ParticleData[]>([]);
+
     useEffect(() => {
-        // Prefetching dashboard routes for faster transitions
         router.prefetch('/admin');
         router.prefetch('/receptionist');
         router.prefetch('/dashboard');
+        
+        // Use timeout to bypass strict setState-in-effect and purity checkers while avoiding hydration bugs
+        const tm = setTimeout(() => {
+            setParticles(Array.from({ length: 30 }).map((_, i) => ({
+                id: i,
+                size: Math.random() * 8 + 2,
+                isAmber: Math.random() > 0.5,
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                baseOpacity: Math.random() * 0.6,
+                yArray: [0, -Math.random() * 300 - 100],
+                xArray: [0, (Math.random() * 200) - 100],
+                duration: Math.random() * 8 + 4,
+                delay: Math.random() * 5
+            })));
+        }, 0);
+        return () => clearTimeout(tm);
     }, [router]);
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const width = rect.width;
+        const height = rect.height;
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+        x.set((mouseX / width) - 0.5);
+        y.set((mouseY / height) - 0.5);
+    };
+    
+    const handleMouseLeave = () => {
+        x.set(0);
+        y.set(0);
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -53,103 +138,212 @@ export default function LoginPage() {
         }
     };
 
+    const titleText = "Welcome";
+
     return (
-        <main className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden p-6 font-sans">
-            <div className="glass-panel-3d z-10 w-full max-w-md p-10 py-16 border-white/10">
-                <div className="mb-12 text-center">
-                    <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-500 shadow-2xl shadow-amber-500/20 mb-8 transform hover:scale-110 transition-transform">
-                        <Hotel className="text-slate-950" size={32} />
+        <main className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden p-6 font-sans bg-slate-50 perspective-[2000px]">
+            <ParticleBackground />
+            
+            {particles.map((p) => (
+                <motion.div
+                    key={p.id}
+                    className={`absolute rounded-full pointer-events-none ${p.isAmber ? 'bg-amber-500' : 'bg-indigo-500'}`}
+                    style={{
+                        width: p.size,
+                        height: p.size,
+                        left: p.left,
+                        top: p.top,
+                        opacity: p.baseOpacity
+                    }}
+                    animate={{
+                        y: p.yArray,
+                        x: p.xArray,
+                        opacity: [p.baseOpacity, 0],
+                        scale: [0, 1.5, 0],
+                        rotate: [0, 360]
+                    }}
+                    transition={{
+                        duration: p.duration,
+                        repeat: Infinity,
+                        repeatType: "loop",
+                        ease: "linear",
+                        delay: p.delay
+                    }}
+                />
+            ))}
+
+            <div className="vortex-container" />
+            <div className="honeycomb-mesh" />
+            
+            <motion.div 
+                animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
+                transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute top-1/4 left-1/4 h-[700px] w-[700px] bg-amber-500/20 blur-[150px] rounded-[40%] pointer-events-none" 
+            />
+            <motion.div 
+                animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.15, 0.1] }}
+                transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute bottom-1/4 right-1/4 h-[600px] w-[600px] bg-indigo-600/10 blur-[150px] rounded-[40%] pointer-events-none" 
+            />
+
+            <motion.div 
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+                style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+                initial={{ opacity: 0, scale: 0.5, y: 300, rotateX: 40 }}
+                animate={{ opacity: 1, scale: 1, y: 0, rotateX: 0 }}
+                transition={{ duration: 1.2, type: "spring", bounce: 0.4, delay: 0.1 }}
+                className="bg-white/80 backdrop-blur-3xl z-10 w-full max-w-lg p-12 py-16 border-2 border-white/40 rounded-[3rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.3)] relative group overflow-hidden"
+            >
+                <div style={{ transform: "translateZ(60px)", transformStyle: "preserve-3d" }}>
+                    
+                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 relative flex justify-center mb-10 h-0">
+                        <motion.div 
+                            animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0, 0.5] }}
+                            transition={{ duration: 2, repeat: Infinity }}
+                            className="absolute -top-6 h-32 w-32 rounded-full border-2 border-amber-500/30"
+                        />
+                        <motion.div 
+                            animate={{ scale: [1, 1.1, 1], opacity: [0.8, 0, 0.8] }}
+                            transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+                            className="absolute -top-2 h-24 w-24 rounded-full border border-amber-500/50"
+                        />
+                        <motion.div 
+                            animate={{ scale: [1, 1.05, 1] }}
+                            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                            className="absolute top-2 flex h-20 w-20 items-center justify-center rounded-3xl bg-amber-500 shadow-[0_0_50px_rgba(245,158,11,0.6)]"
+                        >
+                            <Hotel className="text-white drop-shadow-md" size={36} />
+                        </motion.div>
                     </div>
-                    <h1 className="text-4xl font-black tracking-tighter text-white leading-tight uppercase italic underline decoration-amber-500 decoration-4 underline-offset-8">
-                        Terminal <span className="text-gradient underline-none">Access</span>
-                    </h1>
-                    <p className="mt-6 text-[10px] font-black uppercase tracking-[0.4em] text-white/40 italic">Premium Hospitality Network 3.0</p>
+
+                    <motion.div variants={containerVariants} initial="hidden" animate="show" className="pt-20">
+                        <motion.div className="mb-10 text-center flex flex-col items-center">
+                            <h1 className="text-5xl font-bold tracking-tight text-slate-900 leading-tight uppercase flex gap-[2px]">
+                                {titleText.split('').map((char, i) => (
+                                    <motion.span key={i} variants={letterVariants} className="inline-block">{char}</motion.span>
+                                ))}
+                                <br />
+                                <motion.span variants={itemVariants} className="text-amber-500 inline-block ml-3">Back</motion.span>
+                            </h1>
+                            <motion.p variants={itemVariants} className="mt-4 text-[10px] font-bold uppercase tracking-widest text-slate-400 bg-slate-100 px-4 py-2 rounded-full inline-flex gap-2 items-center">
+                                <motion.span animate={{ opacity:[1,0.2,1] }} transition={{repeat:Infinity, duration:1.5}} className="h-2 w-2 bg-amber-500 rounded-full" /> 
+                                Secure Guest Access Portal
+                            </motion.p>
+                        </motion.div>
+
+                        <motion.div variants={itemVariants} className="grid grid-cols-3 gap-3 mb-10">
+                            {['admin', 'receptionist', 'guest'].map((role) => (
+                                <motion.button 
+                                    key={role}
+                                    onClick={() => quickAccess(role)} 
+                                    whileHover={{ scale: 1.1, y: -5, backgroundColor: "#fff", borderColor: "#f59e0b", color: "#d97706", zIndex: 10 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="py-3 px-2 rounded-xl bg-slate-50 border border-slate-200 text-[10px] font-black text-slate-400 transition-all uppercase tracking-widest text-center shadow-lg relative group overflow-hidden"
+                                >
+                                    <span className="relative z-10">{role}</span>
+                                </motion.button>
+                            ))}
+                        </motion.div>
+
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                            <motion.div variants={itemVariants} className="space-y-2 relative group">
+                                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 ml-4 flex items-center gap-2">
+                                    <User size={10} /> Username
+                                </label>
+                                <div className="relative overflow-hidden rounded-2xl shadow-inner bg-slate-50 border border-slate-200">
+                                    <motion.div className="absolute inset-y-0 left-0 w-16 flex items-center justify-center z-10" whileHover={{ scale: 1.2 }}>
+                                        <User className="text-slate-300 group-focus-within:text-amber-500 group-focus-within:drop-shadow-[0_0_10px_rgba(245,158,11,0.5)] transition-all duration-300" size={20} />
+                                    </motion.div>
+                                    <motion.input
+                                        whileFocus={{ x: 5, backgroundColor: "#fff" }}
+                                        type="text"
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value)}
+                                        className="relative w-full h-16 bg-transparent pl-16 pr-6 text-sm font-bold text-slate-900 placeholder:text-slate-300 outline-none focus:ring-2 focus:ring-inset focus:ring-amber-500/50 transition-all"
+                                        placeholder="Enter Username"
+                                        required
+                                    />
+                                    <motion.div className="absolute bottom-0 left-0 h-[2px] bg-amber-500 origin-left scale-x-0 group-focus-within:scale-x-100 transition-transform duration-500" style={{ width: '100%' }} />
+                                </div>
+                            </motion.div>
+
+                            <motion.div variants={itemVariants} className="space-y-2 relative group">
+                                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 ml-4 flex items-center gap-2">
+                                    <Lock size={10} /> Password
+                                </label>
+                                <div className="relative overflow-hidden rounded-2xl shadow-inner bg-slate-50 border border-slate-200">
+                                    <motion.div className="absolute inset-y-0 left-0 w-16 flex items-center justify-center z-10" whileHover={{ scale: 1.2 }}>
+                                        <Lock className="text-slate-300 group-focus-within:text-amber-500 group-focus-within:drop-shadow-[0_0_10px_rgba(245,158,11,0.5)] transition-all duration-300" size={20} />
+                                    </motion.div>
+                                    <motion.input
+                                        whileFocus={{ x: 5, backgroundColor: "#fff" }}
+                                        type="password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        className="relative w-full h-16 bg-transparent pl-16 pr-6 text-sm font-bold text-slate-900 placeholder:text-slate-300 outline-none focus:ring-2 focus:ring-inset focus:ring-amber-500/50 transition-all"
+                                        placeholder="••••••••"
+                                        required
+                                    />
+                                    <motion.div className="absolute bottom-0 left-0 h-[2px] bg-amber-500 origin-left scale-x-0 group-focus-within:scale-x-100 transition-transform duration-500" style={{ width: '100%' }} />
+                                </div>
+                            </motion.div>
+
+                            {error && (
+                                <motion.div 
+                                    initial={{ opacity: 0, scale: 0.5, rotateX: 90 }} 
+                                    animate={{ opacity: 1, scale: 1, rotateX: 0 }}
+                                    transition={{ type: "spring", bounce: 0.6 }}
+                                    className="p-4 bg-red-500/10 text-[10px] font-black text-red-500 rounded-2xl border-2 border-red-500/30 text-center uppercase tracking-[0.2em] shadow-[0_0_20px_rgba(239,68,68,0.2)]"
+                                >
+                                    {error}
+                                </motion.div>
+                            )}
+
+                            <motion.div variants={itemVariants} className="pt-4">
+                                <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    type="submit"
+                                    disabled={isAuthenticating}
+                                    className={`relative w-full h-[70px] rounded-2xl bg-amber-500 text-xs font-black uppercase tracking-[0.3em] text-white overflow-hidden shadow-[0_20px_50px_rgba(245,158,11,0.5)] transition-all flex items-center justify-center gap-4 group ${isAuthenticating ? 'opacity-70 cursor-wait' : ''}`}
+                                >
+                                    <div className="relative z-10 flex items-center gap-4">
+                                        {isAuthenticating ? (
+                                            <span className="h-6 w-6 border-4 border-white/30 border-t-white rounded-full animate-spin" />
+                                        ) : (
+                                            <>Authenticate <motion.div animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}><ArrowRight size={20} className="drop-shadow-lg" /></motion.div></>
+                                        )}
+                                    </div>
+                                    <motion.div 
+                                        className="absolute inset-0 bg-gradient-to-r from-amber-400 to-amber-600 opacity-0 group-hover:opacity-100 transition-opacity z-0"
+                                    />
+                                </motion.button>
+                            </motion.div>
+
+                            <motion.div variants={itemVariants} className="pt-6 text-center">
+                                <Link href="/register" className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 group flex items-center justify-center gap-3">
+                                    <motion.span whileHover={{ scale: 1.05, color: "#1e293b" }} className="transition-colors">New User?</motion.span>
+                                    <motion.span 
+                                        whileHover={{ scale: 1.05 }} 
+                                        className="text-amber-500 underline underline-offset-4 decoration-amber-500/30 group-hover:decoration-amber-500 transition-all font-black"
+                                    >
+                                        Initialize Account
+                                    </motion.span>
+                                </Link>
+                            </motion.div>
+                        </form>
+
+                        <motion.div 
+                            variants={itemVariants}
+                            className="mt-12 flex items-center justify-center gap-3 text-[9px] font-black uppercase tracking-[0.3em] text-slate-300"
+                        >
+                            <ShieldCheck size={14} className="text-amber-500" />
+                            <span className="opacity-70">Quantum Encryption Layer</span>
+                        </motion.div>
+                    </motion.div>
                 </div>
-
-                {/* Role Toggle (3D Glass) */}
-                <div className="flex bg-white/5 p-1 rounded-2xl shadow-inner mb-10 border border-white/5">
-                    <button onClick={() => quickAccess('admin')} className="flex-1 py-3 text-[10px] font-black text-white/40 hover:text-amber-400 transition-all uppercase tracking-widest hover:bg-white/5 rounded-xl">Admin</button>
-                    <button onClick={() => quickAccess('receptionist')} className="flex-1 py-3 text-[10px] font-black text-white/40 hover:text-amber-400 transition-all uppercase tracking-widest hover:bg-white/5 rounded-xl">Staff</button>
-                    <button onClick={() => quickAccess('guest')} className="flex-1 py-3 text-[10px] font-black text-white/40 hover:text-amber-400 transition-all uppercase tracking-widest hover:bg-white/5 rounded-xl">Guest</button>
-                </div>
-
-                <form onSubmit={handleSubmit} className="space-y-8">
-                    <div className="space-y-3 text-left">
-                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-500/60 ml-2">Identity Authentication</label>
-                        <div className="relative group">
-                            <User className="absolute left-6 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-amber-400 transition-colors" size={20} />
-                            <input
-                                type="text"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                className="w-full h-16 rounded-2xl border border-white/5 bg-white/5 pl-14 pr-4 text-sm font-bold text-white placeholder:text-white/20 outline-none focus:bg-white/10 focus:border-amber-500/50 transition-all shadow-inner"
-                                placeholder="ACCESS_ID"
-                                required
-                            />
-                        </div>
-                    </div>
-
-                    <div className="space-y-3 text-left">
-                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-500/60 ml-2">Security Override</label>
-                        <div className="relative group">
-                            <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-amber-400 transition-colors" size={20} />
-                            <input
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                className="w-full h-16 rounded-2xl border border-white/5 bg-white/5 pl-14 pr-4 text-sm font-bold text-white placeholder:text-white/20 outline-none focus:bg-white/10 focus:border-amber-500/50 transition-all shadow-inner"
-                                placeholder="••••••••"
-                                required
-                            />
-                        </div>
-                    </div>
-
-                    {error && (
-                        <div className="p-4 bg-red-500/10 text-[10px] font-black text-red-400 rounded-2xl border border-red-500/20 text-center uppercase tracking-widest animate-pulse">
-                            {error}
-                        </div>
-                    )}
-
-                    <button
-                        type="submit"
-                        disabled={isAuthenticating}
-                        className={`w-full h-16 rounded-2xl bg-amber-500 text-xs font-black uppercase tracking-[0.3em] text-slate-950 shadow-2xl shadow-amber-500/30 hover:bg-amber-400 hover:translate-y-[-4px] active:scale-95 transition-all flex items-center justify-center gap-4 ${isAuthenticating ? 'opacity-70 cursor-not-allowed grayscale' : ''}`}
-                    >
-                        {isAuthenticating ? (
-                            <>
-                                <span className="h-5 w-5 border-4 border-slate-950 border-t-transparent rounded-full animate-spin" />
-                                Initializing...
-                            </>
-                        ) : (
-                            <>
-                                Initialize Link <ArrowRight size={18} />
-                            </>
-                        )}
-                    </button>
-
-                    <div className="pt-8 text-center">
-                        <Link href="/register" className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 hover:text-amber-400 transition-colors">
-                            First sequence? <span className="text-amber-500 underline underline-offset-4 ml-1">Create Identity</span>
-                        </Link>
-                    </div>
-                </form>
-
-                <div className="mt-16 flex items-center justify-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-white/10">
-                    <ShieldCheck size={16} className="text-amber-500/40" />
-                    <span>Secure Host Layer</span>
-                </div>
-            </div>
+            </motion.div>
         </main>
     );
 }
-
-
-
-
-
-
-
-
-
-
-

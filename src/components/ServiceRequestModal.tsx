@@ -26,56 +26,70 @@ export default function ServiceRequestModal({ isOpen, onClose }: ServiceRequestM
     };
 
     return (
-        <div className="fixed inset-0 z-[110] flex items-center justify-center bg-slate-950/90 p-4 backdrop-blur-xl">
-            <div className="relative w-full max-w-lg rounded-3xl border border-white/10 bg-slate-900 p-10 shadow-2xl">
-                <button onClick={onClose} className="absolute right-6 top-6 text-slate-500 hover:text-white transition-all">
-                    <X size={24} />
+        <div className="fixed inset-0 z-[110] flex items-center justify-center p-6 animate-in fade-in duration-500">
+            {/* Backdrop */}
+            <div 
+                className="absolute inset-0 bg-slate-950/80 backdrop-blur-3xl transition-opacity"
+                onClick={onClose}
+            />
+
+            <div className="relative w-full max-w-xl rounded-[4rem] border-4 border-white/5 bg-slate-900/40 p-12 shadow-[0_50px_100px_rgba(0,0,0,0.8)] backdrop-blur-3xl animate-in fade-in zoom-in-95 duration-500 group overflow-hidden">
+                {/* Decorative Elements */}
+                <div className="absolute top-[-20%] right-[-20%] h-64 w-64 bg-amber-500/5 blur-[60px] rounded-full pointer-events-none group-hover:scale-150 transition-transform duration-1000" />
+                <div className="absolute bottom-[-20%] left-[-20%] h-64 w-64 bg-indigo-500/5 blur-[60px] rounded-full pointer-events-none group-hover:scale-150 transition-transform duration-1000" />
+
+                <button 
+                  onClick={onClose}
+                  className="absolute right-10 top-10 h-12 w-12 rounded-2xl bg-slate-950 border border-white/5 flex items-center justify-center text-white/20 hover:text-red-500 transition-all active:scale-95 shadow-2xl z-20 group/close"
+                >
+                    <X size={24} className="group-hover/close:rotate-90 transition-transform" />
                 </button>
 
                 {step === 1 ? (
-                    <>
-                        <div className="mb-10 text-center">
-                            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-600/10 text-blue-500 shadow-xl shadow-blue-500/10">
-                                <Sparkles size={28} />
+                    <div className="relative z-10">
+                        <div className="mb-12 text-center space-y-2">
+                            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-[2rem] bg-slate-950 border border-white/5 shadow-2xl group/icon">
+                                <Sparkles size={36} className="text-amber-500 group-hover:scale-110 transition-transform duration-500" />
                             </div>
-                            <h2 className="text-3xl font-black italic tracking-tighter uppercase">In-Suite <span className="text-blue-500">Services</span></h2>
-                            <p className="mt-2 text-sm text-slate-500 font-medium">Request premium amenities directly to your room.</p>
+                            <h2 className="text-4xl font-black italic tracking-tighter uppercase text-white leading-none">In-Suite <span className="text-amber-500">Services</span> <span className="text-amber-500">_</span></h2>
+                            <p className="text-white/20 text-[10px] mt-4 font-black uppercase tracking-[0.4em] italic">Standard Operational Protocol v2.4</p>
                         </div>
 
-                        <div className="grid grid-cols-1 gap-4">
+                        <div className="grid grid-cols-1 gap-6">
                             {services.map((service) => (
                                 <button 
                                     key={service.id}
                                     onClick={() => handleSubmit(service.name)}
-                                    className="group flex w-full items-center gap-5 rounded-2xl border border-white/5 bg-white/5 p-5 transition-all hover:bg-blue-600 hover:border-blue-400 active:scale-95 shadow-lg"
+                                    className="group/item flex w-full items-center gap-6 rounded-[2rem] border-2 border-white/5 bg-slate-950/40 p-6 transition-all hover:bg-slate-950 hover:border-amber-500/30 active:scale-95 shadow-2xl"
                                 >
-                                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/5 text-blue-500 group-hover:bg-white group-hover:text-blue-600 transition-colors">
-                                        <service.icon size={26} />
+                                    <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-950 border border-white/5 text-amber-500 group-hover/item:bg-amber-500 group-hover/item:text-slate-950 transition-all duration-300">
+                                        <service.icon size={32} />
                                     </div>
-                                    <div className="text-left flex flex-col">
-                                        <span className="text-lg font-black italic tracking-tighter group-hover:text-white transition-colors">{service.name}</span>
-                                        <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 group-hover:text-blue-100 transition-colors">{service.desc}</span>
+                                    <div className="text-left flex flex-col space-y-1">
+                                        <span className="text-xl font-black italic tracking-tighter text-white uppercase group-hover/item:text-amber-500 transition-colors leading-none">{service.name}</span>
+                                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/10 italic group-hover/item:text-white/40 transition-colors">{service.desc}</span>
                                     </div>
                                 </button>
                             ))}
                         </div>
 
-                        <div className="mt-10 flex items-center justify-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-slate-600">
-                             <Clock size={16} /> <span>Estimated Response: 15 mins</span>
+                        <div className="mt-12 pt-8 border-t border-white/5 flex items-center justify-center gap-4 text-[10px] font-black uppercase tracking-[0.4em] text-white/10 italic">
+                             <Clock size={18} className="text-amber-500/40" /> 
+                             <span>Estimated Sync: 15 mins <span className="text-amber-500">/</span> Priority Response</span>
                         </div>
-                    </>
+                    </div>
                 ) : (
-                    <div className="flex flex-col items-center py-16 text-center">
-                        <div className="mb-8 flex h-24 w-24 items-center justify-center rounded-3xl bg-blue-600 shadow-2xl shadow-blue-600/20">
-                            <CheckCircle size={56} className="text-white" />
+                    <div className="flex flex-col items-center py-20 text-center relative z-10">
+                        <div className="mb-12 flex h-32 w-32 items-center justify-center rounded-[3.5rem] bg-slate-950 border-4 border-white/5 shadow-2xl animate-bounce">
+                            <CheckCircle size={64} className="text-amber-500 shadow-[0_0_30px_rgba(245,158,11,0.4)]" />
                         </div>
-                        <h2 className="text-4xl font-black italic tracking-tighter mb-4">Request <span className="text-blue-500 italic">Sent</span></h2>
-                        <p className="text-slate-400 text-lg max-w-xs mb-10">Our staff has been notified. Your <strong>{selectedService}</strong> is on the way.</p>
+                        <h2 className="text-5xl font-black italic tracking-tighter text-white mb-6 uppercase leading-tight">Request <span className="text-amber-500">Sent</span> <span className="text-amber-500">_</span></h2>
+                        <p className="text-white/20 text-lg font-black max-w-sm mb-14 italic uppercase tracking-tight">Our personnel have been notified. Your <strong>{selectedService}</strong> is being initialized.</p>
                         <button 
                             onClick={onClose}
-                            className="rounded-2xl bg-white/10 px-12 py-4 text-xs font-black uppercase tracking-widest hover:bg-white/20 transition-all"
+                            className="h-20 w-full rounded-[2.5rem] bg-slate-950 border border-white/5 text-[10px] font-black uppercase tracking-[0.5em] text-white hover:text-amber-500 transition-all shadow-2xl active:scale-95"
                         >
-                            Back to Profile
+                            Return to Interface
                         </button>
                     </div>
                 )}
