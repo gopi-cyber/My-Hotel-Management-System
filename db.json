@@ -134,6 +134,30 @@
       "role": "admin",
       "name": "Goi",
       "id": "12CaKJhWLK4"
+    },
+    {
+      "username": "gopi",
+      "email": "gopi@gmail.com",
+      "password": "123456",
+      "role": "guest",
+      "name": "Gopi",
+      "id": "OsBB8n48adc"
+    },
+    {
+      "username": "balu",
+      "email": "balu@gmail.com",
+      "password": "123456",
+      "role": "guest",
+      "name": "Balu",
+      "id": "XnBxTH39t1Y"
+    },
+    {
+      "username": "rabit",
+      "email": "rabit@gmail.com",
+      "password": "123456",
+      "role": "guest",
+      "name": "Rabit",
+      "id": "ahMl-AhE4Oo"
     }
   ],
   "staff": [

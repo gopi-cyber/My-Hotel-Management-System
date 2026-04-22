@@ -17,11 +17,15 @@ interface ServiceState {
   error: string | null;
 }
 
+import { ENDPOINTS } from '../apiConfig';
+
+const API_URL = ENDPOINTS.SERVICES;
+
 export const fetchServices = createAsyncThunk(
   'services/fetchServices',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch('/api/services');
+      const response = await fetch(API_URL);
       if (!response.ok) throw new Error('Failed to fetch services');
       return response.json();
     } catch (error: unknown) {
@@ -34,7 +38,7 @@ export const fetchUserServices = createAsyncThunk(
   'services/fetchUserServices',
   async (guestId: string, { rejectWithValue }) => {
     try {
-      const response = await fetch(`/api/services?guestId=${guestId}`);
+      const response = await fetch(`${API_URL}?guestId=${guestId}`);
       if (!response.ok) throw new Error('Failed to fetch user services');
       return response.json();
     } catch (error: unknown) {
@@ -47,7 +51,7 @@ export const createService = createAsyncThunk(
   'services/createService',
   async (service: Omit<ServiceRequest, 'id' | 'createdAt'>, { rejectWithValue }) => {
     try {
-      const response = await fetch('/api/services', {
+      const response = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(service),
@@ -64,10 +68,12 @@ export const updateService = createAsyncThunk(
   'services/updateService',
   async (data: { id: string; status: string }, { rejectWithValue }) => {
     try {
-      const response = await fetch('/api/services', {
+      const { id, ...updates } = data;
+      const url = API_URL.startsWith('/api') ? API_URL : `${API_URL}/${id}`;
+      const response = await fetch(url, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify(API_URL.startsWith('/api') ? data : updates),
       });
       if (!response.ok) throw new Error('Failed to update service');
       return response.json();

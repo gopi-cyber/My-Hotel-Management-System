@@ -19,12 +19,16 @@ interface RoomState {
     error: string | null;
 }
 
+import { ENDPOINTS } from '../apiConfig';
+
+const API_URL = ENDPOINTS.ROOMS;
+
 // API Thunks - Connecting to real backend
 export const fetchRooms = createAsyncThunk(
     'rooms/fetchRooms',
     async (_, { rejectWithValue }) => {
         try {
-            const response = await fetch('/api/rooms');
+            const response = await fetch(API_URL);
             if (!response.ok) throw new Error('Failed to fetch rooms');
             return response.json();
         } catch (error: unknown) {
@@ -37,7 +41,7 @@ export const addRoom = createAsyncThunk(
     'rooms/addRoom',
     async (room: Omit<Room, 'id' | 'createdAt'>, { rejectWithValue }) => {
         try {
-            const response = await fetch('/api/rooms', {
+            const response = await fetch(API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(room),
@@ -54,10 +58,12 @@ export const updateRoom = createAsyncThunk(
     'rooms/updateRoom',
     async (room: Room, { rejectWithValue }) => {
         try {
-            const response = await fetch('/api/rooms', {
+            const { id, ...updates } = room;
+            const url = API_URL.startsWith('/api') ? API_URL : `${API_URL}/${id}`;
+            const response = await fetch(url, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(room),
+                body: JSON.stringify(API_URL.startsWith('/api') ? room : updates),
             });
             if (!response.ok) throw new Error('Failed to update room');
             return response.json();
@@ -71,7 +77,8 @@ export const deleteRoom = createAsyncThunk(
     'rooms/deleteRoom',
     async (id: string, { rejectWithValue }) => {
         try {
-            const response = await fetch(`/api/rooms?id=${id}`, {
+            const url = API_URL.startsWith('/api') ? `${API_URL}?id=${id}` : `${API_URL}/${id}`;
+            const response = await fetch(url, {
                 method: 'DELETE',
             });
             if (!response.ok) throw new Error('Failed to delete room');

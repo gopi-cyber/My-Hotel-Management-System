@@ -16,12 +16,16 @@ interface StaffState {
     error: string | null;
 }
 
+import { ENDPOINTS } from '../apiConfig';
+
+const API_URL = ENDPOINTS.STAFF;
+
 // API Thunks
 export const fetchStaff = createAsyncThunk(
     'staff/fetchStaff',
     async (_, { rejectWithValue }) => {
         try {
-            const response = await fetch('/api/staff');
+            const response = await fetch(API_URL);
             if (!response.ok) throw new Error('Failed to fetch staff');
             return response.json();
         } catch (error: unknown) {
@@ -34,7 +38,7 @@ export const addStaff = createAsyncThunk(
     'staff/addStaff',
     async (staff: Omit<Staff, 'id' | 'createdAt'>, { rejectWithValue }) => {
         try {
-            const response = await fetch('/api/staff', {
+            const response = await fetch(API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(staff),
@@ -51,10 +55,12 @@ export const updateStaff = createAsyncThunk(
     'staff/updateStaff',
     async (staff: Staff, { rejectWithValue }) => {
         try {
-            const response = await fetch('/api/staff', {
+            const { id, ...updates } = staff;
+            const url = API_URL.startsWith('/api') ? API_URL : `${API_URL}/${id}`;
+            const response = await fetch(url, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(staff),
+                body: JSON.stringify(API_URL.startsWith('/api') ? staff : updates),
             });
             if (!response.ok) throw new Error('Failed to update staff');
             return response.json();
@@ -68,7 +74,8 @@ export const deleteStaff = createAsyncThunk(
     'staff/deleteStaff',
     async (id: string, { rejectWithValue }) => {
         try {
-            const response = await fetch(`/api/staff?id=${id}`, {
+            const url = API_URL.startsWith('/api') ? `${API_URL}?id=${id}` : `${API_URL}/${id}`;
+            const response = await fetch(url, {
                 method: 'DELETE',
             });
             if (!response.ok) throw new Error('Failed to delete staff');

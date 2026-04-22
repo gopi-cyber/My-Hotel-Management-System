@@ -21,12 +21,16 @@ interface BookingState {
     error: string | null;
 }
 
+import { ENDPOINTS } from '../apiConfig';
+
+const API_URL = ENDPOINTS.BOOKINGS;
+
 // API Thunks
 export const fetchBookings = createAsyncThunk(
     'bookings/fetchBookings',
     async (_, { rejectWithValue }) => {
         try {
-            const response = await fetch('/api/bookings');
+            const response = await fetch(API_URL);
             if (!response.ok) throw new Error('Failed to fetch bookings');
             return response.json();
         } catch (error: unknown) {
@@ -39,7 +43,8 @@ export const fetchUserBookings = createAsyncThunk(
     'bookings/fetchUserBookings',
     async (userId: string, { rejectWithValue }) => {
         try {
-            const response = await fetch(`/api/bookings?userId=${userId}`);
+            const url = API_URL.startsWith('/api') ? `${API_URL}?userId=${userId}` : `${API_URL}?guestId=${userId}`;
+            const response = await fetch(url);
             if (!response.ok) throw new Error('Failed to fetch user bookings');
             return response.json();
         } catch (error: unknown) {
@@ -52,7 +57,7 @@ export const addBooking = createAsyncThunk(
     'bookings/addBooking',
     async (booking: Omit<Booking, 'id' | 'createdAt'>, { rejectWithValue }) => {
         try {
-            const response = await fetch('/api/bookings', {
+            const response = await fetch(API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(booking),
@@ -69,10 +74,12 @@ export const updateBooking = createAsyncThunk(
     'bookings/updateBooking',
     async (booking: Booking, { rejectWithValue }) => {
         try {
-            const response = await fetch('/api/bookings', {
+            const { id, ...updates } = booking;
+            const url = API_URL.startsWith('/api') ? API_URL : `${API_URL}/${id}`;
+            const response = await fetch(url, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(booking),
+                body: JSON.stringify(API_URL.startsWith('/api') ? booking : updates),
             });
             if (!response.ok) throw new Error('Failed to update booking');
             return response.json();

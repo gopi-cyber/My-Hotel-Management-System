@@ -16,14 +16,15 @@ interface UserState {
     error: string | null;
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://hotel-db-server-kiiv.onrender.com';
-const API_URL = `${API_BASE_URL}/users`;
+import { ENDPOINTS } from '../apiConfig';
+
+const API_URL = ENDPOINTS.USERS;
 
 export const registerUser = createAsyncThunk('user/registerUser', async (userData: Omit<User, 'id'>) => {
     // Check for duplicate username first
     const checkResponse = await axios.get(`${API_URL}?username=${userData.username}`);
     if (checkResponse.data.length > 0) {
-        throw new Error('Identity already initialized. Please choose a unique handle.');
+        throw new Error('This username is already taken. Please choose another one.');
     }
     
     const response = await axios.post(API_URL, userData);
@@ -56,9 +57,9 @@ export const loginUser = createAsyncThunk('user/loginUser', async (credentials: 
         throw new Error('Invalid username or password');
     } catch (err: unknown) {
         if (axios.isAxiosError(err)) {
-            throw new Error(err.response?.data?.message || err.message || 'Authentication service unreachable');
+            throw new Error(err.response?.data?.message || err.message || 'Login service currently unavailable');
         }
-        throw new Error(err instanceof Error ? err.message : 'Authentication service unreachable');
+        throw new Error(err instanceof Error ? err.message : 'Login service currently unavailable');
     }
 });
 

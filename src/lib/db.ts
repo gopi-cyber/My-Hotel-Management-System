@@ -16,18 +16,14 @@ interface Database {
   checkIns: Array<unknown>;
 }
 
-// In-memory cache to avoid excessive file I/O during parallel requests
-let cachedDB: Database | null = null;
-
 // Read database
 export function readDB(): Database {
-  if (cachedDB) return cachedDB;
   try {
     const data = fs.readFileSync(dbPath, 'utf-8');
-    cachedDB = JSON.parse(data);
-    return cachedDB as Database;
-  } catch {
-    cachedDB = {
+    return JSON.parse(data) as Database;
+  } catch (error) {
+    console.error('Database read error:', error);
+    return {
       users: [],
       rooms: [],
       bookings: [],
@@ -35,13 +31,11 @@ export function readDB(): Database {
       services: [],
       checkIns: [],
     };
-    return cachedDB;
   }
 }
 
 // Write database
 export function writeDB(data: Database): void {
-  cachedDB = data;
   fs.writeFileSync(dbPath, JSON.stringify(data, null, 2));
 }
 
