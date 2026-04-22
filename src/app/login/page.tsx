@@ -185,15 +185,20 @@ export default function LoginPage() {
                 transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
                 className="absolute bottom-1/4 right-1/4 h-[600px] w-[600px] bg-indigo-600/10 blur-[150px] rounded-[40%] pointer-events-none" 
             />
+            
+            <div className="absolute inset-0 z-0 pointer-events-none">
+                <div className="vortex-container" />
+                <div className="honeycomb-mesh" />
+            </div>
 
             <motion.div 
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
                 style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-                initial={{ opacity: 0, scale: 0.5, y: 300, rotateX: 40 }}
+                initial={{ opacity: 0, scale: 0.5, y: -300, rotateX: -40 }}
                 animate={{ opacity: 1, scale: 1, y: 0, rotateX: 0 }}
                 transition={{ duration: 1.2, type: "spring", bounce: 0.4, delay: 0.1 }}
-                className="bg-white/80 backdrop-blur-3xl z-10 w-full max-w-lg p-12 py-16 border-2 border-white/40 rounded-[3rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.3)] relative group overflow-hidden"
+                className="bg-white/80 backdrop-blur-3xl z-10 w-full max-w-lg p-12 py-16 border-2 border-white/40 rounded-[3rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.3)] relative group"
             >
                 <div style={{ transform: "translateZ(60px)", transformStyle: "preserve-3d" }}>
                     
@@ -233,22 +238,37 @@ export default function LoginPage() {
                         </motion.div>
 
                         <motion.div variants={itemVariants} className="grid grid-cols-3 gap-3 mb-10">
-                            {['admin', 'receptionist', 'guest'].map((role) => (
-                                <motion.button 
-                                    key={role}
-                                    type="button"
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                        quickAccess(role);
-                                    }} 
-                                    whileHover={{ scale: 1.05, y: -2, backgroundColor: "#fff", borderColor: "#f59e0b", color: "#d97706", zIndex: 20 }}
-                                    whileTap={{ scale: 0.95 }}
-                                    className="py-3 px-2 rounded-xl bg-slate-50 border border-slate-200 text-[10px] font-black text-slate-400 transition-all uppercase tracking-widest text-center shadow-lg relative group overflow-hidden cursor-pointer"
-                                >
-                                    <span className="relative z-10 pointer-events-none">{role}</span>
-                                </motion.button>
-                            ))}
+                            {['admin', 'receptionist', 'guest'].map((r) => {
+                                const isActive = (r === 'admin' && username === 'admin') || 
+                                               (r === 'receptionist' && username === 'staff') || 
+                                               (r === 'guest' && username === 'new_guest');
+                                return (
+                                    <motion.button 
+                                        key={r}
+                                        type="button"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            quickAccess(r);
+                                        }} 
+                                        whileHover={{ scale: 1.05, y: -2, zIndex: 20 }}
+                                        whileTap={{ scale: 0.95 }}
+                                        className={`py-3 px-2 rounded-xl border transition-all uppercase tracking-widest text-center shadow-lg relative group overflow-hidden cursor-pointer text-[10px] font-black ${
+                                            isActive 
+                                            ? 'bg-amber-500 text-white border-amber-600 scale-105' 
+                                            : 'bg-slate-50 border-slate-200 text-slate-400 hover:text-slate-900 hover:bg-white'
+                                        }`}
+                                    >
+                                        <span className="relative z-10 pointer-events-none">{r}</span>
+                                        {isActive && (
+                                            <motion.div 
+                                                layoutId="loginActive"
+                                                className="absolute inset-0 bg-gradient-to-r from-amber-500 to-amber-600 z-0"
+                                            />
+                                        )}
+                                    </motion.button>
+                                );
+                            })}
                         </motion.div>
 
                         <form onSubmit={handleSubmit} className="space-y-6">

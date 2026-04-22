@@ -168,6 +168,10 @@ export default function RegisterPage() {
                 transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
                 className="absolute bottom-1/4 left-1/4 h-[600px] w-[600px] bg-cyan-600/10 blur-[150px] rounded-[40%] pointer-events-none" 
             />
+            <div className="absolute inset-0 z-0 pointer-events-none">
+                <div className="vortex-container" />
+                <div className="honeycomb-mesh" />
+            </div>
 
             <motion.div 
                 onMouseMove={handleMouseMove}
@@ -176,7 +180,7 @@ export default function RegisterPage() {
                 initial={{ opacity: 0, scale: 0.5, y: -300, rotateX: -40 }}
                 animate={{ opacity: 1, scale: 1, y: 0, rotateX: 0 }}
                 transition={{ duration: 1.2, type: "spring", bounce: 0.4, delay: 0.1 }}
-                className="bg-white/80 backdrop-blur-3xl z-10 w-full max-w-lg p-10 py-12 border-2 border-white/40 rounded-[3rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.3)] relative group overflow-hidden"
+                className="bg-white/80 backdrop-blur-3xl z-10 w-full max-w-lg p-10 py-12 border-2 border-white/40 rounded-[3rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.3)] relative group"
             >
                 <div style={{ transform: "translateZ(60px)", transformStyle: "preserve-3d" }}>
                     
@@ -221,16 +225,20 @@ export default function RegisterPage() {
                                         type="button"
                                         onClick={(e) => {
                                             e.preventDefault();
+                                            e.stopPropagation();
                                             setRole(r as 'admin' | 'receptionist' | 'guest');
                                         }} 
-                                        whileHover={{ scale: 1.05, zIndex: 10, y: -2 }}
+                                        whileHover={{ scale: 1.05, zIndex: 10 }}
                                         whileTap={{ scale: 0.95 }}
-                                        className={`flex-1 text-[9px] font-black uppercase tracking-[0.2em] transition-all rounded-xl mx-0.5 z-10 relative group cursor-pointer ${role === r ? 'bg-white text-amber-600 shadow-lg border border-slate-100 scale-105' : 'text-slate-400 hover:text-slate-900'}`}
+                                        className={`flex-1 text-[9px] font-black uppercase tracking-[0.2em] transition-all rounded-xl mx-0.5 z-10 relative group cursor-pointer ${
+                                            role === r 
+                                            ? 'bg-amber-500 text-white shadow-lg border border-amber-600 scale-105' 
+                                            : 'text-slate-400 hover:text-slate-900 hover:bg-white'
+                                        }`}
                                     >
-                                        {role === r && (
-                                            <motion.div layoutId="activePill" className="absolute inset-0 bg-white rounded-xl shadow-md border border-slate-100 -z-10" />
-                                        )}
-                                        {r === 'receptionist' ? 'Staff' : r}
+                                        <span className="relative z-10 pointer-events-none">
+                                            {r === 'receptionist' ? 'Staff' : r}
+                                        </span>
                                     </motion.button>
                                 ))}
                             </div>
