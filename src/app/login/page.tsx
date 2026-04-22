@@ -236,12 +236,17 @@ export default function LoginPage() {
                             {['admin', 'receptionist', 'guest'].map((role) => (
                                 <motion.button 
                                     key={role}
-                                    onClick={() => quickAccess(role)} 
-                                    whileHover={{ scale: 1.1, y: -5, backgroundColor: "#fff", borderColor: "#f59e0b", color: "#d97706", zIndex: 10 }}
+                                    type="button"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        quickAccess(role);
+                                    }} 
+                                    whileHover={{ scale: 1.05, y: -2, backgroundColor: "#fff", borderColor: "#f59e0b", color: "#d97706", zIndex: 20 }}
                                     whileTap={{ scale: 0.95 }}
-                                    className="py-3 px-2 rounded-xl bg-slate-50 border border-slate-200 text-[10px] font-black text-slate-400 transition-all uppercase tracking-widest text-center shadow-lg relative group overflow-hidden"
+                                    className="py-3 px-2 rounded-xl bg-slate-50 border border-slate-200 text-[10px] font-black text-slate-400 transition-all uppercase tracking-widest text-center shadow-lg relative group overflow-hidden cursor-pointer"
                                 >
-                                    <span className="relative z-10">{role}</span>
+                                    <span className="relative z-10 pointer-events-none">{role}</span>
                                 </motion.button>
                             ))}
                         </motion.div>

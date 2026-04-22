@@ -66,8 +66,8 @@ export default function RegisterPage() {
     const y = useMotionValue(0);
     const mouseXSpring = useSpring(x);
     const mouseYSpring = useSpring(y);
-    const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ['7deg', '-7deg']);
-    const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ['-7deg', '7deg']);
+    const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ['3deg', '-3deg']);
+    const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ['-3deg', '3deg']);
     
     const [particles, setParticles] = useState<ParticleData[]>([]);
 
@@ -219,10 +219,13 @@ export default function RegisterPage() {
                                     <motion.button 
                                         key={r}
                                         type="button"
-                                        onClick={() => setRole(r as 'admin' | 'receptionist' | 'guest')} 
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            setRole(r as 'admin' | 'receptionist' | 'guest');
+                                        }} 
                                         whileHover={{ scale: 1.05, zIndex: 10, y: -2 }}
                                         whileTap={{ scale: 0.95 }}
-                                        className={`flex-1 text-[9px] font-black uppercase tracking-[0.2em] transition-all rounded-xl mx-0.5 z-10 relative group ${role === r ? 'bg-white text-amber-600 shadow-lg border border-slate-100 scale-105' : 'text-slate-400 hover:text-slate-900'}`}
+                                        className={`flex-1 text-[9px] font-black uppercase tracking-[0.2em] transition-all rounded-xl mx-0.5 z-10 relative group cursor-pointer ${role === r ? 'bg-white text-amber-600 shadow-lg border border-slate-100 scale-105' : 'text-slate-400 hover:text-slate-900'}`}
                                     >
                                         {role === r && (
                                             <motion.div layoutId="activePill" className="absolute inset-0 bg-white rounded-xl shadow-md border border-slate-100 -z-10" />

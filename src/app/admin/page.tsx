@@ -29,7 +29,8 @@ import {
     BarChart3,
     PieChart,
     TrendingUp,
-    Calendar
+    Calendar,
+    LogOut
 } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -115,8 +116,12 @@ export default function AdminDashboard() {
                     {tabs.map((tab) => (
                         <button
                             key={tab.id}
-                            onClick={() => setActiveTab(tab.id as TabType)}
-                            className={`w-full flex items-center gap-5 px-6 py-5 rounded-[2rem] text-[11px] font-bold uppercase tracking-widest transition-all group ${
+                            type="button"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                setActiveTab(tab.id as TabType);
+                            }}
+                            className={`w-full flex items-center gap-5 px-6 py-5 rounded-[2rem] text-[11px] font-bold uppercase tracking-widest transition-all group cursor-pointer ${
                                 activeTab === tab.id 
                                     ? 'nav-active text-amber-600' 
                                     : 'text-slate-400 hover:text-slate-900 hover:bg-slate-50 border-2 border-transparent'
@@ -200,8 +205,12 @@ export default function AdminDashboard() {
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.5, delay: idx * 0.1 }}
-                                onClick={stat.onClick}
-                                className="bg-white border-2 border-slate-100 rounded-[2.5rem] p-8 transition-all active:scale-95 text-left group w-full hover:shadow-xl shadow-sm h-full"
+                                type="button"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    stat.onClick();
+                                }}
+                                className="bg-white border-2 border-slate-100 rounded-[2.5rem] p-8 transition-all active:scale-95 text-left group w-full hover:shadow-xl shadow-sm h-full cursor-pointer"
                             >
                                 <div className="flex items-center justify-between mb-6">
                                     <div className={`h-12 w-12 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center shadow-sm group-hover:border-amber-500 transition-all duration-500`}>
@@ -326,4 +335,3 @@ export default function AdminDashboard() {
     );
 }
 
-import { LogOut } from 'lucide-react';

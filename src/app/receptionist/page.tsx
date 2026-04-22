@@ -6,7 +6,7 @@ import { fetchBookings, updateBooking, Booking } from '@/lib/features/bookingSli
 import { RootState, AppDispatch } from '@/lib/store';
 import { CheckCircle, DollarSign, Home, LogOut, Search, Calendar, Users, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useTransform, useSpring } from 'framer-motion';
 
 export default function ReceptionistPage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -68,8 +68,9 @@ export default function ReceptionistPage() {
 
         <nav className="flex-1 space-y-3">
           <button 
+            type="button"
             onClick={() => setActiveTab('checkin')}
-            className={`w-full flex items-center gap-5 px-6 py-5 rounded-[2rem] text-[11px] font-bold uppercase tracking-widest transition-all group ${
+            className={`w-full flex items-center gap-5 px-6 py-5 rounded-[2rem] text-[11px] font-bold uppercase tracking-widest transition-all group cursor-pointer ${
               activeTab === 'checkin' 
                 ? 'bg-slate-50 text-amber-600 border border-slate-100 shadow-sm' 
                 : 'text-slate-400 hover:text-slate-900 hover:bg-slate-50'
@@ -78,6 +79,7 @@ export default function ReceptionistPage() {
             <CheckCircle size={22} className={activeTab === 'checkin' ? 'text-amber-600' : 'text-slate-200 group-hover:text-slate-400'} /> Check-In Hub
           </button>
           <button 
+            type="button"
             onClick={() => setActiveTab('billing')}
             className={`w-full flex items-center gap-5 px-6 py-5 rounded-[2rem] text-[11px] font-bold uppercase tracking-widest transition-all group ${
               activeTab === 'billing' 
@@ -88,6 +90,7 @@ export default function ReceptionistPage() {
             <DollarSign size={22} className={activeTab === 'billing' ? 'text-amber-600' : 'text-slate-200 group-hover:text-slate-400'} /> Billing Ledger
           </button>
           <button 
+            type="button"
             onClick={() => setActiveTab('rooms')}
             className={`w-full flex items-center gap-5 px-6 py-5 rounded-[2rem] text-[11px] font-bold uppercase tracking-widest transition-all group ${
               activeTab === 'rooms' 
@@ -100,7 +103,7 @@ export default function ReceptionistPage() {
         </nav>
 
         <Link href="/">
-          <button className="w-full flex items-center gap-5 px-6 py-5 rounded-[2rem] bg-slate-50 text-slate-400 font-bold text-[11px] uppercase tracking-widest hover:text-red-500 hover:bg-red-50 transition-all border border-slate-100 active:scale-95">
+          <button type="button" className="w-full flex items-center gap-5 px-6 py-5 rounded-[2rem] bg-slate-50 text-slate-400 font-bold text-[11px] uppercase tracking-widest hover:text-red-500 hover:bg-red-50 transition-all border border-slate-100 active:scale-95">
             <LogOut size={22} /> Exit Portal
           </button>
         </Link>
@@ -178,7 +181,7 @@ export default function ReceptionistPage() {
                       <p className="font-bold text-slate-900 text-2xl tracking-tight uppercase leading-none group-hover:text-amber-500 transition-colors">{b.guestName}</p>
                       <p className="text-[10px] font-bold text-slate-300 uppercase tracking-widest mt-1 leading-none">Stay Duration: {b.checkInDate} to {b.checkOutDate}</p>
                     </div>
-                    <div className="flex gap-6 relative z-10">
+                    <div className="flex items-center justify-end gap-3 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-all transform translate-x-4 group-hover:translate-x-0 relative z-20">
                       {b.status === 'confirmed' && (
                         <button 
                           onClick={() => handleCheckIn(b)} 
