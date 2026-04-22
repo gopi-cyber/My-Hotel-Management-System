@@ -69,9 +69,11 @@ export default function ReservationDetailModal({ isOpen, onClose, booking }: Res
                             </p>
                         </div>
                         <div className={`px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest border shadow-xl ${
-                            booking.status === 'CheckedIn' ? 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20' : 'bg-amber-500/10 text-amber-500 border-amber-500/20'
+                            booking.status === 'checked_in' ? 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20' : 
+                            booking.status === 'pending' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' :
+                            'bg-amber-500/10 text-amber-500 border-amber-500/20'
                         }`}>
-                            {booking.status.toUpperCase()}
+                            {booking.status.replace('_', ' ').toUpperCase()}
                         </div>
                     </div>
 

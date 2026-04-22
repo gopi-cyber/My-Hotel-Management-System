@@ -69,12 +69,17 @@ export default function AdminReservationTable({ bookings }: { bookings: Booking[
                                 </td>
                                 <td className="px-10 py-8">
                                     <span className={`inline-flex items-center gap-2 rounded-xl px-5 py-2 text-[10px] font-bold uppercase tracking-widest border ${
-                                        booking.status === 'Confirmed' ? 'bg-amber-50 text-amber-600 border-amber-100' : 
-                                        booking.status === 'CheckedIn' ? 'bg-blue-50 text-blue-600 border-blue-100' :
+                                        booking.status === 'confirmed' ? 'bg-amber-50 text-amber-600 border-amber-100' : 
+                                        booking.status === 'checked_in' ? 'bg-blue-50 text-blue-600 border-blue-100' :
+                                        booking.status === 'pending' ? 'bg-indigo-50 text-indigo-600 border-indigo-100' :
                                         'bg-slate-50 text-slate-400 border-slate-100'
                                     }`}>
-                                        <div className={`h-2 w-2 rounded-full ${booking.status === 'CheckedIn' ? 'bg-blue-500 animate-pulse' : 'bg-amber-500'}`} />
-                                        {booking.status === 'CheckedIn' ? 'In House' : booking.status}
+                                        <div className={`h-2 w-2 rounded-full ${
+                                            booking.status === 'checked_in' ? 'bg-blue-500 animate-pulse' : 
+                                            booking.status === 'confirmed' ? 'bg-amber-500' : 
+                                            booking.status === 'pending' ? 'bg-indigo-500 animate-bounce' : 'bg-slate-300'
+                                        }`} />
+                                        {booking.status === 'checked_in' ? 'In House' : booking.status}
                                     </span>
                                 </td>
                                 <td className="px-10 py-8 text-center">

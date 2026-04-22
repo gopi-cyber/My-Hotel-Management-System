@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchRooms, Room } from '@/lib/features/roomSlice';
+import { fetchRooms, Room, updateRoom } from '@/lib/features/roomSlice';
 import { fetchBookings, updateBooking, Booking } from '@/lib/features/bookingSlice';
 import { RootState, AppDispatch } from '@/lib/store';
 import { CheckCircle, DollarSign, Home, LogOut, Search, Calendar, Users, TrendingUp } from 'lucide-react';
@@ -23,14 +23,28 @@ export default function ReceptionistPage() {
     document.title = 'Vortex Front Desk | Management';
   }, [dispatch]);
 
+  const handleConfirm = async (booking: Booking) => {
+    await dispatch(updateBooking({ ...booking, status: 'confirmed' }));
+    setSuccess(`${booking.guestName}'s booking confirmed successfully.`);
+    setTimeout(() => setSuccess(''), 2000);
+  };
+
   const handleCheckIn = async (booking: Booking) => {
     await dispatch(updateBooking({ ...booking, status: 'checked_in' }));
+    const room = rooms.find(r => r.id === booking.roomId);
+    if (room && room.status !== 'occupied') {
+      await dispatch(updateRoom({ ...room, status: 'occupied' }));
+    }
     setSuccess(`${booking.guestName} checked in successfully.`);
     setTimeout(() => setSuccess(''), 2000);
   };
 
   const handleCheckOut = async (booking: Booking) => {
     await dispatch(updateBooking({ ...booking, status: 'checked_out' }));
+    const room = rooms.find(r => r.id === booking.roomId);
+    if (room) {
+      await dispatch(updateRoom({ ...room, status: 'available' }));
+    }
     setSuccess(`${booking.guestName} checked out successfully.`);
     setTimeout(() => setSuccess(''), 2000);
   };
@@ -41,7 +55,10 @@ export default function ReceptionistPage() {
 
   const occupiedRooms = rooms.filter((r: Room) => r.status === 'occupied').length;
   const availableRooms = rooms.filter((r: Room) => r.status === 'available').length;
-  const totalRevenue = bookings.reduce((sum, b: Booking) => sum + (Number(b.totalPrice) || 0), 0);
+  const activeBookings = bookings.filter(b => ['confirmed', 'checked_in'].includes(b.status));
+  const totalRevenue = bookings
+    .filter(b => ['confirmed', 'checked_in', 'checked_out'].includes(b.status))
+    .reduce((sum, b: Booking) => sum + (Number(b.totalPrice) || 0), 0);
 
   return (
     <main className="flex min-h-screen bg-slate-50 text-slate-900 overflow-hidden font-sans relative">
@@ -129,8 +146,8 @@ export default function ReceptionistPage() {
           {[
             { label: 'Available Rooms', value: availableRooms, icon: Home, color: 'text-amber-500' },
             { label: 'Occupied Rooms', value: occupiedRooms, icon: Users, color: 'text-blue-500' },
-            { label: 'Total Bookings', value: bookings.length, icon: Calendar, color: 'text-amber-500' },
-            { label: 'Total Revenue', value: `₹${totalRevenue}`, icon: TrendingUp, color: 'text-blue-500' }
+            { label: 'Active Bookings', value: activeBookings.length, icon: Calendar, color: 'text-amber-500' },
+            { label: 'Total Revenue', value: `₹${totalRevenue.toLocaleString()}`, icon: TrendingUp, color: 'text-blue-500' }
           ].map((stat, idx) => (
             <motion.div 
               key={idx} 
@@ -182,6 +199,14 @@ export default function ReceptionistPage() {
                       <p className="text-[10px] font-bold text-slate-300 uppercase tracking-widest mt-1 leading-none">Stay Duration: {b.checkInDate} to {b.checkOutDate}</p>
                     </div>
                     <div className="flex items-center justify-end gap-3 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-all transform translate-x-4 group-hover:translate-x-0 relative z-20">
+                      {b.status === 'pending' && (
+                        <button 
+                          onClick={() => handleConfirm(b)} 
+                          className="h-16 px-12 bg-indigo-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.4em] italic hover:bg-indigo-400 shadow-[0_15px_40px_rgba(79,70,229,0.2)] active:scale-95 transition-all"
+                        >
+                          Confirm
+                        </button>
+                      )}
                       {b.status === 'confirmed' && (
                         <button 
                           onClick={() => handleCheckIn(b)} 
@@ -198,7 +223,7 @@ export default function ReceptionistPage() {
                           _Terminate
                         </button>
                       )}
-                      {(b.status !== 'confirmed' && b.status !== 'checked_in') && (
+                      {(b.status !== 'pending' && b.status !== 'confirmed' && b.status !== 'checked_in') && (
                         <span className="h-16 px-12 flex items-center bg-slate-950 text-white/10 rounded-2xl font-black text-[10px] uppercase tracking-[0.4em] italic border-2 border-white/5 opacity-50">
                           {b.status.toUpperCase()}
                         </span>

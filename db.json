@@ -57,9 +57,9 @@
       "checkOutDate": "2026-04-18",
       "totalPrice": 250,
       "nights": 1,
-      "status": "pending",
-      "id": "1776326800465",
-      "createdAt": "2026-04-16T08:06:40.465Z"
+      "status": "checked_in",
+      "createdAt": "2026-04-16T08:06:40.465Z",
+      "id": "1776326800465"
     }
   ],
   "users": [
@@ -166,6 +166,14 @@
       "role": "guest",
       "name": "Raja",
       "id": "aJdRBOtYHVk"
+    },
+    {
+      "username": "ddd",
+      "email": "ddd@gmail.com",
+      "password": "123456",
+      "role": "guest",
+      "name": "Ddd",
+      "id": "GqHVWKuHVOc"
     }
   ],
   "staff": [
