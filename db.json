@@ -158,6 +158,14 @@
       "role": "guest",
       "name": "Rabit",
       "id": "ahMl-AhE4Oo"
+    },
+    {
+      "username": "raja",
+      "email": "raja@gmail.com",
+      "password": "pass123",
+      "role": "guest",
+      "name": "Raja",
+      "id": "aJdRBOtYHVk"
     }
   ],
   "staff": [
