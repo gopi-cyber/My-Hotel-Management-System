@@ -124,17 +124,17 @@ export default function AdminDashboard() {
                             className={`w-full flex items-center gap-5 px-6 py-5 rounded-[2rem] text-[11px] font-bold uppercase tracking-widest transition-all group cursor-pointer ${
                                 activeTab === tab.id 
                                     ? 'nav-active text-amber-600' 
-                                    : 'text-slate-400 hover:text-slate-900 hover:bg-slate-50 border-2 border-transparent'
+                                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border-2 border-transparent'
                             }`}
                         >
-                            <tab.icon size={22} className={activeTab === tab.id ? 'text-amber-600' : 'text-slate-200 group-hover:text-slate-400'} />
+                            <tab.icon size={22} className={activeTab === tab.id ? 'text-amber-600' : 'text-slate-400 group-hover:text-slate-600'} />
                             {tab.label}
                         </button>
                     ))}
                 </nav>
 
                 <div className="pt-10 border-t border-slate-100">
-                    <Link href="/" className="w-full flex items-center gap-5 px-6 py-5 rounded-[2rem] text-[11px] font-bold uppercase tracking-widest text-slate-300 hover:text-red-500 hover:bg-red-50 transition-all">
+                    <Link href="/" className="w-full flex items-center gap-5 px-6 py-5 rounded-[2rem] text-[11px] font-bold uppercase tracking-widest text-slate-500 hover:text-red-500 hover:bg-red-50 transition-all">
                         <LogOut size={22} />
                         Logout Session
                     </Link>

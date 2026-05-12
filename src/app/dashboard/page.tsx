@@ -361,8 +361,8 @@ export default function Dashboard() {
                             onClick={() => setActiveTab(type)}
                             className={`px-8 py-4 rounded-[1.5rem] text-[10px] font-bold uppercase tracking-widest transition-all border ${
                                 activeTab === type
-                                ? 'bg-amber-50 text-white border-amber-500 shadow-lg'
-                                : 'bg-white text-slate-400 border-slate-100 hover:text-slate-900 hover:border-amber-500/30'
+                                ? 'bg-amber-500 text-white border-amber-500 shadow-lg'
+                                : 'bg-white text-slate-600 border-slate-100 hover:text-slate-900 hover:border-amber-500/30'
                             }`}
                             >
                             {type}
@@ -578,14 +578,14 @@ export default function Dashboard() {
                         </div>
 
                         <div className="overflow-x-auto pt-10 border-t border-slate-50">
-                            <table className="w-full text-[11px] font-bold text-slate-400">
+                            <table className="w-full text-[11px] font-bold text-slate-600">
                             <thead>
                                 <tr className="bg-slate-50">
-                                <th className="px-8 py-5 text-left uppercase tracking-widest text-slate-400 border-b border-slate-100">Booking ID</th>
-                                <th className="px-8 py-5 text-left uppercase tracking-widest text-slate-400 border-b border-slate-100">Date Range</th>
-                                <th className="px-8 py-5 text-left uppercase tracking-widest text-slate-400 border-b border-slate-100">Nights</th>
-                                <th className="px-8 py-5 text-left uppercase tracking-widest text-slate-400 border-b border-slate-100">Total Amount</th>
-                                <th className="px-8 py-5 text-left uppercase tracking-widest text-slate-400 border-b border-slate-100">Status</th>
+                                <th className="px-8 py-5 text-left uppercase tracking-widest text-slate-500 border-b border-slate-100">Booking ID</th>
+                                <th className="px-8 py-5 text-left uppercase tracking-widest text-slate-500 border-b border-slate-100">Date Range</th>
+                                <th className="px-8 py-5 text-left uppercase tracking-widest text-slate-500 border-b border-slate-100">Nights</th>
+                                <th className="px-8 py-5 text-left uppercase tracking-widest text-slate-500 border-b border-slate-100">Total Amount</th>
+                                <th className="px-8 py-5 text-left uppercase tracking-widest text-slate-500 border-b border-slate-100">Status</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-50">
@@ -596,15 +596,15 @@ export default function Dashboard() {
                                     animate={{ opacity: 1 }}
                                     className="hover:bg-slate-50 group transition-all"
                                 >
-                                    <td className="px-8 py-6 font-mono text-[10px] text-slate-400 group-hover:text-amber-500">{booking.id.toUpperCase()}</td>
-                                    <td className="px-8 py-6 text-slate-500">{booking.checkInDate} — {booking.checkOutDate}</td>
-                                    <td className="px-8 py-6 text-slate-500">{booking.nights}</td>
+                                    <td className="px-8 py-6 font-mono text-[10px] text-slate-500 group-hover:text-amber-500">{booking.id.toUpperCase()}</td>
+                                    <td className="px-8 py-6 text-slate-600">{booking.checkInDate} — {booking.checkOutDate}</td>
+                                    <td className="px-8 py-6 text-slate-600">{booking.nights}</td>
                                     <td className="px-8 py-6 font-bold text-amber-500 text-lg">₹{booking.totalPrice}</td>
                                     <td className="px-8 py-6">
                                     <span className={`px-5 py-2 rounded-xl text-[9px] font-bold uppercase tracking-widest shadow-sm ${
                                         booking.status === 'confirmed' ? 'bg-amber-500 text-white' :
                                         booking.status === 'checked_in' ? 'bg-blue-600 text-white' :
-                                        'bg-slate-100 text-slate-300'
+                                        'bg-slate-200 text-slate-700'
                                     }`}>
                                         {booking.status.toUpperCase()}
                                     </span>

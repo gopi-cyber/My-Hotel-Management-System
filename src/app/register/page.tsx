@@ -151,7 +151,7 @@ export default function RegisterPage() {
                             <h1 className="text-5xl font-bold tracking-tight text-slate-900 leading-tight uppercase">
                                 Register
                             </h1>
-                            <p className="mt-4 text-[10px] font-bold uppercase tracking-widest text-slate-400 bg-slate-100 px-4 py-2 rounded-full inline-flex gap-2 items-center">
+                            <p className="mt-4 text-[10px] font-bold uppercase tracking-widest text-slate-600 bg-slate-100 px-4 py-2 rounded-full inline-flex gap-2 items-center">
                                 Create Your New Account
                             </p>
                         </div>
@@ -169,7 +169,7 @@ export default function RegisterPage() {
                                         className={`flex-1 text-[9px] font-black uppercase tracking-[0.2em] transition-all rounded-xl mx-0.5 z-10 relative cursor-pointer ${
                                             role === r 
                                             ? 'bg-amber-500 text-white shadow-lg border border-amber-600' 
-                                            : 'text-slate-400 hover:text-slate-900 hover:bg-slate-50'
+                                            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                                         }`}
                                     >
                                         {r === 'receptionist' ? 'Staff' : r}
@@ -182,13 +182,13 @@ export default function RegisterPage() {
                             <div className="relative group">
                                 <div className="relative overflow-hidden rounded-2xl shadow-inner bg-slate-50 border border-slate-200">
                                     <div className="absolute inset-y-0 left-0 w-16 flex items-center justify-center z-10">
-                                        <User className="text-slate-300 group-focus-within:text-amber-500 transition-all duration-300" size={18} />
+                                        <User className="text-slate-500 group-focus-within:text-amber-500 transition-all duration-300" size={18} />
                                     </div>
                                     <input
                                         type="text"
                                         value={username}
                                         onChange={(e) => setUsername(e.target.value)}
-                                        className="relative w-full h-14 bg-transparent pl-16 pr-6 text-sm font-bold text-slate-900 placeholder:text-slate-300 outline-none transition-all"
+                                        className="relative w-full h-14 bg-transparent pl-16 pr-6 text-sm font-bold text-slate-900 placeholder:text-slate-500 outline-none transition-all"
                                         placeholder="Full Name"
                                         required
                                     />
@@ -198,13 +198,13 @@ export default function RegisterPage() {
                             <div className="relative group">
                                 <div className="relative overflow-hidden rounded-2xl shadow-inner bg-slate-50 border border-slate-200">
                                     <div className="absolute inset-y-0 left-0 w-16 flex items-center justify-center z-10">
-                                        <Mail className="text-slate-300 group-focus-within:text-amber-500 transition-all duration-300" size={18} />
+                                        <Mail className="text-slate-500 group-focus-within:text-amber-500 transition-all duration-300" size={18} />
                                     </div>
                                     <input
                                         type="email"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        className="relative w-full h-14 bg-transparent pl-16 pr-6 text-sm font-bold text-slate-900 placeholder:text-slate-300 outline-none transition-all"
+                                        className="relative w-full h-14 bg-transparent pl-16 pr-6 text-sm font-bold text-slate-900 placeholder:text-slate-500 outline-none transition-all"
                                         placeholder="Email Address"
                                         required
                                     />
@@ -214,13 +214,13 @@ export default function RegisterPage() {
                             <div className="relative group">
                                 <div className="relative overflow-hidden rounded-2xl shadow-inner bg-slate-50 border border-slate-200">
                                     <div className="absolute inset-y-0 left-0 w-16 flex items-center justify-center z-10">
-                                        <Lock className="text-slate-300 group-focus-within:text-amber-500 transition-all duration-300" size={18} />
+                                        <Lock className="text-slate-500 group-focus-within:text-amber-500 transition-all duration-300" size={18} />
                                     </div>
                                     <input
                                         type="password"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
-                                        className="relative w-full h-14 bg-transparent pl-16 pr-6 text-sm font-bold text-slate-900 placeholder:text-slate-300 outline-none transition-all"
+                                        className="relative w-full h-14 bg-transparent pl-16 pr-6 text-sm font-bold text-slate-900 placeholder:text-slate-500 outline-none transition-all"
                                         placeholder="Password"
                                         required
                                         minLength={6}
@@ -251,7 +251,7 @@ export default function RegisterPage() {
                             </div>
 
                             <div className="pt-4 text-center">
-                                <Link href="/login" className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-400 group flex items-center justify-center gap-3">
+                                <Link href="/login" className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-600 group flex items-center justify-center gap-3">
                                     <span>Already have an account?</span>
                                     <span className="text-amber-500 underline underline-offset-4 decoration-amber-500/30 group-hover:decoration-amber-500 transition-all font-black">
                                         Log In
@@ -260,7 +260,7 @@ export default function RegisterPage() {
                             </div>
                         </form>
 
-                        <div className="mt-8 flex items-center justify-center gap-3 text-[9px] font-black uppercase tracking-[0.3em] text-slate-300">
+                        <div className="mt-8 flex items-center justify-center gap-3 text-[9px] font-black uppercase tracking-[0.3em] text-slate-500">
                             <ShieldCheck size={14} className="text-amber-500" />
                             <span className="opacity-70">Secure Registration</span>
                         </div>

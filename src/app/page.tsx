@@ -23,22 +23,22 @@ export default function LandingPage() {
         <div className="flex flex-col min-h-screen font-sans text-slate-900 overflow-x-hidden bg-slate-50 relative">
             <ParticleBackground />
             {/* Header / Navbar */}
-            <header className="fixed top-0 left-0 right-0 z-50 bg-slate-950/40 backdrop-blur-3xl border-b border-white/5 shadow-2xl">
+            <header className="fixed top-0 left-0 right-0 z-50 bg-slate-950/80 backdrop-blur-3xl border-b border-white/5 shadow-2xl">
                 <div className="max-w-7xl mx-auto px-8 h-24 flex items-center justify-between">
                     <Link href="/" className="flex items-center gap-4 group">
                         <div className="h-12 w-12 rounded-2xl bg-amber-500 flex items-center justify-center shadow-[0_10px_30px_rgba(245,158,11,0.2)] group-hover:rotate-12 group-hover:scale-110 transition-all duration-700">
                             <Hotel className="text-white" size={26} />
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-2xl font-bold tracking-tight text-slate-900 uppercase leading-none">Vortex</span>
-                            <span className="text-amber-600 text-[10px] font-bold tracking-widest uppercase">Hospitality</span>
+                            <span className="text-2xl font-bold tracking-tight text-white uppercase leading-none">Vortex</span>
+                            <span className="text-amber-500 text-[10px] font-bold tracking-widest uppercase">Hospitality</span>
                         </div>
                     </Link>
                     
                     <nav className="hidden md:flex items-center gap-12">
-                        <a href="#features" className="text-[11px] font-bold uppercase tracking-widest text-slate-400 hover:text-amber-600 transition-colors">Features</a>
-                        <a href="#rooms" className="text-[11px] font-bold uppercase tracking-widest text-slate-400 hover:text-amber-600 transition-colors">Rooms</a>
-                        <Link href="/login" className="text-[11px] font-bold uppercase tracking-widest text-slate-400 hover:text-amber-600 transition-colors">Login</Link>
+                        <a href="#features" className="text-[11px] font-bold uppercase tracking-widest text-slate-100 hover:text-amber-500 transition-colors">Features</a>
+                        <a href="#rooms" className="text-[11px] font-bold uppercase tracking-widest text-slate-100 hover:text-amber-500 transition-colors">Rooms</a>
+                        <Link href="/login" className="text-[11px] font-bold uppercase tracking-widest text-slate-100 hover:text-amber-500 transition-colors">Login</Link>
                         <Link href="/register" className="h-14 px-8 flex items-center justify-center rounded-2xl bg-amber-500 text-white text-[11px] font-bold shadow-lg hover:bg-amber-400 transition-all active:scale-95 uppercase tracking-widest">
                             Book Your Stay
                         </Link>
@@ -68,18 +68,18 @@ export default function LandingPage() {
                             <span className="text-amber-500">Living</span> <br/>
                             Redefined.
                         </h1>
-                        <p className="text-xl text-slate-400 leading-relaxed max-w-lg font-semibold uppercase tracking-tight">
+                        <p className="text-xl text-slate-600 leading-relaxed max-w-lg font-semibold uppercase tracking-tight">
                             Experience high-fidelity hospitality, personalized comfort, and premium service. Vortex offers more than just a stay – we offer a home for your finest moments.
                         </p>
                         <div className="flex flex-col sm:flex-row items-center gap-8">
                             <Link href="/register" className="w-full sm:w-auto h-20 px-12 flex items-center justify-center gap-4 rounded-[2.5rem] bg-amber-500 text-white font-bold shadow-xl hover:bg-amber-400 transition-all hover:-translate-y-2 uppercase tracking-widest active:scale-95">
                                 Book Now <ArrowRight size={24} />
                             </Link>
-                            <a href="#rooms" className="w-full sm:w-auto h-20 px-12 flex items-center justify-center gap-4 rounded-[2.5rem] bg-white border-2 border-slate-100 text-slate-400 font-bold hover:text-slate-900 hover:border-amber-500 transition-all uppercase tracking-widest active:scale-95 shadow-sm">
+                            <a href="#rooms" className="w-full sm:w-auto h-20 px-12 flex items-center justify-center gap-4 rounded-[2.5rem] bg-white border-2 border-slate-100 text-slate-600 font-bold hover:text-slate-900 hover:border-amber-500 transition-all uppercase tracking-widest active:scale-95 shadow-sm">
                                 View Rooms
                             </a>
                         </div>
-                        <div className="flex items-center gap-10 pt-10 border-t border-white/5">
+                        <div className="flex items-center gap-10 pt-10 border-t border-slate-200">
                             <div className="flex -space-x-4">
                                 {[1,2,3,4].map(i => (
                                     <div key={i} className="h-14 w-14 rounded-2xl border-2 border-slate-950 bg-slate-800 overflow-hidden shadow-2xl group cursor-pointer hover:border-amber-500 transition-all">
@@ -88,7 +88,7 @@ export default function LandingPage() {
                                 ))}
                                 <div className="h-14 w-14 rounded-2xl border-2 border-slate-950 bg-amber-500 flex items-center justify-center text-[11px] font-black text-slate-950 shadow-2xl">+5k</div>
                             </div>
-                            <p className="text-[10px] font-black text-white/10 uppercase tracking-[0.3em] italic">Synchronized with over <span className="text-amber-500 font-black">5,000+</span> unique node stays</p>
+                            <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] italic">Synchronized with over <span className="text-amber-500 font-black">5,000+</span> unique node stays</p>
                         </div>
                     </motion.div>
 
@@ -154,7 +154,7 @@ export default function LandingPage() {
                             <h2 className="text-[10px] font-bold text-amber-600 uppercase tracking-widest leading-none">Our Experience</h2>
                             <h3 className="text-6xl lg:text-8xl font-bold text-slate-900 leading-none tracking-tight uppercase">Luxury In Every <br /><span className="text-amber-500">Detail</span></h3>
                         </div>
-                        <p className="text-slate-400 max-w-sm font-semibold uppercase tracking-tight leading-relaxed">From zero-latency service to custom environmental settings, we ensure every stay is perfect.</p>
+                        <p className="text-slate-600 max-w-sm font-semibold uppercase tracking-tight leading-relaxed">From zero-latency service to custom environmental settings, we ensure every stay is perfect.</p>
                     </motion.div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
@@ -173,14 +173,14 @@ export default function LandingPage() {
                                 whileHover={{ y: -10 }}
                                 className="group p-12 rounded-[3rem] bg-white border-2 border-slate-100 hover:border-amber-500/30 transition-all shadow-sm overflow-hidden relative"
                             >
-                                <div className="absolute top-0 right-0 p-8 text-slate-50">
+                                <div className="absolute top-0 right-0 p-8 text-slate-100">
                                     <span className="text-4xl font-bold">0{idx+1}</span>
                                 </div>
                                 <div className="h-20 w-20 rounded-[1.5rem] bg-slate-50 border border-slate-100 flex items-center justify-center shadow-sm mb-10 group-hover:bg-amber-500 group-hover:text-white transition-all duration-500 transform group-hover:rotate-12">
                                     {f.icon}
                                 </div>
                                 <h4 className="text-2xl font-bold text-slate-900 mb-6 tracking-tight uppercase group-hover:text-amber-600 transition-colors leading-none">{f.title}</h4>
-                                <p className="text-[11px] text-slate-400 font-bold uppercase tracking-widest leading-relaxed group-hover:text-slate-600 transition-colors">{f.desc}</p>
+                                <p className="text-[11px] text-slate-500 font-bold uppercase tracking-widest leading-relaxed group-hover:text-slate-700 transition-colors">{f.desc}</p>
                             </motion.div>
                         ))}
                     </div>
@@ -244,14 +244,14 @@ export default function LandingPage() {
                                         <SplitImage src={r.img} alt={r.title} slices={5} className="w-full h-full" />
                                     </div>
                                     <div className="space-y-2 relative z-10">
-                                        <p className="text-[10px] font-bold text-amber-600 uppercase tracking-widest">{r.tag}</p>
-                                        <h4 className="text-3xl font-bold group-hover:text-amber-600 transition-colors uppercase tracking-tight text-slate-900 leading-none">{r.title}</h4>
-                                    </div>
-                                    <div className="text-right relative z-10">
-                                        <p className="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-1">Per Night</p>
-                                        <p className="text-4xl font-bold text-amber-500 tracking-tight leading-none">{r.price}</p>
-                                    </div>
-                                </motion.div>
+                                         <p className="text-[10px] font-bold text-amber-600 uppercase tracking-widest">{r.tag}</p>
+                                         <h4 className="text-3xl font-bold group-hover:text-amber-600 transition-colors uppercase tracking-tight text-slate-900 leading-none">{r.title}</h4>
+                                     </div>
+                                     <div className="text-right relative z-10">
+                                         <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Per Night</p>
+                                         <p className="text-4xl font-bold text-amber-500 tracking-tight leading-none">{r.price}</p>
+                                     </div>
+                                 </motion.div>
                             ))}
                         </div>
                         
@@ -278,18 +278,18 @@ export default function LandingPage() {
                     
                     <div className="max-w-4xl space-y-12">
                         <h4 className="text-6xl lg:text-8xl font-black text-white leading-[0.9] tracking-tighter uppercase italic">Ready to Initialize <br /><span className="text-amber-500">Premium Residency?</span></h4>
-                        <p className="text-white/20 text-xl font-black uppercase italic tracking-tight leading-relaxed max-w-2xl mx-auto">Join the Obsidian tier program and get 15% off your first prestige stay. Our personnel is standby for initialization.</p>
+                        <p className="text-slate-200 text-xl font-black uppercase italic tracking-tight leading-relaxed max-w-2xl mx-auto">Join the Obsidian tier program and get 15% off your first prestige stay. Our personnel is standby for initialization.</p>
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-8 pt-10">
                             <Link href="/register" className="w-full sm:w-auto h-20 px-14 flex items-center justify-center gap-4 rounded-[2.5rem] bg-amber-500 text-slate-950 font-black shadow-[0_20px_40px_rgba(245,158,11,0.3)] hover:bg-amber-400 transition-all uppercase tracking-[0.4em] italic active:scale-95">
                                 Initialize Account
                             </Link>
-                            <Link href="/login" className="w-full sm:w-auto h-20 px-14 flex items-center justify-center gap-4 rounded-[2.5rem] bg-slate-950 border-2 border-white/5 text-white/40 font-black hover:text-white hover:border-amber-500/30 transition-all uppercase tracking-[0.4em] italic active:scale-95 shadow-2xl">
+                            <Link href="/login" className="w-full sm:w-auto h-20 px-14 flex items-center justify-center gap-4 rounded-[2.5rem] bg-slate-950 border-2 border-white/5 text-slate-100 font-black hover:text-white hover:border-amber-500/30 transition-all uppercase tracking-[0.4em] italic active:scale-95 shadow-2xl">
                                 System Portal
                             </Link>
                         </div>
                     </div>
                     
-                    <div className="w-full pt-20 border-t border-white/5 flex flex-col md:flex-row items-center justify-between text-[10px] font-black text-white/10 uppercase tracking-[0.5em] italic gap-10">
+                    <div className="w-full pt-20 border-t border-white/5 flex flex-col md:flex-row items-center justify-between text-[10px] font-black text-slate-300 uppercase tracking-[0.5em] italic gap-10">
                         <p>© 2026 Vortex_Hospitality_Systems_Nexus</p>
                         <div className="flex gap-16">
                             <a href="#" className="hover:text-amber-500 transition-colors">Encryption</a>

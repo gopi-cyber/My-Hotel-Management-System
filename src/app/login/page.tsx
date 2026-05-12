@@ -160,7 +160,7 @@ export default function LoginPage() {
                             <h1 className="text-5xl font-bold tracking-tight text-slate-900 leading-tight uppercase">
                                 Welcome Back
                             </h1>
-                            <p className="mt-4 text-[10px] font-bold uppercase tracking-widest text-slate-400 bg-slate-100 px-4 py-2 rounded-full inline-flex gap-2 items-center">
+                            <p className="mt-4 text-[10px] font-bold uppercase tracking-widest text-slate-600 bg-slate-100 px-4 py-2 rounded-full inline-flex gap-2 items-center">
                                 Login to Your Account
                             </p>
                         </div>
@@ -179,7 +179,7 @@ export default function LoginPage() {
                                         className={`py-4 px-2 rounded-xl border-2 transition-all uppercase tracking-widest text-center shadow-md relative z-[110] cursor-pointer text-[10px] font-black ${
                                             isActive 
                                             ? 'bg-amber-500 text-white border-amber-600' 
-                                            : 'bg-white border-slate-200 text-slate-400 hover:text-slate-900 hover:border-amber-300'
+                                            : 'bg-white border-slate-200 text-slate-600 hover:text-slate-900 hover:border-amber-300'
                                         }`}
                                     >
                                         {r === 'receptionist' ? 'Staff' : r}
@@ -192,13 +192,13 @@ export default function LoginPage() {
                             <div className="relative group">
                                 <div className="relative overflow-hidden rounded-2xl shadow-inner bg-slate-50 border border-slate-200">
                                     <div className="absolute inset-y-0 left-0 w-16 flex items-center justify-center z-10">
-                                        <User className="text-slate-300 group-focus-within:text-amber-500 transition-all duration-300" size={20} />
+                                        <User className="text-slate-500 group-focus-within:text-amber-500 transition-all duration-300" size={20} />
                                     </div>
                                     <input
                                         type="text"
                                         value={username}
                                         onChange={(e) => setUsername(e.target.value)}
-                                        className="relative w-full h-16 bg-transparent pl-16 pr-6 text-sm font-bold text-slate-900 placeholder:text-slate-300 outline-none transition-all"
+                                        className="relative w-full h-16 bg-transparent pl-16 pr-6 text-sm font-bold text-slate-900 placeholder:text-slate-500 outline-none transition-all"
                                         placeholder="Username"
                                         required
                                     />
@@ -208,13 +208,13 @@ export default function LoginPage() {
                             <div className="relative group">
                                 <div className="relative overflow-hidden rounded-2xl shadow-inner bg-slate-50 border border-slate-200">
                                     <div className="absolute inset-y-0 left-0 w-16 flex items-center justify-center z-10">
-                                        <Lock className="text-slate-300 group-focus-within:text-amber-500 transition-all duration-300" size={20} />
+                                        <Lock className="text-slate-500 group-focus-within:text-amber-500 transition-all duration-300" size={20} />
                                     </div>
                                     <input
                                         type="password"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
-                                        className="relative w-full h-16 bg-transparent pl-16 pr-6 text-sm font-bold text-slate-900 placeholder:text-slate-300 outline-none transition-all"
+                                        className="relative w-full h-16 bg-transparent pl-16 pr-6 text-sm font-bold text-slate-900 placeholder:text-slate-500 outline-none transition-all"
                                         placeholder="Password"
                                         required
                                     />
@@ -244,7 +244,7 @@ export default function LoginPage() {
                             </div>
 
                             <div className="pt-6 text-center">
-                                <Link href="/register" className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 group flex items-center justify-center gap-3">
+                                <Link href="/register" className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-600 group flex items-center justify-center gap-3">
                                     <span>New user?</span>
                                     <span className="text-amber-500 underline underline-offset-4 decoration-amber-500/30 group-hover:decoration-amber-500 transition-all font-black">
                                         Register Now
@@ -253,7 +253,7 @@ export default function LoginPage() {
                             </div>
                         </form>
 
-                        <div className="mt-12 flex items-center justify-center gap-3 text-[9px] font-black uppercase tracking-[0.3em] text-slate-300">
+                        <div className="mt-12 flex items-center justify-center gap-3 text-[9px] font-black uppercase tracking-[0.3em] text-slate-500">
                             <ShieldCheck size={14} className="text-amber-500" />
                             <span className="opacity-70">Secure Login</span>
                         </div>

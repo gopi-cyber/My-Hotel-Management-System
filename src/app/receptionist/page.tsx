@@ -89,38 +89,38 @@ export default function ReceptionistPage() {
             onClick={() => setActiveTab('checkin')}
             className={`w-full flex items-center gap-5 px-6 py-5 rounded-[2rem] text-[11px] font-bold uppercase tracking-widest transition-all group cursor-pointer ${
               activeTab === 'checkin' 
-                ? 'bg-slate-50 text-amber-600 border border-slate-100 shadow-sm' 
-                : 'text-slate-400 hover:text-slate-900 hover:bg-slate-50'
+                ? 'bg-slate-50 text-amber-600 border border-slate-100 shadow-sm font-extrabold' 
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
             }`}
           >
-            <CheckCircle size={22} className={activeTab === 'checkin' ? 'text-amber-600' : 'text-slate-200 group-hover:text-slate-400'} /> Check-In Hub
+            <CheckCircle size={22} className={activeTab === 'checkin' ? 'text-amber-600' : 'text-slate-400 group-hover:text-slate-600'} /> Check-In Hub
           </button>
           <button 
             type="button"
             onClick={() => setActiveTab('billing')}
-            className={`w-full flex items-center gap-5 px-6 py-5 rounded-[2rem] text-[11px] font-bold uppercase tracking-widest transition-all group ${
+            className={`w-full flex items-center gap-5 px-6 py-5 rounded-[2rem] text-[11px] font-bold uppercase tracking-widest transition-all group cursor-pointer ${
               activeTab === 'billing' 
-                ? 'bg-slate-50 text-amber-600 border border-slate-100 shadow-sm' 
-                : 'text-slate-400 hover:text-slate-900 hover:bg-slate-50'
+                ? 'bg-slate-50 text-amber-600 border border-slate-100 shadow-sm font-extrabold' 
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
             }`}
           >
-            <DollarSign size={22} className={activeTab === 'billing' ? 'text-amber-600' : 'text-slate-200 group-hover:text-slate-400'} /> Billing Ledger
+            <DollarSign size={22} className={activeTab === 'billing' ? 'text-amber-600' : 'text-slate-400 group-hover:text-slate-600'} /> Billing Ledger
           </button>
           <button 
             type="button"
             onClick={() => setActiveTab('rooms')}
-            className={`w-full flex items-center gap-5 px-6 py-5 rounded-[2rem] text-[11px] font-bold uppercase tracking-widest transition-all group ${
+            className={`w-full flex items-center gap-5 px-6 py-5 rounded-[2rem] text-[11px] font-bold uppercase tracking-widest transition-all group cursor-pointer ${
               activeTab === 'rooms' 
-                ? 'bg-slate-50 text-amber-600 border border-slate-100 shadow-sm' 
-                : 'text-slate-400 hover:text-slate-900 hover:bg-slate-50'
+                ? 'bg-slate-50 text-amber-600 border border-slate-100 shadow-sm font-extrabold' 
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
             }`}
           >
-            <Home size={22} className={activeTab === 'rooms' ? 'text-amber-600' : 'text-slate-200 group-hover:text-slate-400'} /> Room Inventory
+            <Home size={22} className={activeTab === 'rooms' ? 'text-amber-600' : 'text-slate-400 group-hover:text-slate-600'} /> Room Inventory
           </button>
         </nav>
 
         <Link href="/">
-          <button type="button" className="w-full flex items-center gap-5 px-6 py-5 rounded-[2rem] bg-slate-50 text-slate-400 font-bold text-[11px] uppercase tracking-widest hover:text-red-500 hover:bg-red-50 transition-all border border-slate-100 active:scale-95">
+          <button type="button" className="w-full flex items-center gap-5 px-6 py-5 rounded-[2rem] bg-slate-50 text-slate-600 font-bold text-[11px] uppercase tracking-widest hover:text-red-500 hover:bg-red-50 transition-all border border-slate-100 active:scale-95 cursor-pointer">
             <LogOut size={22} /> Exit Portal
           </button>
         </Link>

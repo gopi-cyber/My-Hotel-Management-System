@@ -145,3 +145,47 @@ body {
   -webkit-text-fill-color: transparent;
 }
 
+/* Typography Readability & Contrast Enhancements */
+@layer utilities {
+  /* Boost contrast globally for common gray/slate colors in light mode/containers */
+  :root {
+    --text-slate-200-override: #64748b; /* Maps invisible slate-200 to dark slate-500 */
+    --text-slate-300-override: #475569; /* Maps slate-300 to dark slate-600 */
+    --text-slate-400-override: #334155; /* Maps slate-400 to dark slate-700 */
+  }
+
+  /* Target sidebars and content wrappers that have a light background */
+  main.bg-slate-50 :not(.bg-slate-950):not(.bg-slate-950\/80):not(.bg-slate-900) .text-slate-200 {
+    color: var(--text-slate-200-override) !important;
+  }
+  main.bg-slate-50 :not(.bg-slate-950):not(.bg-slate-950\/80):not(.bg-slate-900) .text-slate-300 {
+    color: var(--text-slate-300-override) !important;
+  }
+  main.bg-slate-50 :not(.bg-slate-950):not(.bg-slate-950\/80):not(.bg-slate-900) .text-slate-400 {
+    color: var(--text-slate-400-override) !important;
+  }
+  
+  /* Standard overrides for gray colors as well */
+  main.bg-slate-50 :not(.bg-slate-950):not(.bg-slate-950\/80):not(.bg-slate-900) .text-gray-300 {
+    color: #4b5563 !important;
+  }
+  main.bg-slate-50 :not(.bg-slate-950):not(.bg-slate-950\/80):not(.bg-slate-900) .text-gray-400 {
+    color: #374151 !important;
+  }
+
+  /* Universal overrides for light containers (bg-white, bg-slate-50, etc.) across the app */
+  .bg-white .text-slate-200, .bg-slate-50 .text-slate-200, .bg-slate-100 .text-slate-200, .bg-slate-200 .text-slate-200 { color: #475569 !important; }
+  .bg-white .text-slate-300, .bg-slate-50 .text-slate-300, .bg-slate-100 .text-slate-300, .bg-slate-200 .text-slate-300 { color: #334155 !important; }
+  .bg-white .text-slate-400, .bg-slate-50 .text-slate-400, .bg-slate-100 .text-slate-400, .bg-slate-200 .text-slate-400 { color: #1e293b !important; }
+  
+  .bg-white .text-gray-300, .bg-slate-50 .text-gray-300, .bg-slate-100 .text-gray-300 { color: #4b5563 !important; }
+  .bg-white .text-gray-400, .bg-slate-50 .text-gray-400, .bg-slate-100 .text-gray-400 { color: #374151 !important; }
+
+  /* Universal Placeholder Overrides for Input Fields inside Light Containers */
+  .bg-white input::placeholder, .bg-slate-50 input::placeholder, .bg-slate-100 input::placeholder {
+    color: #475569 !important;
+    opacity: 0.9 !important;
+  }
+}
+
+
