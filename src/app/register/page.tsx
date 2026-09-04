@@ -46,7 +46,6 @@ export default function RegisterPage() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [role, setRole] = useState<'admin' | 'receptionist' | 'guest'>('guest');
     const dispatch = useDispatch<AppDispatch>();
     const router = useRouter();
     const { error } = useSelector((state: RootState) => state.user || { error: null });
@@ -82,7 +81,7 @@ export default function RegisterPage() {
             username,
             email,
             password,
-            role,
+            role: 'guest',
             name: username.charAt(0).toUpperCase() + username.slice(1)
         }));
         if (registerUser.fulfilled.match(result)) {
@@ -156,27 +155,9 @@ export default function RegisterPage() {
                             </p>
                         </div>
 
-                        <div className="mb-6 space-y-3">
-                            <div className="flex bg-white p-1.5 rounded-2xl border-2 border-slate-200 shadow-inner relative overflow-hidden h-16 z-[110]">
-                                {['admin', 'receptionist', 'guest'].map((r) => (
-                                    <button 
-                                        key={r}
-                                        type="button"
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            setRole(r as 'admin' | 'receptionist' | 'guest');
-                                        }} 
-                                        className={`flex-1 text-[9px] font-black uppercase tracking-[0.2em] transition-all rounded-xl mx-0.5 z-10 relative cursor-pointer ${
-                                            role === r 
-                                            ? 'bg-amber-500 text-white shadow-lg border border-amber-600' 
-                                            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-                                        }`}
-                                    >
-                                        {r === 'receptionist' ? 'Staff' : r}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
+                        <p className="mb-6 text-center text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                            Guest membership registration
+                        </p>
 
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div className="relative group">

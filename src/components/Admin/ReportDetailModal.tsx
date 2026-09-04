@@ -132,7 +132,7 @@ export default function ReportDetailModal({ isOpen, onClose, type }: ReportDetai
                         </div>
                         <div>
                             <h2 className="text-4xl font-black text-white tracking-tighter uppercase italic leading-tight">
-                                {isFinancial ? 'Financial Analysis' : 'Growth Telemetry'}<span className="text-amber-500">.</span>
+                                {isFinancial ? 'Financial analysis' : 'Occupancy insights'}<span className="text-amber-500">.</span>
                             </h2>
                             <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] mt-1 italic">
                                 {isFinancial
@@ -262,7 +262,7 @@ export default function ReportDetailModal({ isOpen, onClose, type }: ReportDetai
                                     <p className="text-[10px] text-white/10 font-black italic mt-4 leading-relaxed uppercase tracking-wider">{currentEff.desc}</p>
                                     <div className="mt-8 pt-6 border-t border-white/5">
                                         <p className="text-[9px] text-amber-500 font-black uppercase tracking-[0.3em] italic">
-                                            {activeStat === 'efficiency' ? '▶ Telemetry Active' : 'Switch to Optimum Sync'}
+                                            {activeStat === 'efficiency' ? '▶ Selected metric' : 'View efficiency'}
                                         </p>
                                     </div>
                                 </button>
@@ -284,7 +284,7 @@ export default function ReportDetailModal({ isOpen, onClose, type }: ReportDetai
                                     <p className="text-[10px] text-white/10 font-black italic mt-4 leading-relaxed uppercase tracking-wider">{currentLat.desc}</p>
                                     <div className="mt-8 pt-6 border-t border-white/5">
                                         <p className="text-[9px] text-indigo-400 font-black uppercase tracking-[0.3em] italic">
-                                            {activeStat === 'latency' ? '▶ Telemetry Active' : 'Switch to Minimized Sync'}
+                                            {activeStat === 'latency' ? '▶ Selected metric' : 'View response time'}
                                         </p>
                                     </div>
                                 </button>
@@ -326,7 +326,7 @@ export default function ReportDetailModal({ isOpen, onClose, type }: ReportDetai
                                         ))}
                                     </div>
                                     <div className="mt-12 text-center relative">
-                                        <p className="text-[9px] font-black uppercase tracking-[0.4em] italic opacity-30 leading-relaxed">Initialized Neural Synchronization Portal 4.0</p>
+                                        <p className="text-[9px] font-bold uppercase tracking-[0.2em] opacity-50 leading-relaxed">LuxeStay operations reporting</p>
                                     </div>
                                 </div>
                             )}

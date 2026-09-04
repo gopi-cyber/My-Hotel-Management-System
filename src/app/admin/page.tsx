@@ -36,6 +36,8 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ParticleBackground } from '@/components/ParticleBackground';
 import { TiltCard } from '@/components/TiltCard';
+import { useRouter } from 'next/navigation';
+import { logout, restoreSession, User as SessionUser } from '@/lib/features/userSlice';
 
 export default function AdminDashboard() {
     type TabType = 'inventory' | 'staff' | 'reservations' | 'reports';
@@ -44,16 +46,35 @@ export default function AdminDashboard() {
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     const [reportType, setReportType] = useState<'financial' | 'growth'>('financial');
     const dispatch = useDispatch<AppDispatch>();
+    const router = useRouter();
+    const user = useSelector((state: RootState) => state.user.user);
     const rooms = useSelector((state: RootState) => state.rooms);
     const staff = useSelector((state: RootState) => state.staff);
     const bookings = useSelector((state: RootState) => state.bookings);
 
     useEffect(() => {
+        if (!user) {
+            const saved = sessionStorage.getItem('vortex_user');
+            if (saved) {
+                try {
+                    dispatch(restoreSession(JSON.parse(saved) as SessionUser));
+                    return;
+                } catch {
+                    sessionStorage.removeItem('vortex_user');
+                }
+            }
+            router.replace('/login');
+            return;
+        }
+        if (user.role !== 'admin') {
+            router.replace(user.role === 'guest' ? '/dashboard' : '/receptionist');
+            return;
+        }
         dispatch(fetchRooms());
         dispatch(fetchStaff());
         dispatch(fetchBookings());
-        document.title = 'Vortex Hub | Management Hub';
-    }, [dispatch]);
+        document.title = 'LuxeStay | Administration';
+    }, [dispatch, router, user]);
 
     const stats = [
         { label: 'Occupancy Rate', value: '82%', icon: PieChart, color: 'text-amber-500', progress: 82, onClick: () => setActiveTab('reports') },
@@ -107,7 +128,7 @@ export default function AdminDashboard() {
                         <Activity className="text-white" size={24} />
                     </div>
                     <div className="flex flex-col">
-                        <span className="text-2xl font-bold tracking-tight text-slate-900 leading-none uppercase">Vortex</span>
+                        <span className="text-2xl font-bold tracking-tight text-slate-900 leading-none">LuxeStay</span>
                         <span className="text-[10px] font-bold text-amber-600 uppercase tracking-widest mt-1">Management Hub</span>
                     </div>
                 </Link>
@@ -124,17 +145,17 @@ export default function AdminDashboard() {
                             className={`w-full flex items-center gap-5 px-6 py-5 rounded-[2rem] text-[11px] font-bold uppercase tracking-widest transition-all group cursor-pointer ${
                                 activeTab === tab.id 
                                     ? 'nav-active text-amber-600' 
-                                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border-2 border-transparent'
+                                    : 'text-white hover:text-white hover:bg-white/10 border-2 border-transparent'
                             }`}
                         >
-                            <tab.icon size={22} className={activeTab === tab.id ? 'text-amber-600' : 'text-slate-400 group-hover:text-slate-600'} />
+                            <tab.icon size={22} className={activeTab === tab.id ? 'text-amber-500' : 'text-white/70 group-hover:text-white'} />
                             {tab.label}
                         </button>
                     ))}
                 </nav>
 
                 <div className="pt-10 border-t border-slate-100">
-                    <Link href="/" className="w-full flex items-center gap-5 px-6 py-5 rounded-[2rem] text-[11px] font-bold uppercase tracking-widest text-slate-500 hover:text-red-500 hover:bg-red-50 transition-all">
+                    <Link href="/" onClick={() => dispatch(logout())} className="w-full flex items-center gap-5 px-6 py-5 rounded-[2rem] text-[11px] font-bold uppercase tracking-widest text-slate-500 hover:text-red-500 hover:bg-red-50 transition-all">
                         <LogOut size={22} />
                         Logout Session
                     </Link>

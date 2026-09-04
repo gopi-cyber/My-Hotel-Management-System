@@ -7,9 +7,13 @@ import { RootState, AppDispatch } from '@/lib/store';
 import { CheckCircle, DollarSign, Home, LogOut, Search, Calendar, Users, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence, useTransform, useSpring } from 'framer-motion';
+import { useRouter } from 'next/navigation';
+import { logout, restoreSession, User as SessionUser } from '@/lib/features/userSlice';
 
 export default function ReceptionistPage() {
   const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
+  const user = useSelector((state: RootState) => state.user.user);
   const bookings = useSelector((state: RootState) => state.bookings.items);
   const rooms = useSelector((state: RootState) => state.rooms.items);
   
@@ -18,10 +22,27 @@ export default function ReceptionistPage() {
   const [success, setSuccess] = useState('');
 
   useEffect(() => {
+    if (!user) {
+      const saved = sessionStorage.getItem('vortex_user');
+      if (saved) {
+        try {
+          dispatch(restoreSession(JSON.parse(saved) as SessionUser));
+          return;
+        } catch {
+          sessionStorage.removeItem('vortex_user');
+        }
+      }
+      router.replace('/login');
+      return;
+    }
+    if (user.role !== 'receptionist' && user.role !== 'staff') {
+      router.replace(user.role === 'admin' ? '/admin' : '/dashboard');
+      return;
+    }
     dispatch(fetchRooms());
     dispatch(fetchBookings());
-    document.title = 'Vortex Front Desk | Management';
-  }, [dispatch]);
+    document.title = 'LuxeStay | Front Desk';
+  }, [dispatch, router, user]);
 
   const handleConfirm = async (booking: Booking) => {
     await dispatch(updateBooking({ ...booking, status: 'confirmed' }));
@@ -78,7 +99,7 @@ export default function ReceptionistPage() {
             <Users className="text-white" size={24} />
           </div>
           <div className="flex flex-col">
-            <span className="text-2xl font-bold tracking-tight text-slate-900 leading-none">Vortex</span>
+            <span className="text-2xl font-bold tracking-tight text-slate-900 leading-none">LuxeStay</span>
             <p className="text-[10px] text-amber-600 font-bold uppercase tracking-widest mt-1">Front Desk</p>
           </div>
         </Link>
@@ -90,10 +111,10 @@ export default function ReceptionistPage() {
             className={`w-full flex items-center gap-5 px-6 py-5 rounded-[2rem] text-[11px] font-bold uppercase tracking-widest transition-all group cursor-pointer ${
               activeTab === 'checkin' 
                 ? 'bg-slate-50 text-amber-600 border border-slate-100 shadow-sm font-extrabold' 
-                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                : 'text-white hover:text-white hover:bg-white/10'
             }`}
           >
-            <CheckCircle size={22} className={activeTab === 'checkin' ? 'text-amber-600' : 'text-slate-400 group-hover:text-slate-600'} /> Check-In Hub
+            <CheckCircle size={22} className={activeTab === 'checkin' ? 'text-amber-500' : 'text-white/70 group-hover:text-white'} /> Check-In Hub
           </button>
           <button 
             type="button"
@@ -101,10 +122,10 @@ export default function ReceptionistPage() {
             className={`w-full flex items-center gap-5 px-6 py-5 rounded-[2rem] text-[11px] font-bold uppercase tracking-widest transition-all group cursor-pointer ${
               activeTab === 'billing' 
                 ? 'bg-slate-50 text-amber-600 border border-slate-100 shadow-sm font-extrabold' 
-                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                : 'text-white hover:text-white hover:bg-white/10'
             }`}
           >
-            <DollarSign size={22} className={activeTab === 'billing' ? 'text-amber-600' : 'text-slate-400 group-hover:text-slate-600'} /> Billing Ledger
+            <DollarSign size={22} className={activeTab === 'billing' ? 'text-amber-500' : 'text-white/70 group-hover:text-white'} /> Billing Ledger
           </button>
           <button 
             type="button"
@@ -112,14 +133,14 @@ export default function ReceptionistPage() {
             className={`w-full flex items-center gap-5 px-6 py-5 rounded-[2rem] text-[11px] font-bold uppercase tracking-widest transition-all group cursor-pointer ${
               activeTab === 'rooms' 
                 ? 'bg-slate-50 text-amber-600 border border-slate-100 shadow-sm font-extrabold' 
-                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                : 'text-white hover:text-white hover:bg-white/10'
             }`}
           >
-            <Home size={22} className={activeTab === 'rooms' ? 'text-amber-600' : 'text-slate-400 group-hover:text-slate-600'} /> Room Inventory
+            <Home size={22} className={activeTab === 'rooms' ? 'text-amber-500' : 'text-white/70 group-hover:text-white'} /> Room Inventory
           </button>
         </nav>
 
-        <Link href="/">
+        <Link href="/" onClick={() => dispatch(logout())}>
           <button type="button" className="w-full flex items-center gap-5 px-6 py-5 rounded-[2rem] bg-slate-50 text-slate-600 font-bold text-[11px] uppercase tracking-widest hover:text-red-500 hover:bg-red-50 transition-all border border-slate-100 active:scale-95 cursor-pointer">
             <LogOut size={22} /> Exit Portal
           </button>
@@ -212,7 +233,7 @@ export default function ReceptionistPage() {
                           onClick={() => handleCheckIn(b)} 
                           className="h-16 px-12 bg-amber-500 text-slate-950 rounded-2xl font-black text-[10px] uppercase tracking-[0.4em] italic hover:bg-amber-400 shadow-[0_15px_40px_rgba(245,158,11,0.2)] active:scale-95 transition-all"
                         >
-                          Initialize
+                          Start check-in
                         </button>
                       )}
                       {b.status === 'checked_in' && (
@@ -220,7 +241,7 @@ export default function ReceptionistPage() {
                           onClick={() => handleCheckOut(b)} 
                           className="h-16 px-12 bg-slate-900 text-amber-500 border-2 border-amber-500/30 rounded-2xl font-black text-[10px] uppercase tracking-[0.4em] italic hover:bg-amber-500 hover:text-slate-950 active:scale-95 transition-all shadow-2xl"
                         >
-                          _Terminate
+                          Check out
                         </button>
                       )}
                       {(b.status !== 'pending' && b.status !== 'confirmed' && b.status !== 'checked_in') && (

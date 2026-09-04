@@ -49,7 +49,7 @@ export default function RoomCard({ room, onBook }: RoomCardProps) {
             <div className="flex flex-col p-10 relative">
                 {/* ID Indicator */}
                 <div className="mb-4 flex items-center justify-between">
-                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/10 italic">NODE LOG_ID: <span className="text-white/20">#{room.id.toUpperCase()}</span></span>
+                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/50">Room reference <span className="text-white/70">#{room.id.toUpperCase()}</span></span>
                 </div>
 
                 <h3 className="mb-8 text-4xl font-black text-white tracking-tighter leading-none italic uppercase group-hover:text-amber-500 transition-colors">

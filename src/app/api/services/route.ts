@@ -1,71 +1,100 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { readDB, writeDB } from '@/lib/db';
-import { REMOTE_ENDPOINTS } from '@/lib/apiConfig';
+import { BACKEND_ENDPOINTS } from '@/lib/apiConfig';
+import { fallbackData, FallbackService } from '@/lib/serverFallback';
 
 export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const userId = searchParams.get('userId') || searchParams.get('guestId');
+
   try {
-    const { searchParams } = new URL(request.url);
-    const guestId = searchParams.get('guestId');
-    
-    const response = await fetch(REMOTE_ENDPOINTS.SERVICES);
-    let services = await response.json();
-    
-    // Sync to local
-    const db = readDB();
-    db.services = services;
-    writeDB(db);
-    
-    if (guestId) {
-      services = services.filter((s: any) => s.guestId === guestId);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 2000);
+    const url = userId ? `${BACKEND_ENDPOINTS.SERVICES}?userId=${userId}` : BACKEND_ENDPOINTS.SERVICES;
+    const response = await fetch(url, { cache: 'no-store', signal: controller.signal });
+    clearTimeout(timeoutId);
+
+    if (response.ok) {
+      const services = await response.json();
+      return NextResponse.json(services);
     }
-    
-    return NextResponse.json(services);
-  } catch (error: unknown) {
-    return NextResponse.json({ error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 });
+  } catch (_e) {
+    // Backend offline
   }
+
+  let services = [...fallbackData.services];
+  if (userId) {
+    services = services.filter((s: FallbackService) => String(s.userId) === String(userId));
+  }
+  return NextResponse.json(services);
 }
 
 export async function POST(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const body = await request.json();
+  const userId = searchParams.get('userId') || body.userId || '3';
+
   try {
-    const body = await request.json();
-    const remoteResponse = await fetch(REMOTE_ENDPOINTS.SERVICES, {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 2000);
+    const response = await fetch(`${BACKEND_ENDPOINTS.SERVICES}?userId=${userId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
+      signal: controller.signal
     });
-    const service = await remoteResponse.json();
-    
-    // Sync to local
-    const db = readDB();
-    db.services.push(service);
-    writeDB(db);
-    
-    return NextResponse.json(service, { status: 201 });
-  } catch (error: unknown) {
-    return NextResponse.json({ error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 });
+    clearTimeout(timeoutId);
+
+    if (response.ok) {
+      const service = await response.json();
+      return NextResponse.json(service, { status: 201 });
+    }
+  } catch (_e) {
+    // Backend offline
   }
+
+  const newService: FallbackService = {
+    id: Date.now().toString(),
+    userId: userId,
+    guestName: body.guestName || 'Alex Morgan',
+    roomNumber: body.roomNumber || '101',
+    serviceType: body.serviceType || 'Housekeeping',
+    description: body.description || '',
+    priority: body.priority || 'MEDIUM',
+    status: 'PENDING',
+    assignedStaff: body.assignedStaff || 'Sarah Jenkins'
+  };
+  fallbackData.services.push(newService);
+  return NextResponse.json(newService, { status: 201 });
 }
 
 export async function PATCH(request: NextRequest) {
+  const body = await request.json();
+  const { id, status, assignedStaff } = body;
+
   try {
-    const body = await request.json();
-    const { id, ...updates } = body;
-    
-    const remoteResponse = await fetch(`${REMOTE_ENDPOINTS.SERVICES}/${id}`, {
-      method: 'PUT', // JSON Server uses PUT for full updates, but we'll use it as PATCH here
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 2000);
+    const response = await fetch(`${BACKEND_ENDPOINTS.SERVICES}/${id}/status`, {
+      method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(updates)
+      body: JSON.stringify({ status, assignedStaff }),
+      signal: controller.signal
     });
-    const service = await remoteResponse.json();
-    
-    // Sync to local
-    const db = readDB();
-    const idx = db.services.findIndex((s: any) => s.id === id);
-    if (idx !== -1) db.services[idx] = service;
-    writeDB(db);
-    
-    return NextResponse.json(service);
-  } catch (error: unknown) {
-    return NextResponse.json({ error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 });
+    clearTimeout(timeoutId);
+
+    if (response.ok) {
+      const service = await response.json();
+      return NextResponse.json(service);
+    }
+  } catch (_e) {
+    // Backend offline
   }
+
+  const idx = fallbackData.services.findIndex((s: FallbackService) => String(s.id) === String(id));
+  if (idx !== -1) {
+    if (status) fallbackData.services[idx].status = status;
+    if (assignedStaff) fallbackData.services[idx].assignedStaff = assignedStaff;
+    return NextResponse.json(fallbackData.services[idx]);
+  }
+  return NextResponse.json({ error: 'Service request not found' }, { status: 404 });
 }

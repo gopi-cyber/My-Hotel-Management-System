@@ -1,211 +1,144 @@
-﻿# LuxeStay - Professional Hotel Management System
+# LuxeStay - Enterprise Hotel Management System
 
 <div align="center">
 
-![Status](https://img.shields.io/badge/Status-Production%20Ready-brightgreen)
-![Version](https://img.shields.io/badge/Version-1.0.0-blue)
-![License](https://img.shields.io/badge/License-MIT-green)
-![Build](https://img.shields.io/badge/Build-Passing-success)
+![Status](https://img.shields.io/badge/Status-Release%20Candidate-blue)
+![Backend](https://img.shields.io/badge/Backend-Spring%20Boot%203%20%7C%20Hibernate%20%7C%20JSP-orange)
+![Database](https://img.shields.io/badge/Database-MySQL%208.0%2B-blue)
+![Frontend](https://img.shields.io/badge/Frontend-Next.js%2016%20%7C%20React%2019-black)
 
 </div>
 
-## 🏨 Overview
+## 🏨 Project Overview
 
-**LuxeStay** is a comprehensive, professional hotel management system built with production-standard code practices. It''s a full-stack web application that enables seamless operations across guest booking, front desk management, and administrative oversight.
-
-### Why LuxeStay?
-
-✅ **Professional-Grade Architecture** - Built with Next.js 16, TypeScript, and Redux Toolkit  
-✅ **Real Data Persistence** - File-based database with structured schema  
-✅ **Complete Feature Set** - Bookings, check-in/out, invoicing, service requests  
-✅ **Beautiful UI** - Glassmorphism design with responsive layouts  
-✅ **Production Ready** - Type-safe, optimized builds, ready to deploy  
-
-## 🚀 Quick Start
-
-### Installation
-
-```bash
-cd My-Hotel-Management-System
-npm install
-npm run dev
-```
-
-Open http://localhost:3000
-
-### Default Credentials
-
-| Role | Username | Password |
-|------|----------|----------|
-| Admin | admin | 123 |
-| Receptionist | staff | 123 |
-| Guest | new_guest | 123 |
-
-## 📁 Key Features
-
-### 🛎️ Guest Portal
-
-- Browse available rooms and book with date selection
-- View booking history and download invoices
-- Request services (housekeeping, room service, etc.)
-- Real-time room availability checking
-
-### 👥 Receptionist Panel
-
-- Check-in/check-out guest management
-- Guest billing and financial tracking
-- Real-time room status overview
-- Quick analytics dashboard
-
-### 👨‍💼 Admin Console
-
-- Room inventory management
-- Staff management system
-- Comprehensive reservation overview
-- Financial reports and occupancy analytics
-
-## 🏗️ Technical Stack
-
-- **Frontend**: Next.js 16, React, TypeScript, Redux Toolkit
-- **Styling**: Tailwind CSS with glassmorphism design
-- **Backend**: Next.js API Routes (Node.js)
-- **Database**: File-based (db.json) with structured schema
-- **Icons**: Lucide React
-- **Build**: Turbopack (Fast development builds)
-
-## 📊 Project Structure
-
-```
-My-Hotel-Management-System/
-├── app/                    # Next.js 16 App Router
-│   ├── api/               # Backend API routes
-│   ├── dashboard/         # Guest booking portal
-│   ├── receptionist/      # Front desk operations
-│   ├── profile/           # Guest profile & services
-│   └── admin/             # Admin console
-├── src/
-│   ├── components/        # Reusable React components
-│   ├── lib/
-│   │   ├── db.ts         # Database operations
-│   │   ├── store.ts      # Redux configuration
-│   │   └── features/     # Redux slices
-│   └── public/           # Static assets
-└── db.json               # Data storage
-```
-
-## 🔌 API Endpoints
-
-```
-GET    /api/rooms           # List all rooms
-POST   /api/bookings        # Create booking
-GET    /api/bookings        # Get bookings
-PUT    /api/bookings        # Update booking status
-GET    /api/services        # Get services
-POST   /api/services        # Create service request
-```
-
-## 🎯 Complete Features
-
-- ✅ User authentication with role-based access
-- ✅ Room booking with real-time availability
-- ✅ Check-in/check-out management
-- ✅ Service request tracking
-- ✅ Financial reporting and invoicing
-- ✅ Staff management
-- ✅ Real-time room status
-- ✅ Responsive mobile design
-- ✅ Professional glassmorphism UI
-- ✅ Production-ready build
-
-## 🚀 Deployment
-
-### Build for Production
-
-```bash
-npm run build
-npm start
-```
-
-### Deploy to Vercel
-
-```bash
-npm install -g vercel
-vercel
-```
-
-See [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) for more options.
-
-## 🔐 Default Database Structure
-
-The system includes a `db.json` file with:
-- **rooms**: Hotel room inventory
-- **bookings**: Guest reservations
-- **users**: Registered users
-- **staff**: Hotel staff members
-- **services**: Guest service requests
-- **checkIns**: Check-in/out transaction logs
-
-## 📱 Responsive Design
-
-- Mobile-first approach
-- Desktop, tablet, and mobile optimized
-- Fast page loads
-- Smooth transitions and animations
-
-## 🎨 Design System
-
-- **Color**: Indigo, Cyan, and Slate palette
-- **Typography**: Geist font family
-- **Components**: Glassmorphism style with backdrop blur
-- **Icons**: Lucide React (professional 24px icons)
-
-## 📈 Performance
-
-- Build Time: ~5 seconds (Turbopack)
-- Page Load: <2 seconds
-- Bundle Size: ~186KB (gzipped)
-- API Response: <100ms average
-
-## 🧪 Testing
-
-Quick navigation flow:
-1. Login as guest (new_guest/123)
-2. Browse rooms in dashboard
-3. Create booking
-4. Download invoice
-5. Request a service
-6. Login as receptionist to process check-in
-
-## 📚 Documentation
-
-- [README.md](./README.md) - This file
-- [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) - Deployment instructions
-- [IMPLEMENTATION_GUIDE.md](./IMPLEMENTATION_GUIDE.md) - Development notes
-
-## 📦 Dependencies
-
-- next: 16.2.2
-- react: 19
-- typescript: ~5.0
-- @reduxjs/toolkit
-- tailwindcss
-- lucide-react
-
-## ✅ Production Ready
-
-- ✓ Type-safe codebase (TypeScript)
-- ✓ Optimized build
-- ✓ Database persistence
-- ✓ Security best practices
-- ✓ Comprehensive error handling
-- ✓ SEO optimized metadata
-
-## 🌟 Status
-
-**Version**: 1.0.0  
-**Status**: ✅ Production Ready  
-**Last Updated**: April 11, 2026  
+**LuxeStay** is a full-stack Hotel Management System designed with enterprise-style architecture and release checks. It features a Java backend with Hibernate ORM, MySQL persistence, Spring Boot 3, and JSP, alongside a modern Next.js 16 frontend.
 
 ---
 
-Built with ❤️ using Next.js, React, and TypeScript
+## 🏛️ Architecture & Tech Stack
+
+### ☕ Backend (Java Enterprise)
+- **Framework**: Spring Boot 3 (Java 21)
+- **ORM / Persistence**: Hibernate 6 / Spring Data JPA
+- **Database**: MySQL 8.0+ with HikariCP connection pooling
+- **Views & UI**: JSP (JavaServer Pages), JSTL, Bootstrap 5, Glassmorphism CSS
+- **API Documentation**: SpringDoc OpenAPI / Swagger UI
+- **Embedded Web Server**: Apache Tomcat 10+ with Jasper JSP Engine
+
+### 🌐 Frontend (Next.js)
+- **Framework**: Next.js 16 (Turbopack, App Router)
+- **State Management**: Redux Toolkit
+- **Styling**: Tailwind CSS & Lucide Icons
+
+---
+
+## 🚀 Quick Start Guide
+
+### 1. Database Setup (MySQL)
+1. Open your MySQL client (MySQL Workbench, phpMyAdmin, or CLI).
+2. Execute the included [hotel_management_db.sql](file:///d:/clg_project/hotel_management_db.sql) script:
+   ```sql
+   source hotel_management_db.sql;
+   ```
+3. Keep credentials outside source control and set them in the terminal that starts the app:
+   ```bat
+   set DB_USERNAME=root
+   set DB_PASSWORD=your_mysql_password
+   ```
+   `DB_USERNAME` defaults to `root`; `DB_PASSWORD` is intentionally required.
+
+---
+
+### 2. Running the Java Spring Boot + JSP Backend
+```bash
+set DB_PASSWORD=your_mysql_password
+cd backend
+mvnw.cmd spring-boot:run
+# Or on Windows:
+run.bat
+```
+- 🌐 **Web App (JSP)**: [http://localhost:8080](http://localhost:8080)
+- 📄 **Interactive Swagger API Docs**: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+- 🔌 **REST API Base URL**: [http://localhost:8080/api](http://localhost:8080/api)
+
+---
+
+### 3. Running the Next.js Frontend (Optional)
+```bash
+npm install
+npm run dev
+```
+- 🌐 **Frontend URL**: [http://localhost:3000](http://localhost:3000)
+
+---
+
+## 🔑 Default Test Accounts
+
+| Role | Username | Password | JSP Portal | Next.js Portal |
+|---|---|---|---|---|
+| **Admin** | `admin` | `123` | [http://localhost:8080/admin/dashboard](http://localhost:8080/admin/dashboard) | [/admin](http://localhost:3000/admin) |
+| **Receptionist** | `staff` | `123` | [http://localhost:8080/receptionist/dashboard](http://localhost:8080/receptionist/dashboard) | [/receptionist](http://localhost:3000/receptionist) |
+| **Guest** | `new_guest` | `123` | [http://localhost:8080/guest/dashboard](http://localhost:8080/guest/dashboard) | [/dashboard](http://localhost:3000/dashboard) |
+
+---
+
+## 📁 Project Structure
+
+```
+clg_project/
+├── backend/                                   # Java Enterprise Spring Boot Backend
+│   ├── pom.xml                                # Maven Dependencies (Hibernate, MySQL, JSP, Swagger)
+│   ├── run.bat & run.sh                       # Quick startup scripts
+│   └── src/main/
+│       ├── java/com/hotel/management/
+│       │   ├── HotelManagementApplication.java# Main Application Class
+│       │   ├── config/                        # WebMvc, CORS, DataInitializer
+│       │   ├── model/                         # Hibernate JPA Entities (Room, Booking, User, Staff, ServiceRequest, CheckInRecord, Payment)
+│       │   ├── repository/                    # Spring Data JPA Repositories
+│       │   ├── service/                       # Business Logic Layer
+│       │   └── controller/
+│       │       ├── api/                       # REST API Controllers (/api/rooms, /api/bookings, etc.)
+│       │       └── jsp/                       # JSP Page Controllers (Home, Guest, Receptionist, Admin)
+│       ├── resources/
+│       │   └── application.properties         # Hibernate & MySQL Configuration
+│       └── webapp/WEB-INF/jsp/                # JavaServer Pages (JSP) Views
+│           ├── common/                        # header.jsp, navbar.jsp, footer.jsp
+│           ├── auth/                          # login.jsp, register.jsp
+│           ├── guest/                         # dashboard.jsp, rooms.jsp, bookings.jsp, services.jsp, invoice.jsp
+│           ├── receptionist/                  # dashboard.jsp (Check-in/out, Room status monitor)
+│           └── admin/                         # dashboard.jsp (Metrics, Rooms, Staff, Bookings, Users)
+├── hotel_management_db.sql                    # Complete MySQL database schema & seed data
+├── src/                                       # Next.js 16 Frontend
+└── package.json                               # Frontend scripts
+```
+
+---
+
+## 🔌 Complete REST API Reference
+
+| Endpoint | Method | Description |
+|---|---|---|
+| `/api/rooms` | `GET` | Get all rooms or filter by status |
+| `/api/rooms/{id}` | `GET` | Get room details by ID |
+| `/api/rooms` | `POST` | Create new hotel room |
+| `/api/rooms/{id}` | `PUT` | Update room information |
+| `/api/rooms/{id}/status` | `PATCH` | Update room availability status |
+| `/api/rooms/{id}` | `DELETE` | Remove room from inventory |
+| `/api/bookings` | `GET` | List bookings (optional `userId` filter) |
+| `/api/bookings` | `POST` | Create booking reservation |
+| `/api/bookings/{id}/status` | `PATCH` | Update reservation status |
+| `/api/users/login` | `POST` | Authenticate user credentials |
+| `/api/users/register` | `POST` | Register new guest account |
+| `/api/staff` | `GET` / `POST` | Staff directory management |
+| `/api/services` | `GET` / `POST` | Guest service requests tracking |
+| `/api/checkin/process` | `POST` | Front desk guest check-in |
+| `/api/checkin/checkout/{id}` | `POST` | Front desk guest check-out |
+
+---
+
+## 🌟 Advanced Features
+- **Hibernate ORM Mapping**: Full entity relationships (`@ManyToOne`, `@OneToMany`), lifecycle event hooks (`@PrePersist`, `@PreUpdate`), and cascading.
+- **HikariCP Connection Pool**: High-performance database connection management.
+- **Dual Presentation Layer**: Use server-rendered JSP views directly or connect via headless REST APIs.
+- **OpenAPI & Swagger UI**: Integrated test bench at `/swagger-ui.html`.
+- **Printable Invoices**: Built-in formatted invoice generation for guest bookings.

@@ -25,16 +25,16 @@ export default function Navbar() {
         if (!isAuthenticated) return [];
         
         const items = [
-            { name: 'Console', href: '/dashboard', icon: Hotel },
+            { name: 'My stay', href: '/dashboard', icon: Hotel },
             { name: 'Profile', href: '/profile', icon: User },
         ];
 
         if (user?.role === 'admin') {
-            items.push({ name: 'Nexus', href: '/admin', icon: ShieldCheck });
+            items.push({ name: 'Admin', href: '/admin', icon: ShieldCheck });
         }
         
         if (user?.role === 'receptionist' || user?.role === 'admin') {
-            items.push({ name: 'Telemetry', href: '/receptionist', icon: BellRing });
+            items.push({ name: 'Front desk', href: '/receptionist', icon: BellRing });
         }
 
         return items;
@@ -51,8 +51,8 @@ export default function Navbar() {
                         <Hotel size={26} className="stroke-[2.5px]" />
                     </div>
                     <div className="font-black tracking-tighter uppercase italic leading-none flex flex-col">
-                        <span className="text-2xl text-white">Vortex</span>
-                        <span className="text-amber-500 text-[10px] tracking-[0.5em] mt-1">Hospitality</span>
+                        <span className="text-2xl text-white">LuxeStay</span>
+                        <span className="text-amber-500 text-[10px] tracking-[0.3em] mt-1">Hotels & Residences</span>
                     </div>
                 </Link>
 
@@ -95,7 +95,7 @@ export default function Navbar() {
                                 onClick={handleLogout}
                                 className="text-[10px] font-black uppercase tracking-[0.4em] text-white/20 hover:text-red-500 transition-all italic"
                             >
-                                [ Terminate ]
+                                Sign out
                             </button>
                         </div>
                     ) : (
@@ -104,7 +104,7 @@ export default function Navbar() {
                             className="flex items-center gap-3 rounded-[1.5rem] bg-amber-500 px-10 py-3.5 text-[11px] font-black uppercase tracking-[0.3em] text-slate-950 transition-all hover:bg-amber-400 hover:shadow-[0_0_30px_rgba(245,158,11,0.4)] shadow-2xl active:scale-95"
                         >
                             <LogIn size={20} />
-                            <span>System Auth</span>
+                            <span>Sign in</span>
                         </Link>
                     )}
                 </div>
@@ -138,7 +138,7 @@ export default function Navbar() {
                                 onClick={() => { handleLogout(); setIsMenuOpen(false); }}
                                 className="mt-6 flex items-center justify-center gap-4 rounded-[2rem] bg-slate-900 border-2 border-white/5 py-6 text-xs font-black uppercase tracking-[0.5em] text-red-500 shadow-2xl active:scale-95 transition-all"
                             >
-                                 [ Terminate Session ]
+                                 Sign out
                              </button>
                         ) : (
                             <Link 
@@ -146,7 +146,7 @@ export default function Navbar() {
                                 onClick={() => setIsMenuOpen(false)}
                                 className="mt-6 flex items-center justify-center gap-4 rounded-[2rem] bg-amber-500 py-6 text-xs font-black uppercase tracking-[0.5em] text-slate-950 shadow-[0_0_30px_rgba(245,158,11,0.4)] active:scale-95 transition-all"
                             >
-                                <LogIn size={24} /> Initialize Auth
+                                <LogIn size={24} /> Sign in
                             </Link>
                         )}
                     </div>

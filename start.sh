@@ -1,28 +1,35 @@
 #!/bin/bash
+# LuxeStay Hotel Management System Launcher
 
-# LuxeStay - Hotel Management System Quick Start
-# This script starts the development server on Linux/Mac
+echo "========================================================"
+echo "  🏨 LUXESTAY HOTEL MANAGEMENT SYSTEM"
+echo "========================================================"
+echo ""
+echo "  [1] Start ALL Services (Java Backend + Next.js Frontend)"
+echo "  [2] Start Java Backend Only (Spring Boot + JSP on Port 8080)"
+echo "  [3] Start Next.js Frontend Only (Port 3000)"
+echo "  [4] Exit"
+echo ""
+echo "========================================================"
+read -p "Select an option (1-4): " choice
 
-echo ""
-echo "╔════════════════════════════════════════════════════════╗"
-echo "║  LuxeStay Hotel Management System                      ║"
-echo "║  Production-Ready Web Application                      ║"
-echo "╚════════════════════════════════════════════════════════╝"
-echo ""
-
-echo "Starting development server..."
-echo ""
-
-npm run dev
-
-echo ""
-echo "╔════════════════════════════════════════════════════════╗"
-echo "║  Application Started Successfully!                    ║"
-echo "║  Open: http://localhost:3000                          ║"
-echo "║                                                        ║"
-echo "║  Default Credentials:                                 ║"
-echo "║  - Admin: admin / 123                                 ║"
-echo "║  - Receptionist: staff / 123                          ║"
-echo "║  - Guest: new_guest / 123                             ║"
-echo "╚════════════════════════════════════════════════════════╝"
-echo ""
+case $choice in
+    1)
+        echo "Starting Backend..."
+        (cd backend && ./run.sh) &
+        echo "Starting Frontend..."
+        npm run dev
+        ;;
+    2)
+        cd backend && ./run.sh
+        ;;
+    3)
+        npm run dev
+        ;;
+    4)
+        exit 0
+        ;;
+    *)
+        echo "Invalid option."
+        ;;
+esac

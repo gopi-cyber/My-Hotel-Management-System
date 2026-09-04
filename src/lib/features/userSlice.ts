@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-interface User {
+export interface User {
     id: string;
     username: string;
     email?: string;
@@ -33,28 +33,12 @@ export const registerUser = createAsyncThunk('user/registerUser', async (userDat
 
 export const loginUser = createAsyncThunk('user/loginUser', async (credentials: { username: string, password?: string }) => {
     try {
-        // Query by username only to avoid JSON Server filtering issues with the password field
-        const response = await axios.get(API_URL, {
-            params: {
-                username: credentials.username
-            }
-        });
-        const users = response.data;
-        
-        if (Array.isArray(users) && users.length > 0) {
-            const user = users[0];
-            
-            // Manual password comparison
-            if (user.password === credentials.password) {
-                // Normalize role to lowercase for consistent routing
-                return {
-                    ...user,
-                    role: user.role.toLowerCase()
-                };
-            }
+        const response = await axios.post(API_URL, { action: 'login', ...credentials });
+        const authenticatedUser = { ...response.data, role: response.data.role.toLowerCase() };
+        if (typeof window !== 'undefined') {
+            sessionStorage.setItem('vortex_user', JSON.stringify(authenticatedUser));
         }
-        
-        throw new Error('Invalid username or password');
+        return authenticatedUser;
     } catch (err: unknown) {
         if (axios.isAxiosError(err)) {
             throw new Error(err.response?.data?.message || err.message || 'Login service currently unavailable');
@@ -71,9 +55,15 @@ const userSlice = createSlice({
         error: null,
     } as UserState,
     reducers: {
+        restoreSession: (state, action: { payload: User }) => {
+            state.user = action.payload;
+            state.isAuthenticated = true;
+            state.error = null;
+        },
         logout: (state) => {
             state.user = null;
             state.isAuthenticated = false;
+            if (typeof window !== 'undefined') sessionStorage.removeItem('vortex_user');
         }
     },
     extraReducers: (builder) => {
@@ -99,5 +89,5 @@ const userSlice = createSlice({
     },
 });
 
-export const { logout } = userSlice.actions;
+export const { logout, restoreSession } = userSlice.actions;
 export default userSlice.reducer;

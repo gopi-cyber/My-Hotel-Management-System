@@ -114,7 +114,7 @@ export default function StaffModal({ isOpen, onClose, onConfirm, staffMember }: 
                         </div>
 
                         <div className="space-y-4">
-                            <label className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em] ml-6">Telemetry Status</label>
+                            <label className="text-[10px] font-bold text-white/60 uppercase tracking-[0.2em] ml-6">Employment status</label>
                             <select 
                                 value={formData.status}
                                 onChange={(e) => setFormData({...formData, status: e.target.value as 'Active' | 'On Leave' | 'Inactive'})}
@@ -133,7 +133,7 @@ export default function StaffModal({ isOpen, onClose, onConfirm, staffMember }: 
                             Abort
                         </button>
                         <button type="submit" className="flex-1 h-18 rounded-[2rem] bg-amber-500 text-slate-950 text-[10px] font-black uppercase tracking-[0.4em] shadow-xl shadow-amber-500/20 hover:bg-amber-400 hover:scale-[1.02] active:scale-95 transition-all">
-                            Initialize Sync
+                            Save staff member
                         </button>
                     </div>
                 </form>

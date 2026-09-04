@@ -1,29 +1,51 @@
 @echo off
-REM LuxeStay - Hotel Management System Quick Start
-REM This script starts the development server
-
+title LuxeStay Hotel Management System
+:menu
+cls
+echo ========================================================
+echo   🏨 LUXESTAY HOTEL MANAGEMENT SYSTEM
+echo ========================================================
 echo.
-echo ╔════════════════════════════════════════════════════════╗
-echo ║  LuxeStay Hotel Management System                      ║
-echo ║  Production-Ready Web Application                      ║
-echo ╚════════════════════════════════════════════════════════╝
+echo   [1] Start ALL Services (Java Backend + Next.js Frontend)
+echo   [2] Start Java Backend Only (Spring Boot + JSP + MySQL on Port 8080)
+echo   [3] Start Next.js Frontend Only (Port 3000)
+echo   [4] Open MySQL Database Schema file (database/hotel_management_db.sql)
+echo   [5] Open Documentation (docs/)
+echo   [6] Exit
 echo.
+echo ========================================================
+set /p choice="Select an option (1-6): "
 
-echo Starting development server...
-echo.
+if "%choice%"=="1" goto start_all
+if "%choice%"=="2" goto start_backend
+if "%choice%"=="3" goto start_frontend
+if "%choice%"=="4" goto open_db
+if "%choice%"=="5" goto open_docs
+if "%choice%"=="6" goto end
 
-npm run dev
+echo Invalid selection! Please enter 1-6.
+timeout /t 2 >nul
+goto menu
 
-echo.
-echo ╔════════════════════════════════════════════════════════╗
-echo ║  Application Started Successfully!                    ║
-echo ║  Open: http://localhost:3000                          ║
-echo ║                                                        ║
-echo ║  Default Credentials:                                 ║
-echo ║  - Admin: admin / 123                                 ║
-echo ║  - Receptionist: staff / 123                          ║
-echo ║  - Guest: new_guest / 123                             ║
-echo ╚════════════════════════════════════════════════════════╝
-echo.
+:start_all
+call start_all.bat
+goto menu
 
-pause
+:start_backend
+call start_backend.bat
+goto menu
+
+:start_frontend
+call start_frontend.bat
+goto menu
+
+:open_db
+start notepad "%~dp0database\hotel_management_db.sql"
+goto menu
+
+:open_docs
+start explorer "%~dp0docs"
+goto menu
+
+:end
+exit

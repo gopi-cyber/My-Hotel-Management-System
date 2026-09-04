@@ -5,6 +5,8 @@ export interface Booking {
     roomId: string;
     guestId: string;
     guestName: string;
+    roomNumber?: string;
+    roomType?: string;
     checkInDate: string;
     checkOutDate: string;
     totalPrice: number;
@@ -25,6 +27,26 @@ import { ENDPOINTS } from '../apiConfig';
 
 const API_URL = ENDPOINTS.BOOKINGS;
 
+const normalizeStatus = (value: unknown): Booking['status'] =>
+    String(value ?? 'pending').toLowerCase() as Booking['status'];
+
+const normalizeBooking = (booking: Record<string, unknown>): Booking => ({
+    id: String(booking.id ?? booking.bookingReference ?? ''),
+    roomId: String(booking.roomId ?? ''),
+    guestId: String(booking.guestId ?? booking.userId ?? ''),
+    guestName: String(booking.guestName ?? 'Guest'),
+    roomNumber: booking.roomNumber ? String(booking.roomNumber) : undefined,
+    roomType: booking.roomType ? String(booking.roomType) : undefined,
+    checkInDate: String(booking.checkInDate ?? ''),
+    checkOutDate: String(booking.checkOutDate ?? ''),
+    totalPrice: Number(booking.totalPrice ?? booking.totalAmount ?? 0),
+    status: normalizeStatus(booking.status),
+    nights: Number(booking.nights ?? 0),
+    createdAt: booking.createdAt ? String(booking.createdAt) : undefined,
+    checkedInTime: booking.checkedInTime ? String(booking.checkedInTime) : undefined,
+    checkedOutTime: booking.checkedOutTime ? String(booking.checkedOutTime) : undefined,
+});
+
 // API Thunks
 export const fetchBookings = createAsyncThunk(
     'bookings/fetchBookings',
@@ -32,7 +54,8 @@ export const fetchBookings = createAsyncThunk(
         try {
             const response = await fetch(API_URL);
             if (!response.ok) throw new Error('Failed to fetch bookings');
-            return response.json();
+            const data = await response.json();
+            return (Array.isArray(data) ? data : []).map(normalizeBooking);
         } catch (error: unknown) {
             return rejectWithValue(error instanceof Error ? error.message : 'An unknown error occurred');
         }
@@ -46,7 +69,8 @@ export const fetchUserBookings = createAsyncThunk(
             const url = API_URL.startsWith('/api') ? `${API_URL}?userId=${userId}` : `${API_URL}?guestId=${userId}`;
             const response = await fetch(url);
             if (!response.ok) throw new Error('Failed to fetch user bookings');
-            return response.json();
+            const data = await response.json();
+            return (Array.isArray(data) ? data : []).map(normalizeBooking);
         } catch (error: unknown) {
             return rejectWithValue(error instanceof Error ? error.message : 'An unknown error occurred');
         }
@@ -63,7 +87,7 @@ export const addBooking = createAsyncThunk(
                 body: JSON.stringify(booking),
             });
             if (!response.ok) throw new Error('Failed to create booking');
-            return response.json();
+            return normalizeBooking(await response.json());
         } catch (error: unknown) {
             return rejectWithValue(error instanceof Error ? error.message : 'An unknown error occurred');
         }
@@ -82,7 +106,7 @@ export const updateBooking = createAsyncThunk(
                 body: JSON.stringify(API_URL.startsWith('/api') ? booking : updates),
             });
             if (!response.ok) throw new Error('Failed to update booking');
-            return response.json();
+            return normalizeBooking(await response.json());
         } catch (error: unknown) {
             return rejectWithValue(error instanceof Error ? error.message : 'An unknown error occurred');
         }

@@ -7,6 +7,7 @@ import { RootState, AppDispatch } from '@/lib/store';
 import { useRouter } from 'next/navigation';
 import { Coffee, Home, Zap, ShieldAlert, AlertCircle, Clock, User, LogOut, Plus, Bookmark } from 'lucide-react';
 import Link from 'next/link';
+import { logout, restoreSession, User as SessionUser } from '@/lib/features/userSlice';
 
 export default function ProfilePage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -31,7 +32,20 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (!user) {
-      router.push('/');
+      const saved = sessionStorage.getItem('vortex_user');
+      if (saved) {
+        try {
+          dispatch(restoreSession(JSON.parse(saved) as SessionUser));
+          return;
+        } catch {
+          sessionStorage.removeItem('vortex_user');
+        }
+      }
+      router.replace('/login');
+      return;
+    }
+    if (user.role !== 'guest') {
+      router.replace(user.role === 'admin' ? '/admin' : '/receptionist');
       return;
     }
     dispatch(fetchUserBookings(user.id));
@@ -115,7 +129,7 @@ export default function ProfilePage() {
           </button>
         </Link>
         
-        <Link href="/">
+        <Link href="/" onClick={() => dispatch(logout())}>
           <button className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-2xl bg-slate-900 border border-white/5 text-white/40 font-black text-[10px] uppercase tracking-widest hover:text-red-500 transition-all active:scale-95 shadow-lg shadow-black/20">
             <LogOut size={16} /> Logout Protocol
           </button>

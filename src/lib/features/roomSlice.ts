@@ -23,6 +23,21 @@ import { ENDPOINTS } from '../apiConfig';
 
 const API_URL = ENDPOINTS.ROOMS;
 
+const normalizeRoom = (room: Record<string, unknown>): Room => ({
+    id: String(room.id ?? ''),
+    number: String(room.number ?? room.roomNumber ?? ''),
+    type: String(room.type ?? room.name ?? 'Standard'),
+    price: Number(room.price ?? room.pricePerNight ?? 0),
+    status: String(room.status ?? 'available').toLowerCase() as Room['status'],
+    amenities: Array.isArray(room.amenities)
+        ? room.amenities.map(String)
+        : String(room.amenities ?? '').split(',').map((item) => item.trim()).filter(Boolean),
+    capacity: Number(room.capacity ?? 1),
+    image: String(room.image ?? room.imageUrl ?? ''),
+    description: String(room.description ?? ''),
+    createdAt: room.createdAt ? String(room.createdAt) : undefined,
+});
+
 // API Thunks - Connecting to real backend
 export const fetchRooms = createAsyncThunk(
     'rooms/fetchRooms',
@@ -30,7 +45,8 @@ export const fetchRooms = createAsyncThunk(
         try {
             const response = await fetch(API_URL);
             if (!response.ok) throw new Error('Failed to fetch rooms');
-            return response.json();
+            const data = await response.json();
+            return (Array.isArray(data) ? data : []).map(normalizeRoom);
         } catch (error: unknown) {
             return rejectWithValue(error instanceof Error ? error.message : 'An unknown error occurred');
         }
@@ -47,7 +63,7 @@ export const addRoom = createAsyncThunk(
                 body: JSON.stringify(room),
             });
             if (!response.ok) throw new Error('Failed to add room');
-            return response.json();
+            return normalizeRoom(await response.json());
         } catch (error: unknown) {
             return rejectWithValue(error instanceof Error ? error.message : 'An unknown error occurred');
         }
@@ -66,7 +82,7 @@ export const updateRoom = createAsyncThunk(
                 body: JSON.stringify(API_URL.startsWith('/api') ? room : updates),
             });
             if (!response.ok) throw new Error('Failed to update room');
-            return response.json();
+            return normalizeRoom(await response.json());
         } catch (error: unknown) {
             return rejectWithValue(error instanceof Error ? error.message : 'An unknown error occurred');
         }

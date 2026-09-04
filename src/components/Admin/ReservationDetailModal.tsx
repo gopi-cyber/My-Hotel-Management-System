@@ -158,7 +158,7 @@ export default function ReservationDetailModal({ isOpen, onClose, booking }: Res
 
                     <div className="bg-slate-950/40 rounded-[3rem] p-10 border-4 border-white/5 flex flex-col gap-8 shadow-inner">
                         <div className="flex items-center justify-between pb-8 border-b border-white/5">
-                            <h4 className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] italic leading-none">Guest Telemetry Archive</h4>
+                            <h4 className="text-[10px] font-bold text-white/60 uppercase tracking-[0.2em] leading-none">Guest details</h4>
                             <ChevronRight size={18} className="text-white/5" />
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

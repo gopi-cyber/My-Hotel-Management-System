@@ -1,83 +1,118 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { readDB, writeDB } from '@/lib/db';
-import { REMOTE_ENDPOINTS } from '@/lib/apiConfig';
+import { BACKEND_ENDPOINTS } from '@/lib/apiConfig';
+import { fallbackData, FallbackStaff } from '@/lib/serverFallback';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const department = searchParams.get('department');
+
   try {
-    const response = await fetch(REMOTE_ENDPOINTS.STAFF);
-    const staff = await response.json();
-    
-    // Sync to local
-    const db = readDB();
-    db.staff = staff;
-    writeDB(db);
-    
-    return NextResponse.json(staff);
-  } catch (error: unknown) {
-    return NextResponse.json({ error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 });
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 2000);
+    const url = department ? `${BACKEND_ENDPOINTS.STAFF}?department=${department}` : BACKEND_ENDPOINTS.STAFF;
+    const response = await fetch(url, { cache: 'no-store', signal: controller.signal });
+    clearTimeout(timeoutId);
+
+    if (response.ok) {
+      const staff = await response.json();
+      return NextResponse.json(staff);
+    }
+  } catch (_e) {
+    // Backend offline
   }
+
+  let staff = [...fallbackData.staff];
+  if (department) {
+    staff = staff.filter((s: FallbackStaff) => s.department.toLowerCase() === department.toLowerCase());
+  }
+  return NextResponse.json(staff);
 }
 
 export async function POST(request: NextRequest) {
+  const body = await request.json();
+
   try {
-    const body = await request.json();
-    const remoteResponse = await fetch(REMOTE_ENDPOINTS.STAFF, {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 2000);
+    const response = await fetch(BACKEND_ENDPOINTS.STAFF, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
+      signal: controller.signal
     });
-    const member = await remoteResponse.json();
-    
-    // Sync to local
-    const db = readDB();
-    db.staff.push(member);
-    writeDB(db);
-    
-    return NextResponse.json(member, { status: 201 });
-  } catch (error: unknown) {
-    return NextResponse.json({ error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 });
+    clearTimeout(timeoutId);
+
+    if (response.ok) {
+      const member = await response.json();
+      return NextResponse.json(member, { status: 201 });
+    }
+  } catch (_e) {
+    // Backend offline
   }
+
+  const newStaff: FallbackStaff = {
+    id: Date.now().toString(),
+    name: body.name || 'New Staff',
+    email: body.email || `staff${Date.now()}@luxestay.com`,
+    phone: body.phone || '+1 555-0200',
+    role: body.role || 'Front Desk',
+    department: body.department || 'Reception',
+    shift: body.shift || 'Morning',
+    salary: Number(body.salary) || 4000,
+    status: body.status || 'Active'
+  };
+  fallbackData.staff.push(newStaff);
+  return NextResponse.json(newStaff, { status: 201 });
 }
 
 export async function PUT(request: NextRequest) {
+  const body = await request.json();
+  const { id, ...updates } = body;
+
   try {
-    const body = await request.json();
-    const { id, ...updates } = body;
-    
-    const remoteResponse = await fetch(`${REMOTE_ENDPOINTS.STAFF}/${id}`, {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 2000);
+    const response = await fetch(`${BACKEND_ENDPOINTS.STAFF}/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(updates)
+      body: JSON.stringify(updates),
+      signal: controller.signal
     });
-    const member = await remoteResponse.json();
-    
-    // Sync to local
-    const db = readDB();
-    const idx = db.staff.findIndex((s: any) => s.id === id);
-    if (idx !== -1) db.staff[idx] = member;
-    writeDB(db);
-    
-    return NextResponse.json(member);
-  } catch (error: unknown) {
-    return NextResponse.json({ error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 });
+    clearTimeout(timeoutId);
+
+    if (response.ok) {
+      const member = await response.json();
+      return NextResponse.json(member);
+    }
+  } catch (_e) {
+    // Backend offline
   }
+
+  const idx = fallbackData.staff.findIndex((s: FallbackStaff) => String(s.id) === String(id));
+  if (idx !== -1) {
+    fallbackData.staff[idx] = { ...fallbackData.staff[idx], ...updates };
+    return NextResponse.json(fallbackData.staff[idx]);
+  }
+  return NextResponse.json({ error: 'Staff member not found' }, { status: 404 });
 }
 
 export async function DELETE(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const id = searchParams.get('id');
+
   try {
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get('id');
-    if (!id) throw new Error('ID is required');
-    
-    await fetch(`${REMOTE_ENDPOINTS.STAFF}/${id}`, { method: 'DELETE' });
-    
-    // Sync to local
-    const db = readDB();
-    db.staff = db.staff.filter((s: any) => s.id !== id);
-    writeDB(db);
-    
-    return NextResponse.json({ success: true });
-  } catch (error: unknown) {
-    return NextResponse.json({ error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 });
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 2000);
+    const response = await fetch(`${BACKEND_ENDPOINTS.STAFF}/${id}`, { method: 'DELETE', signal: controller.signal });
+    clearTimeout(timeoutId);
+
+    if (response.ok) {
+      return NextResponse.json({ success: true });
+    }
+  } catch (_e) {
+    // Backend offline
   }
+
+  fallbackData.staff = fallbackData.staff.filter((s: FallbackStaff) => String(s.id) !== String(id));
+  return NextResponse.json({ success: true });
 }

@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ParticleBackground } from '@/components/ParticleBackground';
 import { TiltCard } from '@/components/TiltCard';
+import { logout, restoreSession, User as SessionUser } from '@/lib/features/userSlice';
 
 export default function Dashboard() {
   const dispatch = useDispatch<AppDispatch>();
@@ -33,7 +34,20 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!user) {
-      router.push('/');
+      const saved = sessionStorage.getItem('vortex_user');
+      if (saved) {
+        try {
+          dispatch(restoreSession(JSON.parse(saved) as SessionUser));
+          return;
+        } catch {
+          sessionStorage.removeItem('vortex_user');
+        }
+      }
+      router.replace('/login');
+      return;
+    }
+    if (user.role !== 'guest') {
+      router.replace(user.role === 'admin' ? '/admin' : '/receptionist');
       return;
     }
     dispatch(fetchRooms());
@@ -45,8 +59,8 @@ export default function Dashboard() {
       setError('Please select check-in and check-out dates first');
       return;
     }
-    if (new Date(checkOutDate) < new Date(checkInDate)) {
-      setError('Outbound date cannot be before inbound date');
+    if (new Date(checkOutDate) <= new Date(checkInDate)) {
+      setError('Check-out must be after check-in');
       return;
     }
     setSelectedRoom(room);
@@ -67,7 +81,7 @@ export default function Dashboard() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           roomId: selectedRoom.id,
-          guestId: user.id,
+          userId: user.id,
           guestName: user.name || user.username,
           checkInDate,
           checkOutDate,
@@ -134,14 +148,14 @@ export default function Dashboard() {
     ====================================
     Booking ID: ${booking.id}
     Guest: ${booking.guestName}
-    Room: ${selectedRoom?.number || 'N/A'}
+    Room: ${booking.roomNumber || booking.roomId || 'N/A'}
     ====================================
     Check-in: ${booking.checkInDate}
     Check-out: ${booking.checkOutDate}
     Nights: ${booking.nights}
-    Rate: $${selectedRoom?.price || 0} per night
+    Rate: ₹${booking.nights > 0 ? (booking.totalPrice / booking.nights).toFixed(2) : '0.00'} per night
     ====================================
-    TOTAL: $${booking.totalPrice}
+    TOTAL: ₹${booking.totalPrice}
     ====================================
     Status: ${booking.status}
     ====================================
@@ -160,7 +174,9 @@ export default function Dashboard() {
 
   const filteredRooms = rooms.filter((r: Room) => {
     const matchesTab = activeTab === 'All' || r.type === activeTab;
-    const matchesSearch = r.type.toLowerCase().includes(searchQuery.toLowerCase());
+    const query = searchQuery.toLowerCase();
+    const matchesSearch = r.type.toLowerCase().includes(query) ||
+      r.amenities.some((amenity) => amenity.toLowerCase().includes(query));
     return matchesTab && matchesSearch;
   });
 
@@ -184,7 +200,7 @@ export default function Dashboard() {
             <Hotel className="text-white" size={24} />
           </div>
           <div className="flex flex-col">
-            <span className="text-2xl font-bold tracking-tight text-white uppercase leading-none">Vortex</span>
+            <span className="text-2xl font-bold tracking-tight text-white leading-none">LuxeStay</span>
             <p className="text-[10px] text-amber-500 uppercase tracking-widest font-bold mt-1">Guest Portal</p>
           </div>
         </Link>
@@ -202,16 +218,16 @@ export default function Dashboard() {
               className={`w-full flex items-center gap-5 px-6 py-5 rounded-[2rem] text-[11px] font-bold uppercase tracking-widest transition-all group ${
                 activeView === item.id 
                   ? 'bg-white/10 text-amber-500 border border-white/10 shadow-lg' 
-                  : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
+                  : 'text-white hover:text-white hover:bg-white/10 border border-transparent'
               }`}
             >
-              <item.icon size={22} className={activeView === item.id ? 'text-amber-500' : 'text-slate-500 group-hover:text-slate-300'} /> {item.label}
+              <item.icon size={22} className={activeView === item.id ? 'text-amber-500' : 'text-white/70 group-hover:text-white'} /> {item.label}
             </button>
           ))}
         </nav>
 
-        <Link href="/">
-          <button className="w-full flex items-center gap-5 px-6 py-5 rounded-[2rem] bg-slate-900 text-slate-400 font-bold text-[11px] uppercase tracking-widest hover:text-red-500 hover:bg-red-500/10 transition-all border border-transparent hover:border-red-500/20 active:scale-95">
+        <Link href="/" onClick={() => dispatch(logout())} className="block">
+          <button type="button" className="w-full flex items-center gap-5 px-6 py-5 rounded-[2rem] bg-slate-900 text-white font-bold text-[11px] uppercase tracking-widest hover:text-red-300 hover:bg-red-500/10 transition-all border border-transparent hover:border-red-500/20 active:scale-95">
             <LogOut size={22} /> Log out
           </button>
         </Link>
@@ -322,8 +338,8 @@ export default function Dashboard() {
                                 <div className="flex items-end">
                                 <button
                                     onClick={() => {
-                                    if (checkInDate && checkOutDate && new Date(checkOutDate) < new Date(checkInDate)) {
-                                        setError('Outbound date cannot be before inbound date');
+                                    if (checkInDate && checkOutDate && new Date(checkOutDate) <= new Date(checkInDate)) {
+                                        setError('Check-out must be after check-in');
                                         return;
                                     }
                                     setError('');

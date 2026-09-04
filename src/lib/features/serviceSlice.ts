@@ -21,13 +21,25 @@ import { ENDPOINTS } from '../apiConfig';
 
 const API_URL = ENDPOINTS.SERVICES;
 
+const normalizeService = (service: Record<string, unknown>): ServiceRequest => ({
+  id: String(service.id ?? ''),
+  guestId: String(service.guestId ?? service.userId ?? ''),
+  roomId: String(service.roomId ?? service.roomNumber ?? ''),
+  serviceName: String(service.serviceName ?? service.serviceType ?? 'Service'),
+  description: String(service.description ?? ''),
+  status: String(service.status ?? 'pending').toLowerCase() as ServiceRequest['status'],
+  createdAt: service.createdAt ? String(service.createdAt) : undefined,
+  completedAt: service.completedAt ? String(service.completedAt) : undefined,
+});
+
 export const fetchServices = createAsyncThunk(
   'services/fetchServices',
   async (_, { rejectWithValue }) => {
     try {
       const response = await fetch(API_URL);
       if (!response.ok) throw new Error('Failed to fetch services');
-      return response.json();
+      const data = await response.json();
+      return (Array.isArray(data) ? data : []).map(normalizeService);
     } catch (error: unknown) {
       return rejectWithValue(error instanceof Error ? error.message : 'An unknown error occurred');
     }
@@ -40,7 +52,8 @@ export const fetchUserServices = createAsyncThunk(
     try {
       const response = await fetch(`${API_URL}?guestId=${guestId}`);
       if (!response.ok) throw new Error('Failed to fetch user services');
-      return response.json();
+      const data = await response.json();
+      return (Array.isArray(data) ? data : []).map(normalizeService);
     } catch (error: unknown) {
       return rejectWithValue(error instanceof Error ? error.message : 'An unknown error occurred');
     }
@@ -54,10 +67,16 @@ export const createService = createAsyncThunk(
       const response = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(service),
+        body: JSON.stringify({
+          ...service,
+          userId: service.guestId,
+          roomNumber: service.roomId,
+          serviceType: service.serviceName,
+          status: service.status.toUpperCase(),
+        }),
       });
       if (!response.ok) throw new Error('Failed to create service request');
-      return response.json();
+      return normalizeService(await response.json());
     } catch (error: unknown) {
       return rejectWithValue(error instanceof Error ? error.message : 'An unknown error occurred');
     }
@@ -71,12 +90,12 @@ export const updateService = createAsyncThunk(
       const { id, ...updates } = data;
       const url = API_URL.startsWith('/api') ? API_URL : `${API_URL}/${id}`;
       const response = await fetch(url, {
-        method: 'PUT',
+        method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(API_URL.startsWith('/api') ? data : updates),
       });
       if (!response.ok) throw new Error('Failed to update service');
-      return response.json();
+      return normalizeService(await response.json());
     } catch (error: unknown) {
       return rejectWithValue(error instanceof Error ? error.message : 'An unknown error occurred');
     }
